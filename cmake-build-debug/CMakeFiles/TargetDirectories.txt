@@ -1,0 +1,8 @@
+D:/CLion/szakdolgozat/cmake-build-debug/CMakeFiles/szakdolgozat.dir
+D:/CLion/szakdolgozat/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/CLion/szakdolgozat/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/CLion/szakdolgozat/cmake-build-debug/_deps/sdl3-build/CMakeFiles/SDL3-shared.dir
+D:/CLion/szakdolgozat/cmake-build-debug/_deps/sdl3-build/CMakeFiles/SDL3_test.dir
+D:/CLion/szakdolgozat/cmake-build-debug/_deps/sdl3-build/CMakeFiles/SDL_uclibc.dir
+D:/CLion/szakdolgozat/cmake-build-debug/_deps/sdl3-build/CMakeFiles/edit_cache.dir
+D:/CLion/szakdolgozat/cmake-build-debug/_deps/sdl3-build/CMakeFiles/rebuild_cache.dir
