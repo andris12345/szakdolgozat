@@ -137,8 +137,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             SDL_GetMouseState(&x, &y);
             if (karakterinditas->isVisible && isMouseOver(karakterinditas, x, y)) {
                 SDL_Log("meg van nyomva: inditas");
-                if (manSize < 1)
-                    add = true;
+
+                SDL_FPoint point = {.x = 0, .y = 200};
+                CreateMan(point);
             }
             if (singlePlayerBT->isVisible && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
@@ -199,18 +200,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             render_Button(karakterinditas);
         }
 
-        if (add) {
-            SDL_FPoint point = {.x = 0, .y = 200};
-            CreateMan(point);
-            add = false;
-        }
-
-        if (manSize == 1) {
-            man[0].x++;
-            SDL_FRect rect = {.x = man[0].x, .y = man[0].y, .w = 20, .h = 20};
+        for (int i = 0; i < manSize; i++) {
+            man[i].x++;
+            SDL_FRect rect = {.x = man[i].x, .y = man[i].y, .w = 20, .h = 20};
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
             SDL_RenderFillRect(renderer, &rect);
-            if (man[0].x >= 200) {
+            if (man[i].x >= 200) {
                 removeFirstMan();
             }
         }
