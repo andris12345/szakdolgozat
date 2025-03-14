@@ -17,6 +17,8 @@ int frameTime;
 
 using namespace std;
 
+void removeFirstManFromPool();
+
 // Gomb struktúra
 struct Button {
     SDL_FRect rect;
@@ -38,9 +40,12 @@ struct Button {
 Button *karakterinditas, *singlePlayerBT, *easyBt, *mediumBt, *hardBt;
 SDL_FPoint *man;
 size_t manSize = 0;
+SDL_FPoint *pool;
+size_t poolSize = 0;
 bool add, start, singlePlayer;
 SDL_FRect kocka;
-int dificulty;
+float dificulty;
+int map[7] = {};
 
 // Egérpozíció ellen?rzése pointerrel
 bool isMouseOver(Button* button, int mouseX, int mouseY) {
@@ -49,19 +54,25 @@ bool isMouseOver(Button* button, int mouseX, int mouseY) {
             mouseY >= button->rect.y && mouseY <= button->rect.y + button->rect.h);
 }
 
-void CreateMan(SDL_FPoint point) {
+void CreateManToMap() {
+    SDL_Log("ember generalas");
+    SDL_FPoint point = pool[0];
+    removeFirstManFromPool();
     // Növeljük a tömb méretét dinamikusan
     manSize++;
 
-    man = (SDL_FPoint*)realloc(man, manSize * sizeof(SDL_FPoint));
-
-    // Új ember beszúrása a tömb végére
-    man[manSize - 1] = point;
-    SDL_Log(to_string(man[0].x).c_str());
-    SDL_Log(to_string(man[0].y).c_str());
+    SDL_FPoint* temp = (SDL_FPoint*)realloc(man, manSize * sizeof(SDL_FPoint));
+    if (temp) {
+        man = temp; // Csak akkor módosítjuk, ha sikerült
+        man[manSize - 1] = point;
+    } else {
+        // Sikertelen realloc esetén hibaüzenet
+        SDL_Log("realloc failed in CreateManToMap");
+    }
 }
 
-void removeFirstMan() {
+void removeFirstManFromMap() {
+    SDL_Log("map torles");
     if (manSize == 0) return; // Ha nincs mit törölni, kilépünk
 
     // Ha több elem van, akkor el?retoljuk az elemeket
@@ -77,6 +88,39 @@ void removeFirstMan() {
 
     if (manSize == 0) {
         man = NULL; // Ha már nincs ember, nullázzuk ki a pointert
+    }
+}
+
+void CreateManToPool(SDL_FPoint point) {
+    // Növeljük a tömb méretét dinamikusan
+    poolSize++;
+
+    pool = (SDL_FPoint*)realloc(pool, poolSize * sizeof(SDL_FPoint));
+
+    // Új ember beszúrása a tömb végére
+    pool[poolSize - 1] = point;
+    SDL_Log("uj pool letrehozva");
+    SDL_Log(to_string(pool[0].x).c_str());
+    SDL_Log(to_string(pool[0].y).c_str());
+}
+
+void removeFirstManFromPool() {
+    SDL_Log("pool torles");
+    if (poolSize == 0) return; // Ha nincs mit törölni, kilépünk
+
+    // Ha több elem van, akkor el?retoljuk az elemeket
+    for (size_t i = 1; i < poolSize; i++) {
+        pool[i - 1] = pool[i];
+    }
+
+    // Csökkentjük a méretet
+    poolSize--;
+
+    // Újraméretezzük a tömböt
+    pool = (SDL_FPoint*)realloc(pool, poolSize * sizeof(SDL_FPoint));
+
+    if (poolSize == 0) {
+        pool = NULL; // Ha már nincs ember, nullázzuk ki a pointert
     }
 }
 
@@ -136,10 +180,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             float x, y;
             SDL_GetMouseState(&x, &y);
             if (karakterinditas->isVisible && isMouseOver(karakterinditas, x, y)) {
-                SDL_Log("meg van nyomva: inditas");
-
                 SDL_FPoint point = {.x = 0, .y = 200};
-                CreateMan(point);
+                CreateManToPool(point);
             }
             if (singlePlayerBT->isVisible && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
@@ -196,17 +238,59 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (start) {
+        for (int i = 0; i <= 7; i++) {
+            SDL_FRect rect = {.x = (float)(30 * i) , .y = 200, .w = 1, .h = 30};
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+        }
         if (karakterinditas) {
             render_Button(karakterinditas);
         }
 
-        for (int i = 0; i < manSize; i++) {
-            man[i].x++;
-            SDL_FRect rect = {.x = man[i].x, .y = man[i].y, .w = 20, .h = 20};
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &rect);
-            if (man[i].x >= 200) {
-                removeFirstMan();
+        for (int i = 0; i < poolSize; i++) {
+            if (map[0] == 0) {
+                map[0] = 1;
+                CreateManToMap();
+
+            }
+            if (poolSize > 0) {
+                SDL_FRect rect = {.x = pool[i].x, .y = pool[i].y, .w = 20, .h = 20};
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_RenderFillRect(renderer, &rect);
+            }
+        }
+
+        if (manSize > 0) {
+            for (int i = manSize - 1; i >= 0; i--) {
+                int hely = (man[i].x + 10) / 30;
+
+
+                if (hely == 0)
+                if (hely == 6) {
+                   // man[i].x++;
+                }else if (map[hely + 1] == 0 || man[i].x < (hely * 30 + 10)) {
+                    man[i].x += 0.1;
+                }
+                if (man[i].x + 10 > (hely + 1) * 30) {
+                    map[hely] = 0;
+                    map[hely + 1] = 1;
+                }
+
+                if (man[i].x == (hely * 30)) {
+                    SDL_Log(("ebben a pozban van:" + to_string(hely)).c_str());
+                }
+                SDL_Log("hely: %i", map[hely]);
+                SDL_Log("hely: %i", map[hely+1]);
+
+                SDL_FRect rect = {.x = man[i].x, .y = man[i].y, .w = 20, .h = 20};
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_RenderFillRect(renderer, &rect);
+
+
+
+                if (man[i].x >= 210) {
+                    removeFirstManFromMap();
+                }
             }
         }
     }
@@ -225,10 +309,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 // This function runs once at shutdown
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-    free(karakterinditas);
-    free(singlePlayerBT);
-    free(easyBt);
-    free(mediumBt);
-    free(hardBt);
+    delete karakterinditas;
+    delete singlePlayerBT;
+    delete easyBt;
+    delete mediumBt;
+    delete hardBt;
+
     free(man);
+    free(pool);
 }
