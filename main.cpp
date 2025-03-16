@@ -5,9 +5,6 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
 
-
-
-
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 
@@ -266,14 +263,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             for (int i = manSize - 1; i >= 0; i--) {
                 int hely = (man[i].x + 10) / 30;
 
-
-                if (hely == 0)
                 if (hely == 6) {
                    // man[i].x++;
-                }else if (map[hely + 1] == 0 || man[i].x < (hely * 30 + 10)) {
-                    man[i].x += 0.1;
+                }else if (map[hely + 1] == 0 || man[i].x < (hely * 30 + 5)) {
+                    man[i].x++;
                 }
-                if (man[i].x + 10 > (hely + 1) * 30) {
+                if (man[i].x + 10 == (hely + 1) * 30) {
                     map[hely] = 0;
                     map[hely + 1] = 1;
                 }
@@ -281,8 +276,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
                 if (man[i].x == (hely * 30)) {
                     SDL_Log(("ebben a pozban van:" + to_string(hely)).c_str());
                 }
-                SDL_Log("hely: %i", map[hely]);
-                SDL_Log("hely: %i", map[hely+1]);
 
                 SDL_FRect rect = {.x = man[i].x, .y = man[i].y, .w = 20, .h = 20};
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
