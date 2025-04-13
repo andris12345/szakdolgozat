@@ -26,7 +26,15 @@ if (NOT SDL3_FOUND)
 endif ()
 
 # Create your game executable target as usual
-add_executable(szakdolgozat main.cpp)
+add_executable(szakdolgozat main.cpp
+        Gomb.cpp
+        CreateMan.cpp
+        Variables.h
+        Gomb.h
+        CreateMan.h
+        Variables.cpp
+        MoveMan.h
+        MoveMan.cpp)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 
