@@ -27,4 +27,9 @@ extern float dificulty;
 
 extern int map[7];
 
+extern int tav;
+extern float emberszelesseg;
+extern float mezoszelesseg;
+extern int mezoszam;
+
 #endif // VARIABLES_H

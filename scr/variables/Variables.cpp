@@ -19,3 +19,8 @@ SDL_FRect kocka;
 float dificulty;
 
 int map[7] = {};
+
+int tav = 100;
+float mezoszelesseg = 40;
+float emberszelesseg = 30;
+int mezoszam = 7;

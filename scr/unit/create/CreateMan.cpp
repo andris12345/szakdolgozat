@@ -57,10 +57,8 @@ void removeFirstManFromPool() {
         pool[i - 1] = pool[i];
     }
 
-    // Cs�kkentj�k a m�retet
     poolSize--;
 
-    // �jram�retezz�k a t�mb�t
     pool = (SDL_FPoint*)realloc(pool, poolSize * sizeof(SDL_FPoint));
 
     if (poolSize == 0) {
