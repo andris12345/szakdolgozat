@@ -25,6 +25,16 @@ if (NOT SDL3_FOUND)
     include_dependency(SDL3 https://github.com/libsdl-org/SDL.git release-3.2.2)
 endif ()
 
+# SDL_ttf
+find_package(SDL3_ttf QUIET)
+if (NOT SDL3_ttf_FOUND)
+    set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
+    set(SDLTTF_HARFBUZZ OFF CACHE BOOL "" FORCE)
+    set(SDLTTF_FREETYPE TRUE CACHE BOOL "" FORCE)
+
+    include_dependency(SDL_ttf https://github.com/libsdl-org/SDL_ttf.git release-3.2.2)
+endif ()
+
 # Create your game executable target as usual
 add_executable(szakdolgozat main.cpp
         Gomb.cpp
@@ -42,4 +52,4 @@ target_compile_definitions(szakdolgozat PRIVATE SDL_MAIN_USE_CALLBACKS)
 
 
 # Link to the actual SDL3 library.
-target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3)
+target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf)
