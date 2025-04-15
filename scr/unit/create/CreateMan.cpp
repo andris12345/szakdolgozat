@@ -1,5 +1,4 @@
 ﻿#include "CreateMan.h"
-#include "Variables.h"
 #include <string>
 
 void removeFirstManFromPool();

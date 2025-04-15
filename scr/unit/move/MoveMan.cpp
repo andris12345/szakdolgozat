@@ -1,7 +1,7 @@
 ﻿#include "MoveMan.h"
-#include "Variables.h"
-#include "CreateMan.h"
-#include "Gomb.h"
+#include "../../variables/Variables.h"
+#include "../create/CreateMan.h"
+#include "../../gui/gomb/Gomb.h"
 
 void Move(SDL_Renderer *renderer) {
     for (int i = 0; i <= 7; i++) {

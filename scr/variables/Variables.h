@@ -2,7 +2,7 @@
 #define VARIABLES_H
 
 #include <SDL3/SDL.h>
-#include "Gomb.h"
+#include "../gui/gomb/Gomb.h"
 
 extern Uint32 frameStart;
 extern int frameTime;

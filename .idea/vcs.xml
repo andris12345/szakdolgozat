@@ -2,10 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/external/freetype" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/external/harfbuzz" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/vendored/SDL" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/vendored/SDL_ttf" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/vendored/freetype" vcs="Git" />
   </component>
 </project>

@@ -5,9 +5,9 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
 
-#include "Variables.h"
-#include "CreateMan.h"
-#include "MoveMan.h"
+#include "scr/variables/Variables.h"
+#include "scr/unit/create/CreateMan.h"
+#include "scr/unit/move/MoveMan.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;

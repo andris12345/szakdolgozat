@@ -2,6 +2,7 @@
 #define CREATEMAN_H
 
 #include <SDL3/SDL.h>
+#include "../../variables/Variables.h"
 
 void CreateManToMap();
 
