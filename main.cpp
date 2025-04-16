@@ -59,7 +59,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             float x, y;
             SDL_GetMouseState(&x, &y);
             if (karakterinditas->isVisible && isMouseOver(karakterinditas, x, y)) {
-                SDL_FPoint point = {.x = 0, .y = 200};
+                float kezdopoz = tav - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);
+                SDL_FPoint point = {.x = kezdopoz, .y = 200};
                 CreateManToPool(point);
             }
             if (singlePlayerBT->isVisible && isMouseOver(singlePlayerBT, x, y)) {
