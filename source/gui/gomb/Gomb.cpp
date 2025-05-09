@@ -2,18 +2,19 @@
 
 #include <iostream>
 #include <ostream>
+#include <utility>
 
 
-Gomb::Gomb() {}
+Gomb::Gomb() = default;
 
 Gomb::Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text) {
     this->rect = rect;
     this->color = color;
     this->hoverColor = hoverColor;
-    this->text = text;
+    this->text = std::move(text);
 }
 
-bool isMouseOver(Gomb* button, int mouseX, int mouseY) {
+bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
     if (!button) return false;
     return (mouseX >= button->rect.x && mouseX <= button->rect.x + button->rect.w &&
             mouseY >= button->rect.y && mouseY <= button->rect.y + button->rect.h);

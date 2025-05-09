@@ -1,7 +1,8 @@
 ﻿#include "Variables.h"
 
 Uint32 frameStart;
-int frameTime;
+Uint64 frameTime;
+int TARGET_FPS = 60;
 
 Gomb *karakterinditas;
 Gomb *singlePlayerBT;
@@ -20,11 +21,11 @@ float dificulty;
 
 int map[7] = {};
 
-int tav = 100;
+float behuzasi_tavolsag = 100;
 float mezoszelesseg = 40;
 float emberszelesseg = 30;
 int mezoszam = 7;
 
 SDL_Color fontColor = {0, 0, 0};
-int fontSize = 12;
+float fontSize = 12;
 TTF_Font *font = TTF_OpenFont("D:/CLion/szakdolgozat/assets/albert-text/AlbertText-Bold.ttf", fontSize);

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ostream>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 #include <filesystem>
 
@@ -12,16 +12,15 @@
 #include "source/unit/create/CreateMan.h"
 #include "source/unit/move/MoveMan.h"
 
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+static SDL_Window *window = nullptr;
+static SDL_Renderer *renderer = nullptr;
 
-const int TARGET_FPS = 60;
 const int FRAME_DELAY = 1000 / TARGET_FPS; // Ennyi ms kell egy frame-hez (1000ms / 60fps = 16.67ms)
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
 
     if (SDL_Init(SDL_INIT_VIDEO) == false){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), nullptr);
         return SDL_APP_FAILURE;
     }
 
@@ -45,7 +44,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
 
     // 800x450 is 16:9
     if (SDL_CreateWindowAndRenderer("hello SDL3", 800, 450, 0, &window, &renderer) == false){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), nullptr);
         return SDL_APP_FAILURE;
     }
 
@@ -83,7 +82,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             float x, y;
             SDL_GetMouseState(&x, &y);
             if (karakterinditas->isVisible && isMouseOver(karakterinditas, x, y)) {
-                float kezdopoz = tav - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);
+                float kezdopoz = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);
                 SDL_FPoint point = {.x = kezdopoz, .y = 200};
                 CreateManToPool(point);
             }

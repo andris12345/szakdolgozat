@@ -8,7 +8,7 @@
 void Move(SDL_Renderer *renderer) {
     //mező jelölő vonalak
     for (int i = 0; i <= mezoszam; i++) {
-        SDL_FRect rect = {.x = (mezoszelesseg * i) + tav , .y = 200-emberszelesseg/2, .w = 1, .h = emberszelesseg + emberszelesseg/2};
+        SDL_FRect rect = {.x = (mezoszelesseg * i) + behuzasi_tavolsag , .y = 200-emberszelesseg/2, .w = 1, .h = emberszelesseg + emberszelesseg/2};
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
     }
@@ -35,7 +35,7 @@ void Move(SDL_Renderer *renderer) {
 
             kirajzolas(renderer, man[i].x, man[i].y);
 
-            if (man[i].x >= mezoszam * mezoszelesseg + tav) {
+            if (man[i].x >= mezoszam * mezoszelesseg + behuzasi_tavolsag) {
                 removeFirstManFromMap();
                 map[mezoszam] = 0;
             }
@@ -50,22 +50,22 @@ void kirajzolas(SDL_Renderer *renderer, float x, float y) {
 }
 
 void mozgatas(SDL_FPoint &man) {
-    if (man.x < tav) {
+    if (man.x < behuzasi_tavolsag) {
         man.x++;
     }else {
-        int hely = (man.x - tav + (emberszelesseg/2)) / mezoszelesseg;
+        int hely = (man.x - behuzasi_tavolsag + (emberszelesseg/2)) / mezoszelesseg;
 
         if (hely == mezoszam -1) {
             // man[i].x++;
-        }else if (map[hely + 1] == 0 || (man.x - tav) < (hely * mezoszelesseg + 5)) {
+        }else if (map[hely + 1] == 0 || (man.x - behuzasi_tavolsag) < (hely * mezoszelesseg + 5)) {
             man.x++;
         }
-        if (man.x + (emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + tav) {
+        if (man.x + (emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + behuzasi_tavolsag) {
             map[hely] = 0;
             map[hely + 1] = 1;
         }
 
-        if (man.x == (hely * mezoszelesseg) + tav) {
+        if (man.x == (hely * mezoszelesseg) + behuzasi_tavolsag) {
             SDL_Log(("ebben a pozban van:" + std::to_string(hely)).c_str());
         }
     }

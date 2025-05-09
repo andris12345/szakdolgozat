@@ -6,9 +6,9 @@
 #include "../../variables/Variables.h"
 
 struct Gomb{
-    SDL_FRect rect;
-    SDL_Color color;
-    SDL_Color hoverColor;
+    SDL_FRect rect = {};
+    SDL_Color color = {};
+    SDL_Color hoverColor = {};
     std::string text;
     bool isHovered = false;
     bool isVisible = false;
@@ -18,7 +18,7 @@ struct Gomb{
     Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text);
 };
 
-bool isMouseOver(Gomb* button, int mouseX, int mouseY);
+bool isMouseOver(Gomb* button, float mouseX, float mouseY);
 
 void render_Button(Gomb* button, SDL_Renderer *renderer);
 #endif //GOMB_H

@@ -7,7 +7,8 @@
 struct Gomb;
 
 extern Uint32 frameStart;
-extern int frameTime;
+extern Uint64 frameTime;
+extern int TARGET_FPS;
 
 extern Gomb *karakterinditas;
 extern Gomb *singlePlayerBT;
@@ -29,14 +30,14 @@ extern float dificulty;
 
 extern int map[7];
 
-extern int tav;
+extern float behuzasi_tavolsag;
 extern float emberszelesseg;
 extern float mezoszelesseg;
 extern int mezoszam;
 
 extern TTF_Font *font;
 extern SDL_Color fontColor;
-extern int fontSize;
+extern float fontSize;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H
