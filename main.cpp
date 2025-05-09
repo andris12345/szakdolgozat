@@ -1,13 +1,16 @@
+#include <iostream>
+#include <ostream>
 #include <stdio.h>
 #include <string>
+#include <filesystem>
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
 
-#include "scr/variables/Variables.h"
-#include "scr/unit/create/CreateMan.h"
-#include "scr/unit/move/MoveMan.h"
+#include "source/variables/Variables.h"
+#include "source/unit/create/CreateMan.h"
+#include "source/unit/move/MoveMan.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -15,11 +18,29 @@ static SDL_Renderer *renderer = NULL;
 const int TARGET_FPS = 60;
 const int FRAME_DELAY = 1000 / TARGET_FPS; // Ennyi ms kell egy frame-hez (1000ms / 60fps = 16.67ms)
 
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[])
-{
+SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
+
     if (SDL_Init(SDL_INIT_VIDEO) == false){
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
         return SDL_APP_FAILURE;
+    }
+
+    // SDL_ttf inicializálása
+    if (TTF_Init() == -1) {
+        std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << SDL_GetError() << std::endl;
+    }
+
+    if (font == nullptr) {
+        std::cerr << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
+    }
+    namespace fs = std::filesystem;
+    std::string filePath = "D:/CLion/szakdolgozat/assets/albert-text/AlbertText-Bold.ttf";
+
+    if (fs::exists(filePath)) {
+
+        std::cout << "A file letezik!" << std::endl;
+    } else {
+        std::cout << "A file nem letezik." << std::endl;
     }
 
     // 800x450 is 16:9
@@ -28,17 +49,20 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[])
         return SDL_APP_FAILURE;
     }
 
+    font = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", fontSize);
+
     kocka.h = kocka.w = 20;
 
-    karakterinditas = new Gomb({0, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255});
-    singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255});
-    easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255});
-    mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255});
-    hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255});
+    karakterinditas = new Gomb({0, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "karakterinditas");
+    singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255},"single player");
+    easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "easy");
+    mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "medium");
+    hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "hard");
 
     // return success!
     return SDL_APP_CONTINUE;
 }
+
 
 // This function runs when a new event occurs
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
@@ -138,6 +162,8 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     delete easyBt;
     delete mediumBt;
     delete hardBt;
+
+    TTF_CloseFont(font);
 
     free(window);
     free(renderer);

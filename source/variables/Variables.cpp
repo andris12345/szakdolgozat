@@ -24,3 +24,7 @@ int tav = 100;
 float mezoszelesseg = 40;
 float emberszelesseg = 30;
 int mezoszam = 7;
+
+SDL_Color fontColor = {0, 0, 0};
+int fontSize = 12;
+TTF_Font *font = TTF_OpenFont("D:/CLion/szakdolgozat/assets/albert-text/AlbertText-Bold.ttf", fontSize);

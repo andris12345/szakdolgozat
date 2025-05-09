@@ -37,14 +37,14 @@ endif ()
 
 # Create your game executable target as usual
 add_executable(szakdolgozat main.cpp
-        scr/gui/gomb/Gomb.cpp
-        scr/unit/create/CreateMan.cpp
-        scr/variables/Variables.h
-        scr/gui/gomb/Gomb.h
-        scr/unit/create/CreateMan.h
-        scr/variables/Variables.cpp
-        scr/unit/move/MoveMan.h
-        scr/unit/move/MoveMan.cpp)
+        source/gui/gomb/Gomb.cpp
+        source/unit/create/CreateMan.cpp
+        source/variables/Variables.h
+        source/gui/gomb/Gomb.h
+        source/unit/create/CreateMan.h
+        source/variables/Variables.cpp
+        source/unit/move/MoveMan.h
+        source/unit/move/MoveMan.cpp)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 

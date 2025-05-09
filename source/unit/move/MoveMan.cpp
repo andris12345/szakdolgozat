@@ -33,7 +33,6 @@ void Move(SDL_Renderer *renderer) {
         for (int i = manSize - 1; i >= 0; i--) {
             mozgatas(man[i]);
 
-            //kirajzolás
             kirajzolas(renderer, man[i].x, man[i].y);
 
             if (man[i].x >= mezoszam * mezoszelesseg + tav) {

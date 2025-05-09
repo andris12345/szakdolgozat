@@ -2,7 +2,9 @@
 #define VARIABLES_H
 
 #include <SDL3/SDL.h>
-#include "../gui/gomb/Gomb.h"
+#include <SDL3_ttf/SDL_ttf.h>
+
+struct Gomb;
 
 extern Uint32 frameStart;
 extern int frameTime;
@@ -32,4 +34,9 @@ extern float emberszelesseg;
 extern float mezoszelesseg;
 extern int mezoszam;
 
+extern TTF_Font *font;
+extern SDL_Color fontColor;
+extern int fontSize;
+
+#include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H
