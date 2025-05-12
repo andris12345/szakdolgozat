@@ -76,8 +76,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             float x, y;
             SDL_GetMouseState(&x, &y);
             if (fighterBt->isVisible && isMouseOver(fighterBt, x, y)) {
-                float kezdopoz = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);
-                SDL_FPoint point = {.x = kezdopoz, .y = 200};
+                SDL_FPoint point = {.x = emberKezdoX, .y = emberKezdoY};
                 CreateManToPool(point);
             }
             if (singlePlayerBT->isVisible && isMouseOver(singlePlayerBT, x, y)) {

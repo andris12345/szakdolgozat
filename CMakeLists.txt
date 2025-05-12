@@ -50,7 +50,9 @@ add_executable(szakdolgozat main.cpp
         source/unit/ranged/Ranged.cpp
         source/unit/ranged/Ranged.h
         source/unit/tank/Tank.cpp
-        source/unit/tank/Tank.h)
+        source/unit/tank/Tank.h
+        source/unit/gameUnit/GameUnit.cpp
+        source/unit/gameUnit/GameUnit.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 

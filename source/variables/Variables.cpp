@@ -30,6 +30,8 @@ int map[7] = {};
 float behuzasi_tavolsag = 100;
 float mezoszelesseg = 40;
 float emberszelesseg = 30;
+float emberKezdoY = 200;
+float emberKezdoX = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);;
 int mezoszam = 7;
 
 SDL_Color fontColor = {0, 0, 0};

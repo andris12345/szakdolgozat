@@ -1,26 +1,11 @@
 ﻿#ifndef FIGHTER_H
 #define FIGHTER_H
+#include "../gameUnit/GameUnit.h"
 
-
-
-class Fighter {
-    int hp{};
-    int range{};
-    int dmg{};
-
-    public:
+class Fighter: public GameUnit{
+public:
     Fighter();
     Fighter(int _hp, int _dmg);
-
-    int getHp();
-    int getDmg();
-    int getRange();
-
-    void setHp(int _hp);
-    void setDmg(int _dmg);
-    void setRange(int _range);
 };
-
-
 
 #endif //FIGHTER_H

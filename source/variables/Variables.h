@@ -38,6 +38,8 @@ extern int map[7];
 extern float behuzasi_tavolsag;
 extern float emberszelesseg;
 extern float mezoszelesseg;
+extern float emberKezdoY;
+extern float emberKezdoX;
 extern int mezoszam;
 
 extern TTF_Font *font;
