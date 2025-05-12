@@ -6,11 +6,16 @@
 
 struct Gomb;
 
+extern int width;
+extern int height;
+
 extern Uint32 frameStart;
 extern Uint64 frameTime;
 extern int TARGET_FPS;
 
-extern Gomb *karakterinditas;
+extern Gomb *fighterBt;
+extern Gomb *rangedBt;
+extern Gomb *tankBt;
 extern Gomb *singlePlayerBT;
 extern Gomb *easyBt;
 extern Gomb *mediumBt;

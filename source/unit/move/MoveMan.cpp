@@ -12,8 +12,14 @@ void Move(SDL_Renderer *renderer) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
     }
-    if (karakterinditas) {
-        render_Button(karakterinditas, renderer);
+    if (fighterBt) {
+        render_Button(fighterBt, renderer);
+    }
+    if (rangedBt) {
+        render_Button(rangedBt, renderer);
+    }
+    if (tankBt) {
+        render_Button(tankBt, renderer);
     }
 
     //poolban lévő emberek kirajzolása + kitevése a mapra

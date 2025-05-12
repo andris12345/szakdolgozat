@@ -43,7 +43,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     }
 
     // 800x450 is 16:9
-    if (SDL_CreateWindowAndRenderer("hello SDL3", 800, 450, 0, &window, &renderer) == false){
+    if (SDL_CreateWindowAndRenderer("hello SDL3", width, height, 0, &window, &renderer) == false){
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), nullptr);
         return SDL_APP_FAILURE;
     }
@@ -51,12 +51,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     font = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", fontSize);
 
     kocka.h = kocka.w = 20;
-
-    karakterinditas = new Gomb({0, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "karakterinditas");
-    singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255},"single player");
-    easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "easy");
-    mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "medium");
-    hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "hard");
 
     // return success!
     return SDL_APP_CONTINUE;
@@ -81,7 +75,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
             float x, y;
             SDL_GetMouseState(&x, &y);
-            if (karakterinditas->isVisible && isMouseOver(karakterinditas, x, y)) {
+            if (fighterBt->isVisible && isMouseOver(fighterBt, x, y)) {
                 float kezdopoz = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);
                 SDL_FPoint point = {.x = kezdopoz, .y = 200};
                 CreateManToPool(point);
@@ -156,7 +150,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 // This function runs once at shutdown
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-    delete karakterinditas;
+    delete fighterBt;
+    delete rangedBt;
+    delete tankBt;
     delete singlePlayerBT;
     delete easyBt;
     delete mediumBt;

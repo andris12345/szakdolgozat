@@ -44,7 +44,9 @@ add_executable(szakdolgozat main.cpp
         source/unit/create/CreateMan.h
         source/variables/Variables.cpp
         source/unit/move/MoveMan.h
-        source/unit/move/MoveMan.cpp)
+        source/unit/move/MoveMan.cpp
+        source/unit/fighter/Fighter.cpp
+        source/unit/fighter/Fighter.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 
