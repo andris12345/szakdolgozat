@@ -71,10 +71,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
             float x, y;
             SDL_GetMouseState(&x, &y);
-            if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                SDL_FPoint point = {.x = emberKezdoX, .y = emberKezdoY};
-                CreateManToPool(point);
-            }
             if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
@@ -103,6 +99,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 easyBt->setIsVisible(false);
                 mediumBt->setIsVisible(false);
                 hardBt->setIsVisible(false);
+            }
+            if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
+                SDL_FPoint point = {.x = emberKezdoX, .y = emberKezdoY};
+                CreateManToPool(point);
             }
         }
         default:
