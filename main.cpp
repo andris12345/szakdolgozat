@@ -24,11 +24,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    // SDL_ttf inicializálása
     if (TTF_Init() == -1) {
         std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << SDL_GetError() << std::endl;
     }
-
+    font = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", fontSize);
     if (font == nullptr) {
         std::cerr << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
     }
@@ -48,11 +47,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    font = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", fontSize);
-
     kocka.h = kocka.w = 20;
 
-    // return success!
     return SDL_APP_CONTINUE;
 }
 
@@ -75,38 +71,38 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
             float x, y;
             SDL_GetMouseState(&x, &y);
-            if (fighterBt->isVisible && isMouseOver(fighterBt, x, y)) {
+            if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
                 SDL_FPoint point = {.x = emberKezdoX, .y = emberKezdoY};
                 CreateManToPool(point);
             }
-            if (singlePlayerBT->isVisible && isMouseOver(singlePlayerBT, x, y)) {
+            if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
-                singlePlayerBT->isVisible = false;
+                singlePlayerBT->setIsVisible(false);
             }
-            if (easyBt->isVisible && isMouseOver(easyBt, x, y)) {
+            if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
                 SDL_Log("meg van nyomva: easyBT");
                 dificulty = 0.5;
                 start = true;
-                easyBt->isVisible = false;
-                mediumBt->isVisible = false;
-                hardBt->isVisible = false;
+                easyBt->setIsVisible(false);
+                mediumBt->setIsVisible(false);
+                hardBt->setIsVisible(false);
             }
-            if (mediumBt->isVisible && isMouseOver(mediumBt, x, y)) {
+            if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
                 SDL_Log("meg van nyomva: mediumBT");
                 dificulty = 1;
                 start = true;
-                easyBt->isVisible = false;
-                mediumBt->isVisible = false;
-                hardBt->isVisible = false;
+                easyBt->setIsVisible(false);
+                mediumBt->setIsVisible(false);
+                hardBt->setIsVisible(false);
             }
-            if (hardBt->isVisible && isMouseOver(hardBt, x, y)) {
+            if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
                 SDL_Log("meg van nyomva: hardBT");
                 dificulty = 1.5;
                 start = true;
-                easyBt->isVisible = false;
-                mediumBt->isVisible = false;
-                hardBt->isVisible = false;
+                easyBt->setIsVisible(false);
+                mediumBt->setIsVisible(false);
+                hardBt->setIsVisible(false);
             }
         }
         default:

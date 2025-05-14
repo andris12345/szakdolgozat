@@ -16,8 +16,8 @@ Gomb::Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string te
 
 bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
     if (!button) return false;
-    return (mouseX >= button->rect.x && mouseX <= button->rect.x + button->rect.w &&
-            mouseY >= button->rect.y && mouseY <= button->rect.y + button->rect.h);
+    return (mouseX >= button->getRect().x && mouseX <= button->getRect().x + button->getRect().w &&
+            mouseY >= button->getRect().y && mouseY <= button->getRect().y + button->getRect().h);
 }
 
 void render_Button(Gomb* button, SDL_Renderer *renderer) {
@@ -25,14 +25,14 @@ void render_Button(Gomb* button, SDL_Renderer *renderer) {
     SDL_GetMouseState(&x, &y);
 
     if (isMouseOver(button, x, y)) {
-        SDL_SetRenderDrawColor(renderer, button->hoverColor.r, button->hoverColor.g, button->hoverColor.b, 255);
+        SDL_SetRenderDrawColor(renderer, button->getHoverColor().r, button->getHoverColor().g, button->getHoverColor().b, 255);
     }else {
-        SDL_SetRenderDrawColor(renderer, button->color.r, button->color.g, button->color.b, 255);
+        SDL_SetRenderDrawColor(renderer, button->getColor().r, button->getColor().g, button->getColor().b, 255);
     }
-    SDL_RenderFillRect(renderer, &button->rect);
-    button->isVisible = true;
+    SDL_RenderFillRect(renderer, &button->getRect());
+    button->setIsVisible(true);
 
-    SDL_Surface* surface = TTF_RenderText_Solid(font, button->text.c_str(), button->text.length(), fontColor);
+    SDL_Surface* surface = TTF_RenderText_Solid(font, button->getText().c_str(), button->getText().length(), fontColor);
     if (surface == nullptr) {
         // Hibaellenőrzés
         std::cerr << "Error creating text surface: " << SDL_GetError() << std::endl;
@@ -48,7 +48,55 @@ void render_Button(Gomb* button, SDL_Renderer *renderer) {
     }
 
     // Szöveg renderelése
-    SDL_RenderTexture(renderer, texture, nullptr, &button->rect); // SDL_RenderCopy helyett
+    SDL_RenderTexture(renderer, texture, nullptr, &button->getRect());
 
     SDL_DestroyTexture(texture); // texture szabadítása
+}
+
+void Gomb::setRect(SDL_FRect rect) {
+    this->rect = rect;
+}
+
+void Gomb::setColor(SDL_Color color) {
+    this->color = color;
+}
+
+void Gomb::setHoverColor(SDL_Color hoverColor) {
+    this->hoverColor = hoverColor;
+}
+
+void Gomb::setText(std::string text) {
+    this->text = std::move(text);
+}
+
+void Gomb::setIsHovered(bool isHovered) {
+    this->isHovered = isHovered;
+}
+
+void Gomb::setIsVisible(bool isVisible) {
+    this->isVisible = isVisible;
+}
+
+SDL_FRect& Gomb::getRect() {
+    return rect;
+}
+
+SDL_Color Gomb::getColor() {
+    return color;
+}
+
+SDL_Color Gomb::getHoverColor() {
+    return hoverColor;
+}
+
+std::string Gomb::getText() {
+    return text;
+}
+
+bool Gomb::getIsHovered() const {
+    return isHovered;
+}
+
+bool Gomb::getIsVisible() const {
+    return isVisible;
 }
