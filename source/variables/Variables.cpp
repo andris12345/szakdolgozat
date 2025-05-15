@@ -15,9 +15,9 @@ Gomb *singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0,
 Gomb *easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "easy");
 Gomb *mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "medium");
 Gomb *hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "hard");
-SDL_FPoint *man;
+GameUnit *man;
 size_t manSize;
-SDL_FPoint *pool;
+GameUnit *pool;
 size_t poolSize;
 bool add;
 bool start;

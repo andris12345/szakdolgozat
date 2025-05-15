@@ -4,7 +4,7 @@
 
 class Tank: public GameUnit{
 public:
-    Tank();
+    Tank(int _tipus);
     Tank(int _hp, int _dmg);
 };
 

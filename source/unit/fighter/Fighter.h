@@ -4,7 +4,7 @@
 
 class Fighter: public GameUnit{
 public:
-    Fighter();
+    Fighter(int _tipus);
     Fighter(int _hp, int _dmg);
 };
 

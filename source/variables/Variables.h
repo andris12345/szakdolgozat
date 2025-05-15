@@ -4,6 +4,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "../unit/gameUnit/GameUnit.h"
+
 struct Gomb;
 
 extern int width;
@@ -21,9 +23,9 @@ extern Gomb *easyBt;
 extern Gomb *mediumBt;
 extern Gomb *hardBt;
 
-extern SDL_FPoint *man;
+extern GameUnit *man;
 extern size_t manSize;
-extern SDL_FPoint *pool;
+extern GameUnit *pool;
 extern size_t poolSize;
 
 extern bool add;

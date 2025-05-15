@@ -10,7 +10,10 @@
 
 #include "source/variables/Variables.h"
 #include "source/unit/create/CreateMan.h"
+#include "source/unit/fighter/Fighter.h"
 #include "source/unit/move/MoveMan.h"
+#include "source/unit/ranged/Ranged.h"
+#include "source/unit/tank/Tank.h"
 
 static SDL_Window *window = nullptr;
 static SDL_Renderer *renderer = nullptr;
@@ -101,8 +104,16 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 hardBt->setIsVisible(false);
             }
             if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                SDL_FPoint point = {.x = emberKezdoX, .y = emberKezdoY};
-                CreateManToPool(point);
+                Fighter fighter = Fighter(0);
+                CreateManToPool(fighter);
+            }
+            if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
+                Ranged ranged = Ranged(1);
+                CreateManToPool(ranged);
+            }
+            if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
+                Tank tank = Tank(2);
+                CreateManToPool(tank);
             }
         }
         default:

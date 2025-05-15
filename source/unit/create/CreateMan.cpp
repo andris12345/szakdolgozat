@@ -5,11 +5,11 @@ void removeFirstManFromPool();
 
 void CreateManToMap() {
     SDL_Log("ember generalas");
-    SDL_FPoint point = pool[0];
+    GameUnit point = pool[0];
     removeFirstManFromPool();
     manSize++;
 
-    SDL_FPoint* temp = (SDL_FPoint*)realloc(man, manSize * sizeof(SDL_FPoint));
+    GameUnit* temp = (GameUnit*)realloc(man, manSize * sizeof(GameUnit));
     if (temp) {
         man = temp;
         man[manSize - 1] = point;
@@ -28,24 +28,23 @@ void removeFirstManFromMap() {
 
     manSize--;
 
-    man = (SDL_FPoint*)realloc(man, manSize * sizeof(SDL_FPoint));
+    man = (GameUnit*)realloc(man, manSize * sizeof(GameUnit));
 
     if (manSize == 0) {
         man = NULL;
     }
-}
+} //TODO: megnézni hogy tényleg fightert külde és a szineket bellítani
 
-void CreateManToPool(SDL_FPoint point) {
-    // N�velj�k a t�mb m�ret�t dinamikusan
+void CreateManToPool(GameUnit unit) {
     poolSize++;
 
-    pool = (SDL_FPoint*)realloc(pool, poolSize * sizeof(SDL_FPoint));
+    pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
 
     // �j ember besz�r�sa a t�mb v�g�re
-    pool[poolSize - 1] = point;
+    pool[poolSize - 1] = unit;
     SDL_Log("uj pool letrehozva");
-    SDL_Log(std::to_string(pool[0].x).c_str());
-    SDL_Log(std::to_string(pool[0].y).c_str());
+    SDL_Log(std::to_string(pool[0].getRect().x).c_str());
+    SDL_Log(std::to_string(pool[0].getRect().y).c_str());
 }
 
 void removeFirstManFromPool() {
@@ -59,7 +58,7 @@ void removeFirstManFromPool() {
 
     poolSize--;
 
-    pool = (SDL_FPoint*)realloc(pool, poolSize * sizeof(SDL_FPoint));
+    pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
 
     if (poolSize == 0) {
         pool = NULL; // Ha m�r nincs ember, null�zzuk ki a pointert

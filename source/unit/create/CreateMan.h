@@ -8,7 +8,7 @@ void CreateManToMap();
 
 void removeFirstManFromMap();
 
-void CreateManToPool(SDL_FPoint point);
+void CreateManToPool(GameUnit unit);
 
 void removeFirstManFromPool();
 #endif //CREATEMAN_H
