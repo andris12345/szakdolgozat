@@ -6,7 +6,7 @@ int height = 450;
 
 Uint32 frameStart;
 Uint64 frameTime;
-int TARGET_FPS = 60;
+int TARGET_FPS = 30;
 
 Gomb *fighterBt = new Gomb({470, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Fighter");
 Gomb *rangedBt = new Gomb({580, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Ranged");
@@ -25,14 +25,14 @@ bool singlePlayer;
 SDL_FRect kocka;
 float dificulty;
 
-int map[7] = {};
-
 float behuzasi_tavolsag = 100;
 float mezoszelesseg = 40;
 float emberszelesseg = 30;
 float emberKezdoY = 200;
 float emberKezdoX = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);;
-int mezoszam = 7;
+const int mezoszam = 10;
+
+int map[mezoszam] = {};
 
 SDL_Color fontColor = {0, 0, 0};
 float fontSize = 12;

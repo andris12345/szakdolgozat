@@ -35,14 +35,14 @@ extern bool singlePlayer;
 extern SDL_FRect kocka;
 extern float dificulty;
 
-extern int map[7];
-
 extern float behuzasi_tavolsag;
 extern float emberszelesseg;
 extern float mezoszelesseg;
 extern float emberKezdoY;
 extern float emberKezdoX;
-extern int mezoszam;
+extern const int mezoszam;
+
+extern int map[];
 
 extern TTF_Font *font;
 extern SDL_Color fontColor;

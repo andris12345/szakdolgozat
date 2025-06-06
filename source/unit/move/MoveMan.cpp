@@ -40,7 +40,7 @@ void Move(SDL_Renderer *renderer) {
             mozgatas(man[i]);
             kirajzolas(renderer, man[i].getRect().x, man[i].getRect().y, man[i].getColor());
 
-            if (man[i].getRect().x >= mezoszam * mezoszelesseg + behuzasi_tavolsag) {
+            if ((man[i].getRect().x + emberszelesseg/2) >= mezoszam * mezoszelesseg + behuzasi_tavolsag) {
                 removeFirstManFromMap();
                 map[mezoszam] = 0;
             }
@@ -55,23 +55,27 @@ void kirajzolas(SDL_Renderer *renderer, float x, float y, SDL_Color color) {
 }
 
 void mozgatas(GameUnit &man){
-    if (man.getRect().x < behuzasi_tavolsag) {
+    if ((man.getRect().x + emberszelesseg / 2) < behuzasi_tavolsag) {
         man.setRectX(man.getRextX() + 1);
     }else {
-        int hely = (man.getRextX() - behuzasi_tavolsag + (emberszelesseg/2)) / mezoszelesseg;
+        int hely = ((man.getRextX() + emberszelesseg/2) - behuzasi_tavolsag) / mezoszelesseg;
 
-        if (hely == mezoszam -1) {
-            // man[i].x++;
-        }else if (map[hely + 1] == 0 || (man.getRextX() - behuzasi_tavolsag) < (hely * mezoszelesseg + 5)) {
+        if (hely == 0) {
+            //SDL_Delay(4000);
+        }
+        if (hely == mezoszam) {
+             man.setRectX(man.getRextX() + 1);
+        }else if (map[hely + 1] == 0 || man.getRextX() < ((mezoszam - 1) * mezoszelesseg + behuzasi_tavolsag)) {
             man.setRectX(man.getRextX() + 1);
+        } else {
+            SDL_Log("igen");
         }
         if (man.getRextX() + (emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + behuzasi_tavolsag) {
             map[hely] = 0;
             map[hely + 1] = 1;
         }
-
-        if (man.getRextX() == (hely * mezoszelesseg) + behuzasi_tavolsag) {
-            SDL_Log(("ebben a pozban van:" + std::to_string(hely)).c_str());
+        if ((man.getRextX() + emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + behuzasi_tavolsag) {
+            SDL_Log(("ebben a pozban van: " + std::to_string(hely + 1) + " ebben az xben: " + std::to_string(man.getRextX()+emberszelesseg/2)).c_str());
         }
     }
 }
