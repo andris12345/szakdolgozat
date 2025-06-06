@@ -63,12 +63,12 @@ void mozgatas(GameUnit &man){
         if (hely == 0) {
             //SDL_Delay(4000);
         }
-        if (hely == mezoszam) {
-             man.setRectX(man.getRextX() + 1);
-        }else if (map[hely + 1] == 0 || man.getRextX() < ((mezoszam - 1) * mezoszelesseg + behuzasi_tavolsag)) {
+        if (hely == mezoszam-1) {
+            if (man.getRextX() < (hely * mezoszelesseg + behuzasi_tavolsag + (mezoszelesseg - emberszelesseg) / 2)) {
+                man.setRectX(man.getRextX() + 1);
+            }
+        }else if (map[hely + 1] == 0 || man.getRextX() < (hely * mezoszelesseg + behuzasi_tavolsag + (mezoszelesseg - emberszelesseg) / 2)) {
             man.setRectX(man.getRextX() + 1);
-        } else {
-            SDL_Log("igen");
         }
         if (man.getRextX() + (emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + behuzasi_tavolsag) {
             map[hely] = 0;
