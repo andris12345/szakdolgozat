@@ -7,11 +7,17 @@
 
 Gomb::Gomb() = default;
 
-Gomb::Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text) {
+Gomb::Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text, TTF_Font* font) {
     this->rect = rect;
     this->color = color;
     this->hoverColor = hoverColor;
     this->text = std::move(text);
+    this->subtitle = new Subtitle(font, {0, 0, 0}, {rect.x, rect.y, 0, 0});
+    subtitle->setText(this->text);
+}
+
+Gomb::~Gomb() {
+    delete subtitle;
 }
 
 bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
@@ -20,7 +26,7 @@ bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
             mouseY >= button->getRect().y && mouseY <= button->getRect().y + button->getRect().h);
 }
 
-void render_Button(Gomb* button, SDL_Renderer *renderer) {
+void render_Button(Gomb* button) {
     float x, y;
     SDL_GetMouseState(&x, &y);
 
@@ -32,6 +38,8 @@ void render_Button(Gomb* button, SDL_Renderer *renderer) {
     SDL_RenderFillRect(renderer, &button->getRect());
     button->setIsVisible(true);
 
+    button->getSubtitle()->render();
+    /*
     SDL_Surface* surface = TTF_RenderText_Solid(font, button->getText().c_str(), button->getText().length(), fontColor);
     if (surface == nullptr) {
         // Hibaellenőrzés
@@ -51,6 +59,7 @@ void render_Button(Gomb* button, SDL_Renderer *renderer) {
     SDL_RenderTexture(renderer, texture, nullptr, &button->getRect());
 
     SDL_DestroyTexture(texture); // texture szabadítása
+    */
 }
 
 void Gomb::setRect(SDL_FRect rect) {
@@ -77,6 +86,10 @@ void Gomb::setIsVisible(bool isVisible) {
     this->isVisible = isVisible;
 }
 
+void Gomb::setSubtitleText() {
+    this->subtitle->setText(this->getText());
+}
+
 SDL_FRect& Gomb::getRect() {
     return rect;
 }
@@ -99,4 +112,8 @@ bool Gomb::getIsHovered() const {
 
 bool Gomb::getIsVisible() const {
     return isVisible;
+}
+
+Subtitle *Gomb::getSubtitle() {
+    return subtitle;
 }

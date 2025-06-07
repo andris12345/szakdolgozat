@@ -12,10 +12,13 @@ class Gomb{
     std::string text;
     bool isHovered = false;
     bool isVisible = false;
+    Subtitle *subtitle;
 public:
     Gomb();
 
-    Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text);
+    Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string text, TTF_Font* font);
+
+    ~Gomb();
 
     void setRect(SDL_FRect rect);
     void setColor(SDL_Color color);
@@ -23,6 +26,7 @@ public:
     void setText(std::string text);
     void setIsHovered(bool isHovered);
     void setIsVisible(bool isVisible);
+    void setSubtitleText();
 
     SDL_FRect& getRect();
     SDL_Color getColor();
@@ -30,9 +34,10 @@ public:
     std::string getText();
     bool getIsHovered() const;
     bool getIsVisible() const;
+    Subtitle* getSubtitle();
 };
 
 bool isMouseOver(Gomb* button, float mouseX, float mouseY);
 
-void render_Button(Gomb* button, SDL_Renderer *renderer);
+void render_Button(Gomb* button);
 #endif //GOMB_H

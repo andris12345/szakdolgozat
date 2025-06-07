@@ -8,15 +8,13 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
 
+#include "source/gui/felirat/Felirat.h"
 #include "source/variables/Variables.h"
 #include "source/unit/create/CreateMan.h"
 #include "source/unit/fighter/Fighter.h"
 #include "source/unit/move/MoveMan.h"
 #include "source/unit/ranged/Ranged.h"
 #include "source/unit/tank/Tank.h"
-
-static SDL_Window *window = nullptr;
-static SDL_Renderer *renderer = nullptr;
 
 const int FRAME_DELAY = 1000 / TARGET_FPS; // Ennyi ms kell egy frame-hez (1000ms / 60fps = 16.67ms)
 
@@ -31,18 +29,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << SDL_GetError() << std::endl;
     }
     font = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", fontSize);
+    gombFont = TTF_OpenFont("../../assets/albert-text/AlbertText-Bold.ttf", 30);
     if (font == nullptr) {
         std::cerr << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
     }
-    namespace fs = std::filesystem;
-    std::string filePath = "D:/CLion/szakdolgozat/assets/albert-text/AlbertText-Bold.ttf";
 
-    if (fs::exists(filePath)) {
 
-        std::cout << "A file letezik!" << std::endl;
-    } else {
-        std::cout << "A file nem letezik." << std::endl;
-    }
 
     // 800x450 is 16:9
     if (SDL_CreateWindowAndRenderer("hello SDL3", width, height, 0, &window, &renderer) == false){
@@ -50,13 +42,21 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
+    penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
+
+    fighterBt = new Gomb({470, 10, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Fighter", gombFont);
+    rangedBt = new Gomb({580, 10, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Ranged", gombFont);
+    tankBt = new Gomb({690, 10, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Tank", gombFont);
+    singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255},"single player", gombFont);
+    easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "easy", gombFont);
+    mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "medium", gombFont);
+    hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "hard", gombFont);
+
     kocka.h = kocka.w = 20;
 
     return SDL_APP_CONTINUE;
 }
 
-
-// This function runs when a new event occurs
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
     switch (event->type)
@@ -105,15 +105,25 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             }
             if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
                 Fighter fighter = Fighter(0);
-                CreateManToPool(fighter);
+                if (penz >= fighter.getPrice()) {
+                    penz -= fighter.getPrice();
+                    CreateManToPool(fighter);
+                }
+
             }
             if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
                 Ranged ranged = Ranged(1);
-                CreateManToPool(ranged);
+                if (penz >= ranged.getPrice()) {
+                    penz -= ranged.getPrice();
+                    CreateManToPool(ranged);
+                }
             }
             if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
                 Tank tank = Tank(2);
-                CreateManToPool(tank);
+                if (penz >= tank.getPrice()) {
+                    penz -= tank.getPrice();
+                    CreateManToPool(tank);
+                }
             }
         }
         default:
@@ -125,21 +135,28 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
     frameStart = SDL_GetTicks();
+    penz += 1/30.0;
 
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
     if (singlePlayerBT && !singlePlayer && !start) {
-        render_Button(singlePlayerBT, renderer);
+        render_Button(singlePlayerBT);
     }
     if (singlePlayer && !start) {
-        render_Button(easyBt, renderer);
-        render_Button(mediumBt, renderer);
-        render_Button(hardBt, renderer);
+        render_Button(easyBt);
+        render_Button(mediumBt);
+        render_Button(hardBt);
     }
 
     if (start) {
-       Move(renderer);
+        std::string text = "Pénz: " + std::to_string((int)penz); // elég nagy buffer  //TODO: megcsinalni valtozo hosszusagu charra es kivinni a valtozokat
+
+        penzText->setText(text);
+
+        penzText->render();
+
+        Move(renderer);
     }
 
     SDL_RenderPresent(renderer);

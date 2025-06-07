@@ -2,6 +2,7 @@
 
 Ranged::Ranged(int _tipus) : GameUnit(_tipus) {
     this->setColor({ 255, 0, 0, 255 });
+    this->setPrice(15);
 }
 
 Ranged::Ranged(int _hp, int _dmg): GameUnit(_hp, _dmg) {

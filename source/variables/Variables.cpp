@@ -1,5 +1,7 @@
 ﻿#include "Variables.h"
 
+SDL_Window *window = nullptr;
+SDL_Renderer *renderer = nullptr;
 
 int width = 800;
 int height = 450;
@@ -8,13 +10,6 @@ Uint32 frameStart;
 Uint64 frameTime;
 int TARGET_FPS = 30;
 
-Gomb *fighterBt = new Gomb({470, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Fighter");
-Gomb *rangedBt = new Gomb({580, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Ranged");
-Gomb *tankBt = new Gomb({690, 0, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "Tank");
-Gomb *singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 0, 0, 255},"single player");
-Gomb *easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "easy");
-Gomb *mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "medium");
-Gomb *hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 0, 0, 255}, "hard");
 GameUnit *man;
 size_t manSize;
 GameUnit *pool;
@@ -36,4 +31,15 @@ int map[mezoszam] = {};
 
 SDL_Color fontColor = {0, 0, 0};
 float fontSize = 12;
-TTF_Font *font = TTF_OpenFont("D:/CLion/szakdolgozat/assets/albert-text/AlbertText-Bold.ttf", fontSize);
+TTF_Font *font;
+TTF_Font *gombFont;
+
+float penz = 10;
+Subtitle *penzText = nullptr;
+Gomb *fighterBt = nullptr;
+Gomb *rangedBt = nullptr;
+Gomb *tankBt = nullptr;
+Gomb *singlePlayerBT = nullptr;
+Gomb *easyBt = nullptr;
+Gomb *mediumBt = nullptr;
+Gomb *hardBt = nullptr;

@@ -5,6 +5,7 @@
 
 
 class GameUnit {
+    int price;
     int tipus{};
     int hp{};
     int range{};
@@ -16,6 +17,7 @@ public:
     GameUnit(int _tipus);
     GameUnit(int _hp, int _dmg);
 
+    int getPrice();
     int getTipus();
     int getHp();
     int getDmg();
@@ -24,6 +26,7 @@ public:
     SDL_Color getColor();
     float getRextX();
 
+    void setPrice(int _price);
     void setHp(int _hp);
     void setDmg(int _dmg);
     void setRange(int _range);

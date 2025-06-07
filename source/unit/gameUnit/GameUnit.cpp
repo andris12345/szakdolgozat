@@ -10,6 +10,7 @@ GameUnit::GameUnit(int _hp, int _dmg) : hp(_hp), dmg(_dmg) {
     this->rect = {emberKezdoX, emberKezdoY};
 }
 
+int GameUnit::getPrice() { return price; }
 int GameUnit::getHp() { return hp; }
 int GameUnit::getTipus() { return tipus; }
 int GameUnit::getDmg() { return dmg; }
@@ -18,6 +19,7 @@ SDL_FRect GameUnit::getRect() { return rect; }
 SDL_Color GameUnit::getColor() { return color; }
 float GameUnit::getRextX() { return rect.x; }
 
+void GameUnit::setPrice(int _price) { price = _price; };
 void GameUnit::setHp(int _hp) { hp = _hp; }
 void GameUnit::setDmg(int _dmg) { dmg = _dmg; }
 void GameUnit::setRange(int _range) { range = _range; }

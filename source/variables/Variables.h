@@ -3,10 +3,16 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <string>
 
+#include "../gui/felirat/Felirat.h"
 #include "../unit/gameUnit/GameUnit.h"
 
-struct Gomb;
+extern SDL_Window *window;
+extern SDL_Renderer *renderer;
+
+class Gomb;
+class Subtitle;
 
 extern int width;
 extern int height;
@@ -14,14 +20,6 @@ extern int height;
 extern Uint32 frameStart;
 extern Uint64 frameTime;
 extern int TARGET_FPS;
-
-extern Gomb *fighterBt;
-extern Gomb *rangedBt;
-extern Gomb *tankBt;
-extern Gomb *singlePlayerBT;
-extern Gomb *easyBt;
-extern Gomb *mediumBt;
-extern Gomb *hardBt;
 
 extern GameUnit *man;
 extern size_t manSize;
@@ -44,9 +42,21 @@ extern const int mezoszam;
 
 extern int map[];
 
-extern TTF_Font *font;
 extern SDL_Color fontColor;
 extern float fontSize;
+extern TTF_Font *font;
+extern TTF_Font *gombFont;
+
+extern float penz;
+extern Subtitle *penzText;
+
+extern Gomb *fighterBt;
+extern Gomb *rangedBt;
+extern Gomb *tankBt;
+extern Gomb *singlePlayerBT;
+extern Gomb *easyBt;
+extern Gomb *mediumBt;
+extern Gomb *hardBt;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

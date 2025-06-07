@@ -52,7 +52,9 @@ add_executable(szakdolgozat main.cpp
         source/unit/tank/Tank.cpp
         source/unit/tank/Tank.h
         source/unit/gameUnit/GameUnit.cpp
-        source/unit/gameUnit/GameUnit.h)
+        source/unit/gameUnit/GameUnit.h
+        source/gui/felirat/Felirat.cpp
+        source/gui/felirat/Felirat.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 
