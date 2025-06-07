@@ -39,7 +39,6 @@ void Subtitle::updateTexture() {
     SDL_Log("Text rendered: %dx%d", surface->w, surface->h);
 }
 
-
 void Subtitle::render() const {
     if (texture) {
         SDL_RenderTexture(renderer, texture, nullptr, &rect);

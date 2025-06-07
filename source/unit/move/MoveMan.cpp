@@ -27,7 +27,6 @@ void Move(SDL_Renderer *renderer) {
         if (map[0] == 0) {
             map[0] = 1;
             CreateManToMap();
-
         }
         if (poolSize > 0) {
             kirajzolas(renderer, pool[i].getRect().x, pool[i].getRect().y, pool[i].getColor());

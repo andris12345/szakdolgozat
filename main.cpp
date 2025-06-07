@@ -34,8 +34,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         std::cerr << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
     }
 
-
-
     // 800x450 is 16:9
     if (SDL_CreateWindowAndRenderer("hello SDL3", width, height, 0, &window, &renderer) == false){
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), nullptr);
@@ -62,13 +60,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
     switch (event->type)
     {
         case SDL_EVENT_QUIT:
-            // end the program, reporting success to the OS
                 return SDL_APP_SUCCESS;
         case SDL_EVENT_KEY_DOWN:
             if (event->key.key == SDLK_ESCAPE)
             {
-                // end the program on ESC key,
-                // returning success to the OS
                 return SDL_APP_SUCCESS;
             }
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
@@ -109,7 +104,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     penz -= fighter.getPrice();
                     CreateManToPool(fighter);
                 }
-
             }
             if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
                 Ranged ranged = Ranged(1);
@@ -150,10 +144,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (start) {
-        std::string text = "Pénz: " + std::to_string((int)penz); // elég nagy buffer  //TODO: megcsinalni valtozo hosszusagu charra es kivinni a valtozokat
+        std::string text = "Pénz: " + std::to_string(static_cast<int>(penz));
 
         penzText->setText(text);
-
         penzText->render();
 
         Move(renderer);
@@ -170,7 +163,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     return SDL_APP_CONTINUE;
 }
 
-// This function runs once at shutdown
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
     delete fighterBt;

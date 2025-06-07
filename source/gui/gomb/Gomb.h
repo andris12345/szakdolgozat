@@ -12,7 +12,7 @@ class Gomb{
     std::string text;
     bool isHovered = false;
     bool isVisible = false;
-    Subtitle *subtitle;
+    Subtitle *subtitle = nullptr;
 public:
     Gomb();
 

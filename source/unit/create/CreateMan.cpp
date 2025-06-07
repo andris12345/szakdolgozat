@@ -33,14 +33,14 @@ void removeFirstManFromMap() {
     if (manSize == 0) {
         man = NULL;
     }
-} //TODO: megnézni hogy tényleg fightert külde és a szineket bellítani
+}
 
 void CreateManToPool(GameUnit unit) {
     poolSize++;
 
     pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
 
-    // �j ember besz�r�sa a t�mb v�g�re
+    // uj ember beszurasa a tomb vegere
     pool[poolSize - 1] = unit;
     SDL_Log("uj pool letrehozva");
     SDL_Log(std::to_string(pool[0].getRect().x).c_str());
@@ -51,7 +51,7 @@ void removeFirstManFromPool() {
     SDL_Log("pool torles");
     if (poolSize == 0) return; // Ha nincs mit t�r�lni, kil�p�nk
 
-    // Ha t�bb elem van, akkor el?retoljuk az elemeket
+    // Ha tobb elem van, akkor eloretoljuk az elemeket
     for (size_t i = 1; i < poolSize; i++) {
         pool[i - 1] = pool[i];
     }
@@ -61,6 +61,6 @@ void removeFirstManFromPool() {
     pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
 
     if (poolSize == 0) {
-        pool = NULL; // Ha m�r nincs ember, null�zzuk ki a pointert
+        pool = NULL; // Ha mar nincs ember, nullazzuk ki a pointert
     }
 }

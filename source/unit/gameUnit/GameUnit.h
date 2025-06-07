@@ -5,7 +5,7 @@
 
 
 class GameUnit {
-    int price;
+    int price{};
     int tipus{};
     int hp{};
     int range{};

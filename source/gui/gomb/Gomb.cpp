@@ -1,6 +1,5 @@
 ﻿#include "Gomb.h"
 
-#include <iostream>
 #include <ostream>
 #include <utility>
 
@@ -39,81 +38,32 @@ void render_Button(Gomb* button) {
     button->setIsVisible(true);
 
     button->getSubtitle()->render();
-    /*
-    SDL_Surface* surface = TTF_RenderText_Solid(font, button->getText().c_str(), button->getText().length(), fontColor);
-    if (surface == nullptr) {
-        // Hibaellenőrzés
-        std::cerr << "Error creating text surface: " << SDL_GetError() << std::endl;
-        return;
-    }
-
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_DestroySurface(surface);
-
-    if (texture == nullptr) {
-        std::cerr << "Error creating texture: " << SDL_GetError() << std::endl;
-        return;
-    }
-
-    // Szöveg renderelése
-    SDL_RenderTexture(renderer, texture, nullptr, &button->getRect());
-
-    SDL_DestroyTexture(texture); // texture szabadítása
-    */
 }
 
-void Gomb::setRect(SDL_FRect rect) {
-    this->rect = rect;
-}
+void Gomb::setRect(SDL_FRect rect) { this->rect = rect; }
 
-void Gomb::setColor(SDL_Color color) {
-    this->color = color;
-}
+void Gomb::setColor(SDL_Color color) { this->color = color; }
 
-void Gomb::setHoverColor(SDL_Color hoverColor) {
-    this->hoverColor = hoverColor;
-}
+void Gomb::setHoverColor(SDL_Color hoverColor) { this->hoverColor = hoverColor; }
 
-void Gomb::setText(std::string text) {
-    this->text = std::move(text);
-}
+void Gomb::setText(std::string text) { this->text = std::move(text); }
 
-void Gomb::setIsHovered(bool isHovered) {
-    this->isHovered = isHovered;
-}
+void Gomb::setIsHovered(bool isHovered) { this->isHovered = isHovered; }
 
-void Gomb::setIsVisible(bool isVisible) {
-    this->isVisible = isVisible;
-}
+void Gomb::setIsVisible(bool isVisible) { this->isVisible = isVisible; }
 
-void Gomb::setSubtitleText() {
-    this->subtitle->setText(this->getText());
-}
+void Gomb::setSubtitleText() { this->subtitle->setText(this->getText()); }
 
-SDL_FRect& Gomb::getRect() {
-    return rect;
-}
+SDL_FRect& Gomb::getRect() { return rect; }
 
-SDL_Color Gomb::getColor() {
-    return color;
-}
+SDL_Color Gomb::getColor() { return color; }
 
-SDL_Color Gomb::getHoverColor() {
-    return hoverColor;
-}
+SDL_Color Gomb::getHoverColor() { return hoverColor; }
 
-std::string Gomb::getText() {
-    return text;
-}
+std::string Gomb::getText() { return text; }
 
-bool Gomb::getIsHovered() const {
-    return isHovered;
-}
+bool Gomb::getIsHovered() const { return isHovered; }
 
-bool Gomb::getIsVisible() const {
-    return isVisible;
-}
+bool Gomb::getIsVisible() const { return isVisible; }
 
-Subtitle *Gomb::getSubtitle() {
-    return subtitle;
-}
+Subtitle *Gomb::getSubtitle() { return subtitle; }
