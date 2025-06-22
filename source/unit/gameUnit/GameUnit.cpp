@@ -2,11 +2,11 @@
 
 #include "../../variables/Variables.h"
 
-GameUnit::GameUnit(int _tipus) : tipus(_tipus){
+GameUnit::GameUnit(int _tipus, int _hp, int _dmg) : tipus(_tipus), hp(_hp), dmg(_dmg){
     this->rect = {emberKezdoX, emberKezdoY};
 }
 
-GameUnit::GameUnit(int _hp, int _dmg) : hp(_hp), dmg(_dmg) {
+GameUnit::GameUnit() {
     this->rect = {emberKezdoX, emberKezdoY};
 }
 

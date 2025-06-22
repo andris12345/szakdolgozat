@@ -4,8 +4,8 @@
 
 class Fighter: public GameUnit{
 public:
-    Fighter(int _tipus);
-    Fighter(int _hp, int _dmg);
+    Fighter(int _tipus, int _hp, int _dmg);
+    Fighter();
 };
 
 #endif //FIGHTER_H

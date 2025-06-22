@@ -4,8 +4,8 @@
 
 class Ranged: public GameUnit{
 public:
-    Ranged(int _tipus);
-    Ranged(int _hp, int _dmg);
+    Ranged(int _tipus, int _hp, int _dmg);
+    Ranged();
 };
 
 #endif //RANGED_H

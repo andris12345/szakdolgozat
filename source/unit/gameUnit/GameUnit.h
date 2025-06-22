@@ -10,12 +10,13 @@ class GameUnit {
     int hp{};
     int range{};
     int dmg{};
+    bool isEnemy;
     SDL_FRect rect{};
     SDL_Color color{};
 
 public:
-    GameUnit(int _tipus);
-    GameUnit(int _hp, int _dmg);
+    GameUnit(int _tipus, int _hp, int _dmg);
+    GameUnit();
 
     int getPrice();
     int getTipus();
