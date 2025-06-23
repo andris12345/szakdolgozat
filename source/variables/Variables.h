@@ -26,6 +26,11 @@ extern size_t manSize;
 extern GameUnit *pool;
 extern size_t poolSize;
 
+extern GameUnit *enemyMan;
+extern size_t enemyManSize;
+extern GameUnit *enemyPool;
+extern size_t enemyPoolSize;
+
 extern bool add;
 extern bool start;
 extern bool singlePlayer;
@@ -57,6 +62,11 @@ extern Gomb *singlePlayerBT;
 extern Gomb *easyBt;
 extern Gomb *mediumBt;
 extern Gomb *hardBt;
+
+extern int frameSzamlalo;
+
+extern Gomb *startenemy;
+extern GameUnit* enemy;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

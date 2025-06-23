@@ -49,6 +49,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
+    startenemy = new Gomb({470, 100, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "enemy", gombFont);
 
     kocka.h = kocka.w = 20;
 
@@ -99,25 +100,30 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 hardBt->setIsVisible(false);
             }
             if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                Fighter fighter = Fighter(0, 12 ,1);
+                Fighter fighter = Fighter(0, 12 ,1, false);
                 if (penz >= fighter.getPrice()) {
                     penz -= fighter.getPrice();
-                    CreateManToPool(fighter);
+                    CreateManToPool(fighter, false);
                 }
             }
             if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
-                Ranged ranged = Ranged(1, 8, 4);
+                Ranged ranged = Ranged(1, 8, 4, false);
                 if (penz >= ranged.getPrice()) {
                     penz -= ranged.getPrice();
-                    CreateManToPool(ranged);
+                    CreateManToPool(ranged, false);
                 }
             }
             if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
-                Tank tank = Tank(2, 16, 1);
+                Tank tank = Tank(2, 16, 1, false);
                 if (penz >= tank.getPrice()) {
                     penz -= tank.getPrice();
-                    CreateManToPool(tank);
+                    CreateManToPool(tank, false);
                 }
+            }
+            if (startenemy->getIsVisible() && isMouseOver(startenemy, x, y)) {
+                Fighter fighter = Fighter(0, 12 ,1, true);
+                SDL_Log("startenemy");
+                CreateManToPool(fighter, true);
             }
         }
         default:
@@ -158,6 +164,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     frameTime = SDL_GetTicks() - frameStart;
     if (frameTime < FRAME_DELAY) {
         SDL_Delay(FRAME_DELAY - frameTime);
+        frameSzamlalo++;
+        if (frameSzamlalo % 30 == 0) {
+            frameSzamlalo = 0;
+        }
     }
 
     return SDL_APP_CONTINUE;
@@ -172,6 +182,8 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     delete easyBt;
     delete mediumBt;
     delete hardBt;
+    delete enemy;
+    delete startenemy;
 
     TTF_CloseFont(font);
 
@@ -179,4 +191,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     free(renderer);
     free(man);
     free(pool);
+    free(enemyMan);
+    free(enemyPool);
 }

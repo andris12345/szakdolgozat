@@ -1,5 +1,7 @@
 ﻿#include "Variables.h"
 
+#include "../unit/fighter/Fighter.h"
+
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 
@@ -14,6 +16,12 @@ GameUnit *man;
 size_t manSize;
 GameUnit *pool;
 size_t poolSize;
+
+GameUnit *enemyMan;
+size_t enemyManSize;
+GameUnit *enemyPool;
+size_t enemyPoolSize;
+
 bool add;
 bool start;
 bool singlePlayer;
@@ -34,7 +42,7 @@ float fontSize = 12;
 TTF_Font *font;
 TTF_Font *gombFont;
 
-float penz = 10;
+float penz = 20;
 Subtitle *penzText = nullptr;
 Gomb *fighterBt = nullptr;
 Gomb *rangedBt = nullptr;
@@ -43,3 +51,8 @@ Gomb *singlePlayerBT = nullptr;
 Gomb *easyBt = nullptr;
 Gomb *mediumBt = nullptr;
 Gomb *hardBt = nullptr;
+
+int frameSzamlalo = 0;
+
+Gomb *startenemy = nullptr;
+GameUnit* enemy = new Fighter(0, 12 ,1, true);

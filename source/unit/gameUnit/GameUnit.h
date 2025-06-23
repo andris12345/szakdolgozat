@@ -15,7 +15,7 @@ class GameUnit {
     SDL_Color color{};
 
 public:
-    GameUnit(int _tipus, int _hp, int _dmg);
+    GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy);
     GameUnit();
 
     int getPrice();
@@ -26,6 +26,7 @@ public:
     SDL_FRect getRect();
     SDL_Color getColor();
     float getRextX();
+    bool getIsEnemy();
 
     void setPrice(int _price);
     void setHp(int _hp);

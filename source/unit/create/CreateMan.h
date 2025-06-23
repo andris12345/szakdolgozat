@@ -4,11 +4,11 @@
 #include <SDL3/SDL.h>
 #include "../../variables/Variables.h"
 
-void CreateManToMap();
+void CreateManToMap(bool isEnemy);
 
-void removeFirstManFromMap();
+void removeFirstManFromMap(bool isEnemy);
 
-void CreateManToPool(GameUnit unit);
+void CreateManToPool(GameUnit unit, bool isEnemy);
 
-void removeFirstManFromPool();
+void removeFirstManFromPool(bool isEnemy);
 #endif //CREATEMAN_H

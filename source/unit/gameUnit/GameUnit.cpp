@@ -2,8 +2,12 @@
 
 #include "../../variables/Variables.h"
 
-GameUnit::GameUnit(int _tipus, int _hp, int _dmg) : tipus(_tipus), hp(_hp), dmg(_dmg){
-    this->rect = {emberKezdoX, emberKezdoY};
+GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), dmg(_dmg), isEnemy(_isEnemy){
+    if (_isEnemy) {
+        this->rect = {mezoszam * mezoszelesseg + behuzasi_tavolsag + mezoszelesseg/2 - emberszelesseg/2, emberKezdoY};
+    }else {
+        this->rect = {emberKezdoX, emberKezdoY};
+    }
 }
 
 GameUnit::GameUnit() {
@@ -18,6 +22,8 @@ int GameUnit::getRange() { return range; }
 SDL_FRect GameUnit::getRect() { return rect; }
 SDL_Color GameUnit::getColor() { return color; }
 float GameUnit::getRextX() { return rect.x; }
+bool GameUnit::getIsEnemy() { return isEnemy; }
+
 
 void GameUnit::setPrice(int _price) { price = _price; };
 void GameUnit::setHp(int _hp) { hp = _hp; }

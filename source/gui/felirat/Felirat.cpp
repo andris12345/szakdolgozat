@@ -19,8 +19,6 @@ void Subtitle::updateTexture() {
     if (texture) SDL_DestroyTexture(texture);
     if (surface) SDL_DestroySurface(surface);
 
-    SDL_Log("Rendering text: %s", text.c_str());
-
     surface = TTF_RenderText_Solid(font, text.c_str(), text.length(), color);
     if (!surface) {
         SDL_Log("asdTTF_RenderText_Solid failed: %s", SDL_GetError());
@@ -36,7 +34,6 @@ void Subtitle::updateTexture() {
     rect.w = surface->w;
     rect.h = surface->h;
 
-    SDL_Log("Text rendered: %dx%d", surface->w, surface->h);
 }
 
 void Subtitle::render() const {
