@@ -7,6 +7,7 @@
 void Move(SDL_Renderer *renderer);
 void kirajzolas(SDL_Renderer *renderer, GameUnit &man);
 void mozgatas(GameUnit &man);
-void tamadas();
+void attackHandler(GameUnit unit_man, int hely);
+void attack(GameUnit unit_man);
 
 #endif //MOVEMAN_H

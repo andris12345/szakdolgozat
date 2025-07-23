@@ -88,12 +88,10 @@ void mozgatas(GameUnit &man){
             }
             if (man.getRextX() + (emberszelesseg/2) == ((hely) * mezoszelesseg) + behuzasi_tavolsag - 1) {
                 map[hely] = 0;
-                map[hely - 1] = 1;
+                map[hely - 1] = 2;
+                man.setPos(hely - 1);
             }
-            if (hely + 1 == 9) {
-                if (frameSzamlalo % 15 == 0)
-                    tamadas();
-            }
+            attackHandler(man, hely);
         }
     }else {
         if ((man.getRect().x + emberszelesseg / 2) < behuzasi_tavolsag) {
@@ -111,14 +109,43 @@ void mozgatas(GameUnit &man){
             if (man.getRextX() + (emberszelesseg/2) == ((hely + 1) * mezoszelesseg) + behuzasi_tavolsag) {
                 map[hely] = 0;
                 map[hely + 1] = 1;
+                man.setPos(hely + 1);
             }
-            if (hely + 1 == 9) {
-                if (frameSzamlalo % 15 == 0)
-                    tamadas();
+            attackHandler(man, hely);
+        }
+    }
+}
+
+void attackHandler(GameUnit unit_man, int hely) {
+    if (unit_man.getIsEnemy()) {
+        for (int i = 1; i <= unit_man.getRange(); i++) {
+            if (map[hely - i] == 1) {
+                attack(unit_man);
+            }
+        }
+    }else {
+        for (int i = 1; i <= unit_man.getRange(); i++) {
+            if (map[hely + i] == 2) {
+                attack(unit_man);
             }
         }
     }
 }
 
-void tamadas() {
+void attack(GameUnit unit_man) {
+    if (unit_man.getIsEnemy()) {
+        GameUnit* enemy = &man[0];
+        enemy->setHp(enemy->getHp() - unit_man.getDmg());
+        if (enemy->getHp() <= 0) {
+            map[enemy->getPos()] = 0;
+            removeFirstManFromMap(false);
+        }
+    }else {
+        GameUnit* enemy = &enemyMan[0];
+        enemy->setHp(enemy->getHp() - unit_man.getDmg());
+        if (enemy->getHp() <= 0) {
+            map[enemy->getPos()] = 0;
+            removeFirstManFromMap(true);
+        }
+    }
 }

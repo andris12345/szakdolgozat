@@ -100,28 +100,28 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 hardBt->setIsVisible(false);
             }
             if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                Fighter fighter = Fighter(0, 12 ,1, false);
+                Fighter fighter = Fighter(0, 12 ,2, false);
                 if (penz >= fighter.getPrice()) {
                     penz -= fighter.getPrice();
                     CreateManToPool(fighter, false);
                 }
             }
             if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
-                Ranged ranged = Ranged(1, 8, 4, false);
+                Ranged ranged = Ranged(1, 8, 2, false);
                 if (penz >= ranged.getPrice()) {
                     penz -= ranged.getPrice();
                     CreateManToPool(ranged, false);
                 }
             }
             if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
-                Tank tank = Tank(2, 16, 1, false);
+                Tank tank = Tank(2, 16, 2, false);
                 if (penz >= tank.getPrice()) {
                     penz -= tank.getPrice();
                     CreateManToPool(tank, false);
                 }
             }
             if (startenemy->getIsVisible() && isMouseOver(startenemy, x, y)) {
-                Fighter fighter = Fighter(0, 12 ,1, true);
+                Fighter fighter = Fighter(0, 12 ,2, true);
                 SDL_Log("startenemy");
                 CreateManToPool(fighter, true);
             }

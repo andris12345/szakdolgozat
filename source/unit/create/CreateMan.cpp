@@ -68,6 +68,7 @@ void removeFirstManFromMap(bool isEnemy) {
 
 void CreateManToPool(GameUnit unit, bool isEnemy) {
     if (isEnemy) {
+        unit.setPos(mezoszam);
         SDL_Log("enemy");
         enemyPoolSize++;
         enemyPool = (GameUnit*)realloc(enemyPool, enemyPoolSize * sizeof(GameUnit));
@@ -78,6 +79,7 @@ void CreateManToPool(GameUnit unit, bool isEnemy) {
         SDL_Log(std::to_string(enemyPool[0].getRect().x).c_str());
         SDL_Log(std::to_string(enemyPool[0].getRect().y).c_str());
     }else {
+        unit.setPos(0);
         poolSize++;
 
         pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
