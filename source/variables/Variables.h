@@ -36,7 +36,6 @@ extern bool start;
 extern bool singlePlayer;
 
 extern SDL_FRect kocka;
-extern float dificulty;
 
 extern float behuzasi_tavolsag;
 extern float emberszelesseg;
@@ -53,7 +52,6 @@ extern TTF_Font *font;
 extern TTF_Font *gombFont;
 
 extern float money;
-extern float enemyMoney;
 extern Subtitle *penzText;
 
 extern Gomb *fighterBt;

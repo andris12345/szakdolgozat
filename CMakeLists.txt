@@ -54,7 +54,15 @@ add_executable(szakdolgozat main.cpp
         source/unit/gameUnit/GameUnit.cpp
         source/unit/gameUnit/GameUnit.h
         source/gui/felirat/Felirat.cpp
-        source/gui/felirat/Felirat.h)
+        source/gui/felirat/Felirat.h
+        source/variables/AiVariables.cpp
+        source/variables/AiVariables.h
+        source/ai/easy/easyAi.cpp
+        source/ai/easy/easyAi.h
+        source/ai/medium/mediumAi.cpp
+        source/ai/medium/mediumAi.h
+        source/ai/hard/hardAi.cpp
+        source/ai/hard/hardAi.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 

@@ -10,11 +10,15 @@
 
 #include "source/gui/felirat/Felirat.h"
 #include "source/variables/Variables.h"
+#include "source/variables/AiVariables.h"
 #include "source/unit/create/CreateMan.h"
 #include "source/unit/fighter/Fighter.h"
 #include "source/unit/move/MoveMan.h"
 #include "source/unit/ranged/Ranged.h"
 #include "source/unit/tank/Tank.h"
+#include "source/ai/easy/easyAi.h"
+#include "source/ai/medium/mediumAi.h"
+#include "source/ai/hard/hardAi.h"
 
 const int FRAME_DELAY = 1000 / TARGET_FPS; // Ennyi ms kell egy frame-hez (1000ms / 60fps = 16.67ms)
 
@@ -77,7 +81,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             }
             if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
                 SDL_Log("meg van nyomva: easyBT");
-                dificulty = 0.5;
+                dificulty = 1;
                 start = true;
                 easyBt->setIsVisible(false);
                 mediumBt->setIsVisible(false);
@@ -85,7 +89,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             }
             if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
                 SDL_Log("meg van nyomva: mediumBT");
-                dificulty = 1;
+                dificulty = 2;
                 start = true;
                 easyBt->setIsVisible(false);
                 mediumBt->setIsVisible(false);
@@ -93,7 +97,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             }
             if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
                 SDL_Log("meg van nyomva: hardBT");
-                dificulty = 1.5;
+                dificulty = 3;
                 start = true;
                 easyBt->setIsVisible(false);
                 mediumBt->setIsVisible(false);
@@ -135,7 +139,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
     frameStart = SDL_GetTicks();
-    money += 1/30.0;
 
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
@@ -150,10 +153,28 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (start) {
+        money += 1/30.0;
         std::string text = "Pénz: " + std::to_string(static_cast<int>(money));
 
         penzText->setText(text);
         penzText->render();
+
+        switch (dificulty) {
+            case 1: {
+                easyAi();
+                break;
+            }
+            case 2: {
+                mediumAi();
+                break;
+            }
+            case 3: {
+                hardAi();
+                break;
+            }
+            default:
+                break;
+        }
 
         Move(renderer);
     }

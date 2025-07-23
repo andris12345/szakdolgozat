@@ -1,5 +1,6 @@
 ﻿#include "MoveMan.h"
 #include "../../variables/Variables.h"
+#include "../../variables/AiVariables.h"
 #include "../create/CreateMan.h"
 #include "../../gui/gomb/Gomb.h"
 
@@ -138,7 +139,7 @@ void attack(GameUnit unit_man) {
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[enemy->getPos()] = 0;
-            enemyMoney += enemy->getPrice() / 2;
+            aiMoney += enemy->getPrice() / 2;
             removeFirstManFromMap(false);
         }
     }else {

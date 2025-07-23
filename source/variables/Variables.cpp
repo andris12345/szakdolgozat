@@ -26,7 +26,6 @@ bool add;
 bool start;
 bool singlePlayer;
 SDL_FRect kocka;
-float dificulty;
 
 float behuzasi_tavolsag = 100;
 float mezoszelesseg = 40;
@@ -43,7 +42,6 @@ TTF_Font *font;
 TTF_Font *gombFont;
 
 float money = 20;
-float enemyMoney = 20;
 Subtitle *penzText = nullptr;
 Gomb *fighterBt = nullptr;
 Gomb *rangedBt = nullptr;
