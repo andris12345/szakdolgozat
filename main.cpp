@@ -203,7 +203,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     delete easyBt;
     delete mediumBt;
     delete hardBt;
-    delete enemy;
     delete startenemy;
 
     TTF_CloseFont(font);

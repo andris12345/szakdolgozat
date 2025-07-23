@@ -62,7 +62,9 @@ add_executable(szakdolgozat main.cpp
         source/ai/medium/mediumAi.cpp
         source/ai/medium/mediumAi.h
         source/ai/hard/hardAi.cpp
-        source/ai/hard/hardAi.h)
+        source/ai/hard/hardAi.h
+        source/unit/attack/Attack.cpp
+        source/unit/attack/Attack.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 

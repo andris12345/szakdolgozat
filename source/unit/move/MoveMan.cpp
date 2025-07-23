@@ -4,8 +4,6 @@
 #include "../create/CreateMan.h"
 #include "../../gui/gomb/Gomb.h"
 
-void mozgatas(GameUnit &man);
-
 void Move(SDL_Renderer *renderer) {
     //mező jelölő vonalak
     for (int i = 0; i <= mezoszam; i++) {
@@ -17,7 +15,7 @@ void Move(SDL_Renderer *renderer) {
         render_Button(fighterBt);
     }
     if (rangedBt) {
-        render_Button(rangedBt);
+        render_Button(rangedBt); // todo atvinni a mainbe a buttonrendereket
     }
     if (tankBt) {
         render_Button(tankBt);
@@ -27,26 +25,35 @@ void Move(SDL_Renderer *renderer) {
     }
 
     //poolban lévő emberek kirajzolása + kitevése a mapra
-    for (int i = 0; i < poolSize; i++) {
-        if (map[0] == 0) {
-            map[0] = 1;
-            CreateManToMap(false);
-            SDL_Log("Created map");
-        }
-        if (poolSize > 0) {
-            kirajzolas(renderer, pool[i]);
+    if (pool != NULL) {
+        for (int i = 0; i < poolSize; i++) {
+            if (map[0] == 0) {                      //todo: megcsinalni hogy ne egybol tegye ki hanem lepdessen es ha odaer akko rakja at
+                map[0] = 1;
+                CreateManToMap(false);
+                SDL_Log("Created map");
+            }
+            if (pool != NULL && map[0] == 2 && (pool[i].getRange() == 3 || i == 0)) {
+                attackFromPool(pool[i], false);
+            }
+            if (poolSize > 0) {
+                kirajzolas(renderer, pool[i]);
+            }
         }
     }
 
     //enemy pool kirajzolasa
-    for (int i = 0; i < enemyPoolSize; i++) {
-
-        if (map[mezoszam - 1] == 0) {
-            map[mezoszam - 1] = 1;
-            CreateManToMap(true);
-        }
-        if (enemyPoolSize > 0) {
-            kirajzolas(renderer, enemyPool[i]);
+    if (enemyPool != NULL) {
+        for (int i = 0; i < enemyPoolSize; i++) {
+            if (map[mezoszam - 1] == 0) {       //todo: ugyan az mint feljebb
+                map[mezoszam - 1] = 2;
+                CreateManToMap(true);
+            }
+            if (enemyPool != NULL && map[mezoszam - 1] == 1 && (enemyPool[i].getRange() == 3 || i == 0)) {
+                attackFromPool(enemyPool[i], true);
+            }
+            if (enemyPoolSize > 0) {
+                kirajzolas(renderer, enemyPool[i]);
+            }
         }
     }
 
@@ -113,42 +120,6 @@ void mozgatas(GameUnit &man){
                 man.setPos(hely + 1);
             }
             attackHandler(man, hely);
-        }
-    }
-}
-
-void attackHandler(GameUnit unit_man, int hely) {
-    if (unit_man.getIsEnemy()) {
-        for (int i = 1; i <= unit_man.getRange(); i++) {
-            if (map[hely - i] == 1) {
-                attack(unit_man);
-            }
-        }
-    }else {
-        for (int i = 1; i <= unit_man.getRange(); i++) {
-            if (map[hely + i] == 2) {
-                attack(unit_man);
-            }
-        }
-    }
-}
-
-void attack(GameUnit unit_man) {
-    if (unit_man.getIsEnemy()) {
-        GameUnit* enemy = &man[0];
-        enemy->setHp(enemy->getHp() - unit_man.getDmg());
-        if (enemy->getHp() <= 0) {
-            map[enemy->getPos()] = 0;
-            aiMoney += enemy->getPrice() / 2;
-            removeFirstManFromMap(false);
-        }
-    }else {
-        GameUnit* enemy = &enemyMan[0];
-        enemy->setHp(enemy->getHp() - unit_man.getDmg());
-        if (enemy->getHp() <= 0) {
-            map[enemy->getPos()] = 0;
-            money += enemy->getPrice() / 2;
-            removeFirstManFromMap(true);
         }
     }
 }

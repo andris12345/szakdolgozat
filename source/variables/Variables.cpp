@@ -54,4 +54,3 @@ Gomb *hardBt = nullptr;
 int frameSzamlalo = 0;
 
 Gomb *startenemy = nullptr;
-GameUnit* enemy = new Fighter(0, 12 ,1, true);

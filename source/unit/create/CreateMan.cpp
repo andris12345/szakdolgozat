@@ -45,7 +45,7 @@ void removeFirstManFromMap(bool isEnemy) {
 
         enemyMan = (GameUnit*)realloc(enemyMan, enemyManSize * sizeof(GameUnit));
 
-        if (manSize == 0) {
+        if (enemyManSize == 0) {
             enemyMan = NULL;
         }
     }else {
