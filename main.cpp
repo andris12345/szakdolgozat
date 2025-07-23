@@ -101,22 +101,22 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             }
             if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
                 Fighter fighter = Fighter(0, 12 ,2, false);
-                if (penz >= fighter.getPrice()) {
-                    penz -= fighter.getPrice();
+                if (money >= fighter.getPrice()) {
+                    money -= fighter.getPrice();
                     CreateManToPool(fighter, false);
                 }
             }
             if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
                 Ranged ranged = Ranged(1, 8, 2, false);
-                if (penz >= ranged.getPrice()) {
-                    penz -= ranged.getPrice();
+                if (money >= ranged.getPrice()) {
+                    money -= ranged.getPrice();
                     CreateManToPool(ranged, false);
                 }
             }
             if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
                 Tank tank = Tank(2, 16, 2, false);
-                if (penz >= tank.getPrice()) {
-                    penz -= tank.getPrice();
+                if (money >= tank.getPrice()) {
+                    money -= tank.getPrice();
                     CreateManToPool(tank, false);
                 }
             }
@@ -135,7 +135,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
     frameStart = SDL_GetTicks();
-    penz += 1/30.0;
+    money += 1/30.0;
 
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
@@ -150,7 +150,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (start) {
-        std::string text = "Pénz: " + std::to_string(static_cast<int>(penz));
+        std::string text = "Pénz: " + std::to_string(static_cast<int>(money));
 
         penzText->setText(text);
         penzText->render();

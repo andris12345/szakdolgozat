@@ -52,7 +52,8 @@ extern float fontSize;
 extern TTF_Font *font;
 extern TTF_Font *gombFont;
 
-extern float penz;
+extern float money;
+extern float enemyMoney;
 extern Subtitle *penzText;
 
 extern Gomb *fighterBt;

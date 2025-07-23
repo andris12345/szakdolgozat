@@ -138,6 +138,7 @@ void attack(GameUnit unit_man) {
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[enemy->getPos()] = 0;
+            enemyMoney += enemy->getPrice() / 2;
             removeFirstManFromMap(false);
         }
     }else {
@@ -145,6 +146,7 @@ void attack(GameUnit unit_man) {
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[enemy->getPos()] = 0;
+            money += enemy->getPrice() / 2;
             removeFirstManFromMap(true);
         }
     }

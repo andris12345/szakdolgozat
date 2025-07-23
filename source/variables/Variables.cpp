@@ -42,7 +42,8 @@ float fontSize = 12;
 TTF_Font *font;
 TTF_Font *gombFont;
 
-float penz = 20;
+float money = 20;
+float enemyMoney = 20;
 Subtitle *penzText = nullptr;
 Gomb *fighterBt = nullptr;
 Gomb *rangedBt = nullptr;

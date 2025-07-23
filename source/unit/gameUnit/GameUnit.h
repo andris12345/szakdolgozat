@@ -5,7 +5,7 @@
 
 
 class GameUnit {
-    int price{};
+    float price{};
     int tipus{};
     int hp{};
     int range{};
@@ -19,7 +19,7 @@ public:
     GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy);
     GameUnit();
 
-    int getPrice();
+    float getPrice();
     int getTipus();
     int getHp();
     int getDmg();
@@ -30,7 +30,7 @@ public:
     float getRextX();
     bool getIsEnemy();
 
-    void setPrice(int _price);
+    void setPrice(float _price);
     void setHp(int _hp);
     void setDmg(int _dmg);
     void setRange(int _range);

@@ -14,7 +14,7 @@ GameUnit::GameUnit() {
     this->rect = {emberKezdoX, emberKezdoY};
 }
 
-int GameUnit::getPrice() { return price; }
+float GameUnit::getPrice() { return price; }
 int GameUnit::getHp() { return hp; }
 int GameUnit::getTipus() { return tipus; }
 int GameUnit::getDmg() { return dmg; }
@@ -26,7 +26,7 @@ float GameUnit::getRextX() { return rect.x; }
 bool GameUnit::getIsEnemy() { return isEnemy; }
 
 
-void GameUnit::setPrice(int _price) { price = _price; };
+void GameUnit::setPrice(float _price) { price = _price; };
 void GameUnit::setHp(int _hp) { hp = _hp; }
 void GameUnit::setDmg(int _dmg) { dmg = _dmg; }
 void GameUnit::setRange(int _range) { range = _range; }
