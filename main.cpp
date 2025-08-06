@@ -175,7 +175,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             default:
                 break;
         }
-
         Move(renderer);
     }
 

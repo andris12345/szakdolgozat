@@ -7,6 +7,7 @@ void CreateManToMap(bool isEnemy) {
     if (isEnemy) {
         SDL_Log("enemy create to map");
         GameUnit point = enemyPool[0];
+        point.setPos(mezoszam - 1);
         removeFirstManFromPool(isEnemy);
         enemyManSize++;
         SDL_Log("delete enemy from pool");
@@ -20,6 +21,7 @@ void CreateManToMap(bool isEnemy) {
     }else {
         SDL_Log("ember generalas");
         GameUnit point = pool[0];
+        point.setPos(0);
         removeFirstManFromPool(isEnemy);
         manSize++;
         SDL_Log("delete man from pool");
@@ -37,6 +39,8 @@ void removeFirstManFromMap(bool isEnemy) {
     if (isEnemy) {
         if (enemyManSize == 0) return;
 
+        map[enemyMan[0].getPos()] = 0;
+
         for (size_t i = 1; i < enemyManSize; i++) {
             enemyMan[i - 1] = enemyMan[i];
         }
@@ -51,6 +55,8 @@ void removeFirstManFromMap(bool isEnemy) {
     }else {
         SDL_Log("map torles");
         if (manSize == 0) return;
+
+        map[man[0].getPos()] = 0;
 
         for (size_t i = 1; i < manSize; i++) {
             man[i - 1] = man[i];

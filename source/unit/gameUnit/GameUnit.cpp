@@ -2,7 +2,7 @@
 
 #include "../../variables/Variables.h"
 
-GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), dmg(_dmg), isEnemy(_isEnemy){
+GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), maxHp(_hp), dmg(_dmg), isEnemy(_isEnemy){
     if (_isEnemy) {
         this->rect = {mezoszam * mezoszelesseg + behuzasi_tavolsag + mezoszelesseg/2 - emberszelesseg/2, emberKezdoY};
     }else {
@@ -16,6 +16,7 @@ GameUnit::GameUnit() {
 
 float GameUnit::getPrice() { return price; }
 int GameUnit::getHp() { return hp; }
+int GameUnit::getMaxHp() { return maxHp; }
 int GameUnit::getTipus() { return tipus; }
 int GameUnit::getDmg() { return dmg; }
 int GameUnit::getRange() { return range; }
@@ -28,6 +29,7 @@ bool GameUnit::getIsEnemy() { return isEnemy; }
 
 void GameUnit::setPrice(float _price) { price = _price; };
 void GameUnit::setHp(int _hp) { hp = _hp; }
+void GameUnit::setMaxHp(int _maxHp) { maxHp = _maxHp; }
 void GameUnit::setDmg(int _dmg) { dmg = _dmg; }
 void GameUnit::setRange(int _range) { range = _range; }
 void GameUnit::setPos(int _pos) { poz = _pos; }

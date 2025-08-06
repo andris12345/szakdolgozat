@@ -8,6 +8,7 @@ class GameUnit {
     float price{};
     int tipus{};
     int hp{};
+    int maxHp{};
     int range{};
     int dmg{};
     int poz{};
@@ -22,6 +23,7 @@ public:
     float getPrice();
     int getTipus();
     int getHp();
+    int getMaxHp();
     int getDmg();
     int getRange();
     int getPos();
@@ -32,6 +34,7 @@ public:
 
     void setPrice(float _price);
     void setHp(int _hp);
+    void setMaxHp(int _maxHp);
     void setDmg(int _dmg);
     void setRange(int _range);
     void setPos(int _pos);

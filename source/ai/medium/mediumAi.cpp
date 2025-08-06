@@ -6,7 +6,6 @@
 
 void mediumAi() {
     aiMoney += 1.0 / 30;
-    SDL_Log(std::to_string(aiMoney).c_str());
     switch (unitCounter) {
         case 0: {
             Fighter fighter = Fighter(0, 12 ,2, true);

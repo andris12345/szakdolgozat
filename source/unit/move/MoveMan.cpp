@@ -33,7 +33,9 @@ void Move(SDL_Renderer *renderer) {
                 SDL_Log("Created map");
             }
             if (pool != NULL && map[0] == 2 && (pool[i].getRange() == 3 || i == 0)) {
-                attackFromPool(pool[i], false);
+                if (frameSzamlalo == 0) {
+                    attackFromPool(pool[i], false);
+                }
             }
             if (poolSize > 0) {
                 kirajzolas(renderer, pool[i]);
@@ -49,7 +51,9 @@ void Move(SDL_Renderer *renderer) {
                 CreateManToMap(true);
             }
             if (enemyPool != NULL && map[mezoszam - 1] == 1 && (enemyPool[i].getRange() == 3 || i == 0)) {
-                attackFromPool(enemyPool[i], true);
+                if (frameSzamlalo == 0) {
+                    attackFromPool(enemyPool[i], true);
+                }
             }
             if (enemyPoolSize > 0) {
                 kirajzolas(renderer, enemyPool[i]);
@@ -72,6 +76,38 @@ void Move(SDL_Renderer *renderer) {
             kirajzolas(renderer, enemyMan[i]);
         }
     }
+
+    //hp kirajzplas
+    if (manSize != 0) {
+        if (man[0].getHp() != man[0].getMaxHp()) {
+            hpkirajzolas(renderer, man[0]);
+        }
+    }else if (poolSize != 0) {
+        if (pool[0].getHp() != pool[0].getMaxHp()) {
+            hpkirajzolas(renderer, pool[0]);
+        }
+    }
+    if (enemyManSize != 0 ) {
+        if (enemyMan[0].getHp() != enemyMan[0].getMaxHp()) {
+            hpkirajzolas(renderer, enemyMan[0]);
+        }
+    }else if (enemyPoolSize != 0) {
+        if (enemyPool[0].getHp() != enemyPool[0].getMaxHp()) {
+            hpkirajzolas(renderer, enemyPool[0]);
+        }
+    }
+}
+
+void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man) {
+    float ratio = (float)man.getHp() / (float)man.getMaxHp();
+    float hpwidth = ratio * emberszelesseg;
+    SDL_FRect rect = {.x = man.getRect().x, .y = (man.getRect().y - 15), .w = emberszelesseg, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    rect = {.x = man.getRect().x, .y = (man.getRect().y - 15), .w = hpwidth, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 void kirajzolas(SDL_Renderer *renderer, GameUnit &man) {
@@ -99,7 +135,9 @@ void mozgatas(GameUnit &man){
                 map[hely - 1] = 2;
                 man.setPos(hely - 1);
             }
-            attackHandler(man, hely);
+            if (frameSzamlalo == 0) {
+                attackHandler(man, hely);
+            }
         }
     }else {
         if ((man.getRect().x + emberszelesseg / 2) < behuzasi_tavolsag) {
@@ -119,7 +157,9 @@ void mozgatas(GameUnit &man){
                 map[hely + 1] = 1;
                 man.setPos(hely + 1);
             }
-            attackHandler(man, hely);
+            if (frameSzamlalo == 0) {
+                attackHandler(man, hely);
+            }
         }
     }
 }
