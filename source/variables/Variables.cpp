@@ -53,7 +53,7 @@ Gomb *hardBt = nullptr;
 
 int frameSzamlalo = 0;
 
-int maxBaseHp = 150;
+int maxBaseHp = 50;
 int baseHp = maxBaseHp;
-int maxEnemybaseHp = 150;
+int maxEnemybaseHp = 50;
 int enemybaseHp = maxEnemybaseHp;

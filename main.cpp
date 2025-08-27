@@ -46,9 +46,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
 
     penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
 
-    fighterBt = new Gomb({470, 10, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
-    rangedBt = new Gomb({580, 10, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged", gombFont);
-    tankBt = new Gomb({690, 10, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank", gombFont);
+    fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
+    rangedBt = new Gomb({580, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged", gombFont);
+    tankBt = new Gomb({690, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank", gombFont);
     singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255},"single player", gombFont);
     easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);

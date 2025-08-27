@@ -98,7 +98,7 @@ void Move(SDL_Renderer *renderer) {
 }
 
 void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man) {
-    float ratio = (float)man.getHp() / (float)man.getMaxHp();
+    float ratio = static_cast<float>(man.getHp()) / static_cast<float>(man.getMaxHp());
     float hpwidth = ratio * emberszelesseg;
     SDL_FRect rect = {.x = man.getRect().x, .y = (man.getRect().y - 15), .w = emberszelesseg, .h = 5};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -121,6 +121,26 @@ void basekirajzolas(SDL_Renderer *renderer) {
     SDL_RenderFillRect(renderer, &rect);
 
     rect = {.x = (behuzasi_tavolsag + mezoszam * mezoszelesseg + 20), .y = (emberKezdoY - 100), .w = behuzasi_tavolsag - 40, .h = emberKezdoY - 100 + emberszelesseg};
+    SDL_RenderFillRect(renderer, &rect);
+
+    float ratio = static_cast<float>(baseHp) / static_cast<float>(maxBaseHp); // sajat
+    float hpwidth = ratio * behuzasi_tavolsag - 40;
+    rect = {.x = 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    rect = {.x = 20, .y = (emberKezdoY - 100 - 15), .w = hpwidth, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    ratio = static_cast<float>(enemybaseHp) / static_cast<float>(maxEnemybaseHp);  //enemy
+    hpwidth = ratio * behuzasi_tavolsag - 40;
+    rect = {.x = behuzasi_tavolsag + mezoszam * mezoszelesseg + 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    rect = {.x = behuzasi_tavolsag + mezoszam * mezoszelesseg + 20, .y = (emberKezdoY - 100 - 15), .w = hpwidth, .h = 5};
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 }
 

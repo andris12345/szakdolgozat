@@ -36,7 +36,7 @@ void attack(GameUnit unit_man, bool attackBase) {
                     removeFirstManFromPool(false);
                 }
             }else {
-                //todo bazistamadas
+                baseHp -= unit_man.getDmg();
             }
         }else {
             enemy = &man[0];
@@ -58,7 +58,7 @@ void attack(GameUnit unit_man, bool attackBase) {
                     removeFirstManFromPool(true);
                 }
             }else {
-                //todo ellensegbazis
+                enemybaseHp -= unit_man.getDmg();
             }
         }else {
             enemy = &enemyMan[0];
