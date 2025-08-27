@@ -25,12 +25,14 @@ void Move(SDL_Renderer *renderer) {
 
     //poolban lévő emberek kirajzolása + kitevése a mapra
     if (pool != NULL) {
-        for (int i = 0; i < poolSize; i++) {
-            if (map[0] == 0) {                      //todo: megcsinalni hogy ne egybol tegye ki hanem lepdessen es ha odaer akko rakja at
+        if (map[0] == 0) {
+            pool[0].setRectX(pool[0].getRextX() + 1);
+            if (pool[0].getRextX() + emberszelesseg/2 >= behuzasi_tavolsag) {
                 map[0] = 1;
                 CreateManToMap(false);
-                SDL_Log("Created map");
             }
+        }
+        for (int i = 0; i < poolSize; i++) {
             if (pool != NULL && map[0] == 2 && (pool[i].getRange() == 3 || i == 0)) {
                 if (frameSzamlalo == 0) {
                     attackFromPool(pool[i], false);
@@ -44,11 +46,14 @@ void Move(SDL_Renderer *renderer) {
 
     //enemy pool kirajzolasa
     if (enemyPool != NULL) {
-        for (int i = 0; i < enemyPoolSize; i++) {
-            if (map[mezoszam - 1] == 0) {       //todo: ugyan az mint feljebb
+        if (map[mezoszam - 1] == 0) {
+            enemyPool[0].setRectX(enemyPool[0].getRextX() - 1);
+            if (enemyPool[0].getRextX() + emberszelesseg/2 <= behuzasi_tavolsag + mezoszam * mezoszelesseg) {
                 map[mezoszam - 1] = 2;
                 CreateManToMap(true);
             }
+        }
+        for (int i = 0; i < enemyPoolSize; i++) {
             if (enemyPool != NULL && map[mezoszam - 1] == 1 && (enemyPool[i].getRange() == 3 || i == 0)) {
                 if (frameSzamlalo == 0) {
                     attackFromPool(enemyPool[i], true);
