@@ -129,7 +129,7 @@ void basekirajzolas(SDL_Renderer *renderer) {
     SDL_RenderFillRect(renderer, &rect);
 
     float ratio = static_cast<float>(baseHp) / static_cast<float>(maxBaseHp); // sajat
-    float hpwidth = ratio * behuzasi_tavolsag - 40;
+    float hpwidth = ratio * (behuzasi_tavolsag - 40);
     rect = {.x = 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
@@ -139,7 +139,7 @@ void basekirajzolas(SDL_Renderer *renderer) {
     SDL_RenderFillRect(renderer, &rect);
 
     ratio = static_cast<float>(enemybaseHp) / static_cast<float>(maxEnemybaseHp);  //enemy
-    hpwidth = ratio * behuzasi_tavolsag - 40;
+    hpwidth = ratio * (behuzasi_tavolsag - 40);
     rect = {.x = behuzasi_tavolsag + mezoszam * mezoszelesseg + 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);

@@ -71,5 +71,7 @@ extern int baseHp;
 extern int maxEnemybaseHp;
 extern int enemybaseHp;
 
+extern bool vege;
+
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

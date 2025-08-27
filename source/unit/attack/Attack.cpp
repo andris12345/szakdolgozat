@@ -37,6 +37,10 @@ void attack(GameUnit unit_man, bool attackBase) {
                 }
             }else {
                 baseHp -= unit_man.getDmg();
+                if (baseHp <= 0) {
+                    SDL_Log("vege van a mecsnek");
+                    vege = true;
+                }
             }
         }else {
             enemy = &man[0];
@@ -59,6 +63,9 @@ void attack(GameUnit unit_man, bool attackBase) {
                 }
             }else {
                 enemybaseHp -= unit_man.getDmg();
+                if (enemybaseHp <= 0) {
+                    vege = true;
+                }
             }
         }else {
             enemy = &enemyMan[0];

@@ -146,6 +146,27 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         render_Button(hardBt);
     }
 
+    if (vege) {
+        start = false;
+        vege = false;
+
+        baseHp = maxBaseHp;
+        enemybaseHp = maxEnemybaseHp;
+        man = nullptr;
+        manSize = 0;
+        pool = nullptr;
+        poolSize = 0;
+
+        enemyMan = nullptr;
+        enemyManSize = 0;
+        enemyPool = nullptr;
+        enemyPoolSize = 0;
+
+        money = 20;
+        aiMoney = 20;
+        unitCounter = 0;
+    }
+
     if (start) {
         money += 1/30.0;
         std::string text = "Pénz: " + std::to_string(static_cast<int>(money));

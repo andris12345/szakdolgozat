@@ -57,3 +57,5 @@ int maxBaseHp = 50;
 int baseHp = maxBaseHp;
 int maxEnemybaseHp = 50;
 int enemybaseHp = maxEnemybaseHp;
+
+bool vege = false;
