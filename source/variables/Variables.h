@@ -64,8 +64,12 @@ extern Gomb *hardBt;
 
 extern int frameSzamlalo;
 
-extern Gomb *startenemy;
 extern GameUnit* enemy;
+
+extern int maxBaseHp;
+extern int baseHp;
+extern int maxEnemybaseHp;
+extern int enemybaseHp;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

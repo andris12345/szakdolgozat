@@ -20,9 +20,8 @@ void Move(SDL_Renderer *renderer) {
     if (tankBt) {
         render_Button(tankBt);
     }
-    if (startenemy) {
-        render_Button(startenemy);
-    }
+
+    basekirajzolas(renderer);
 
     //poolban lévő emberek kirajzolása + kitevése a mapra
     if (pool != NULL) {
@@ -115,6 +114,16 @@ void kirajzolas(SDL_Renderer *renderer, GameUnit &man) {
     SDL_SetRenderDrawColor(renderer, man.getColor().r, man.getColor().g, man.getColor().b, 255);
     SDL_RenderFillRect(renderer, &rect);
 }
+
+void basekirajzolas(SDL_Renderer *renderer) {
+    SDL_FRect rect = {.x = 20, .y = (emberKezdoY - 100), .w = behuzasi_tavolsag - 40, .h = emberKezdoY - 100 + emberszelesseg};
+    SDL_SetRenderDrawColor(renderer, 137, 81, 41, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    rect = {.x = (behuzasi_tavolsag + mezoszam * mezoszelesseg + 20), .y = (emberKezdoY - 100), .w = behuzasi_tavolsag - 40, .h = emberKezdoY - 100 + emberszelesseg};
+    SDL_RenderFillRect(renderer, &rect);
+}
+
 
 void mozgatas(GameUnit &man){
     if (man.getIsEnemy()) {

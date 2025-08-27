@@ -53,7 +53,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
-    startenemy = new Gomb({470, 100, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "enemy", gombFont);
 
     kocka.h = kocka.w = 20;
 
@@ -123,11 +122,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     money -= tank.getPrice();
                     CreateManToPool(tank, false);
                 }
-            }
-            if (startenemy->getIsVisible() && isMouseOver(startenemy, x, y)) {
-                Fighter fighter = Fighter(0, 12 ,2, true);
-                SDL_Log("startenemy");
-                CreateManToPool(fighter, true);
             }
         }
         default:
@@ -202,7 +196,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     delete easyBt;
     delete mediumBt;
     delete hardBt;
-    delete startenemy;
 
     TTF_CloseFont(font);
 
