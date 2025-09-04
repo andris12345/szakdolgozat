@@ -53,6 +53,7 @@ extern TTF_Font *gombFont;
 
 extern float money;
 extern Subtitle *penzText;
+extern Subtitle *endText;
 
 extern Gomb *fighterBt;
 extern Gomb *rangedBt;
@@ -61,6 +62,7 @@ extern Gomb *singlePlayerBT;
 extern Gomb *easyBt;
 extern Gomb *mediumBt;
 extern Gomb *hardBt;
+extern Gomb *mainMenuBt;
 
 extern int frameSzamlalo;
 
@@ -72,6 +74,8 @@ extern int maxEnemybaseHp;
 extern int enemybaseHp;
 
 extern bool vege;
+extern bool fomanu;
+extern bool vegeMenu;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

@@ -43,6 +43,8 @@ TTF_Font *gombFont;
 
 float money = 20;
 Subtitle *penzText = nullptr;
+Subtitle *endText = nullptr;
+
 Gomb *fighterBt = nullptr;
 Gomb *rangedBt = nullptr;
 Gomb *tankBt = nullptr;
@@ -50,6 +52,7 @@ Gomb *singlePlayerBT = nullptr;
 Gomb *easyBt = nullptr;
 Gomb *mediumBt = nullptr;
 Gomb *hardBt = nullptr;
+Gomb *mainMenuBt = nullptr;
 
 int frameSzamlalo = 0;
 
@@ -59,3 +62,5 @@ int maxEnemybaseHp = 50;
 int enemybaseHp = maxEnemybaseHp;
 
 bool vege = false;
+bool fomanu = true;
+bool vegeMenu = false;

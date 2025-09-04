@@ -45,7 +45,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     }
 
     penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
-
+    endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
+    //todo: gombokbol kirakni a meseszamokat ha lehet
     fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
     rangedBt = new Gomb({580, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged", gombFont);
     tankBt = new Gomb({690, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank", gombFont);
@@ -53,6 +54,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
+    mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
 
     kocka.h = kocka.w = 20;
 
@@ -76,6 +78,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
+                fomanu = false;
                 singlePlayerBT->setIsVisible(false);
             }
             if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
@@ -123,6 +126,13 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     CreateManToPool(tank, false);
                 }
             }
+            if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
+                fomanu = true;
+                start = false;
+                vegeMenu = false;
+                singlePlayer = false;
+                mainMenuBt->setIsVisible(false);
+            }
         }
         default:
             break;
@@ -137,7 +147,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
-    if (singlePlayerBT && !singlePlayer && !start) {
+    if (fomanu) {
         render_Button(singlePlayerBT);
     }
     if (singlePlayer && !start) {
@@ -147,8 +157,17 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (vege) {
+        if (baseHp <= 0) {
+            endText->setText("Vege sajnos te vesztettel!");
+        }else {
+            endText->setText("Vege te nyertel!");
+        }
+
         start = false;
-        vege = false;
+        singlePlayer = false;
+        fighterBt->setIsVisible(false);
+        rangedBt->setIsVisible(false);
+        tankBt->setIsVisible(false);
 
         baseHp = maxBaseHp;
         enemybaseHp = maxEnemybaseHp;
@@ -165,6 +184,18 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         money = 20;
         aiMoney = 20;
         unitCounter = 0;
+
+        vegeMenu = true;
+        vege = false;
+
+        for (int i = 0; i < mezoszam; i++) {
+            map[i] = 0;
+        }
+    }
+
+    if (vegeMenu) {
+        endText->render();
+        render_Button(mainMenuBt);
     }
 
     if (start) {
@@ -208,8 +239,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     return SDL_APP_CONTINUE;
 }
 
-void SDL_AppQuit(void *appstate, SDL_AppResult result)
-{
+void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     delete fighterBt;
     delete rangedBt;
     delete tankBt;
