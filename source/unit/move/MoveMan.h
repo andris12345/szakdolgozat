@@ -4,6 +4,9 @@
 #include <SDL3/SDL.h>
 #include "../../variables/Variables.h"
 #include "../attack/Attack.h"
+#include "../../variables/AiVariables.h"
+#include "../create/CreateMan.h"
+#include "../../gui/gomb/Gomb.h"
 
 void Move(SDL_Renderer *renderer);
 void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man);

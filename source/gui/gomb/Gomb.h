@@ -8,7 +8,7 @@
 class Gomb{
     SDL_FRect rect = {};
     SDL_Color color = {};
-    SDL_Color hoverColor = {};
+    SDL_Color hoverColor = {}; //todo: talan atrakni coverre hover helyett
     std::string text;
     bool isHovered = false;
     bool isVisible = false;

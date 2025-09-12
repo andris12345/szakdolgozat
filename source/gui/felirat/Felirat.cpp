@@ -15,6 +15,10 @@ void Subtitle::setText(const std::string& newText) {
     updateTexture();
 }
 
+void Subtitle::setRect(SDL_FRect newRect) {
+    rect = newRect;
+}
+
 void Subtitle::updateTexture() {
     if (texture) SDL_DestroyTexture(texture);
     if (surface) SDL_DestroySurface(surface);

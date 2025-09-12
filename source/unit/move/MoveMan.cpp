@@ -1,8 +1,4 @@
 ﻿#include "MoveMan.h"
-#include "../../variables/Variables.h"
-#include "../../variables/AiVariables.h"
-#include "../create/CreateMan.h"
-#include "../../gui/gomb/Gomb.h"
 
 void Move(SDL_Renderer *renderer) {
     //mező jelölő vonalak
@@ -102,7 +98,7 @@ void Move(SDL_Renderer *renderer) {
     }
 }
 
-void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man) {
+void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man) { //TODO: kirajzolasokat atvinni egz masik .cppbe
     float ratio = static_cast<float>(man.getHp()) / static_cast<float>(man.getMaxHp());
     float hpwidth = ratio * emberszelesseg;
     SDL_FRect rect = {.x = man.getRect().x, .y = (man.getRect().y - 15), .w = emberszelesseg, .h = 5};

@@ -26,6 +26,7 @@ bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
 }
 
 void render_Button(Gomb* button) {
+    button->getSubtitle()->setRect({button->getRect().x, button->getRect().y, 0, 0});
     float x, y;
     SDL_GetMouseState(&x, &y);
 

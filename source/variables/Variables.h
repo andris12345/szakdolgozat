@@ -63,6 +63,8 @@ extern Gomb *easyBt;
 extern Gomb *mediumBt;
 extern Gomb *hardBt;
 extern Gomb *mainMenuBt;
+extern Gomb *tower1Bt;
+extern Gomb *tower2Bt;
 
 extern int frameSzamlalo;
 
@@ -76,6 +78,10 @@ extern int enemybaseHp;
 extern bool vege;
 extern bool fomanu;
 extern bool vegeMenu;
+extern bool moveTower;
+
+extern SDL_FRect moveTowerRect;
+extern SDL_Color moveTowerColor;
 
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H

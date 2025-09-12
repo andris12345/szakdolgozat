@@ -53,10 +53,12 @@ Gomb *easyBt = nullptr;
 Gomb *mediumBt = nullptr;
 Gomb *hardBt = nullptr;
 Gomb *mainMenuBt = nullptr;
+Gomb *tower1Bt = nullptr;
+Gomb *tower2Bt = nullptr;
 
 int frameSzamlalo = 0;
 
-int maxBaseHp = 50;
+int maxBaseHp = 50;                 //todo: csinalni kulon user classt es belerakni az ait is
 int baseHp = maxBaseHp;
 int maxEnemybaseHp = 50;
 int enemybaseHp = maxEnemybaseHp;
@@ -64,3 +66,7 @@ int enemybaseHp = maxEnemybaseHp;
 bool vege = false;
 bool fomanu = true;
 bool vegeMenu = false;
+
+bool moveTower = false;
+SDL_FRect moveTowerRect = {0,0,0,0};
+SDL_Color moveTowerColor = {0,0,0,0};

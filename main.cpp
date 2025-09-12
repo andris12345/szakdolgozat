@@ -55,6 +55,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
     mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
+    tower1Bt = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    tower2Bt = new Gomb({(behuzasi_tavolsag - 40), 70, 40, 20},{137, 81, 41, 255}, {98, 58, 29, 255}, " +", font);
 
     kocka.h = kocka.w = 20;
 
@@ -75,63 +77,70 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
             float x, y;
             SDL_GetMouseState(&x, &y);
-            if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
+            if (event->button.button == SDL_BUTTON_LEFT) {
+                 if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
                 fomanu = false;
                 singlePlayerBT->setIsVisible(false);
             }
-            if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
-                SDL_Log("meg van nyomva: easyBT");
-                dificulty = 1;
-                start = true;
-                easyBt->setIsVisible(false);
-                mediumBt->setIsVisible(false);
-                hardBt->setIsVisible(false);
-            }
-            if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
-                SDL_Log("meg van nyomva: mediumBT");
-                dificulty = 2;
-                start = true;
-                easyBt->setIsVisible(false);
-                mediumBt->setIsVisible(false);
-                hardBt->setIsVisible(false);
-            }
-            if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
-                SDL_Log("meg van nyomva: hardBT");
-                dificulty = 3;
-                start = true;
-                easyBt->setIsVisible(false);
-                mediumBt->setIsVisible(false);
-                hardBt->setIsVisible(false);
-            }
-            if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                Fighter fighter = Fighter(0, 12 ,2, false);
-                if (money >= fighter.getPrice()) {
-                    money -= fighter.getPrice();
-                    CreateManToPool(fighter, false);
+                if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
+                    SDL_Log("meg van nyomva: easyBT");
+                    dificulty = 1;
+                    start = true;
+                    easyBt->setIsVisible(false);
+                    mediumBt->setIsVisible(false);
+                    hardBt->setIsVisible(false);
+                }
+                if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
+                    SDL_Log("meg van nyomva: mediumBT");
+                    dificulty = 2;
+                    start = true;
+                    easyBt->setIsVisible(false);
+                    mediumBt->setIsVisible(false);
+                    hardBt->setIsVisible(false);
+                }
+                if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
+                    SDL_Log("meg van nyomva: hardBT");
+                    dificulty = 3;
+                    start = true;
+                    easyBt->setIsVisible(false);
+                    mediumBt->setIsVisible(false);
+                    hardBt->setIsVisible(false);
+                }
+                if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
+                    Fighter fighter = Fighter(0, 12 ,2, false);
+                    if (money >= fighter.getPrice()) {
+                        money -= fighter.getPrice();
+                        CreateManToPool(fighter, false);
+                    }
+                }
+                if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
+                    Ranged ranged = Ranged(1, 8, 2, false);
+                    if (money >= ranged.getPrice()) {
+                        money -= ranged.getPrice();
+                        CreateManToPool(ranged, false);
+                    }
+                }
+                if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
+                    Tank tank = Tank(2, 16, 2, false);
+                    if (money >= tank.getPrice()) {
+                        money -= tank.getPrice();
+                        CreateManToPool(tank, false);
+                    }
+                }
+                if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
+                    fomanu = true;
+                    start = false;
+                    vegeMenu = false;
+                    singlePlayer = false;
+                    mainMenuBt->setIsVisible(false);
                 }
             }
-            if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
-                Ranged ranged = Ranged(1, 8, 2, false);
-                if (money >= ranged.getPrice()) {
-                    money -= ranged.getPrice();
-                    CreateManToPool(ranged, false);
+            if (event->button.button == SDL_BUTTON_RIGHT) {
+                if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
+
                 }
-            }
-            if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
-                Tank tank = Tank(2, 16, 2, false);
-                if (money >= tank.getPrice()) {
-                    money -= tank.getPrice();
-                    CreateManToPool(tank, false);
-                }
-            }
-            if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
-                fomanu = true;
-                start = false;
-                vegeMenu = false;
-                singlePlayer = false;
-                mainMenuBt->setIsVisible(false);
             }
         }
         default:
@@ -197,6 +206,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         endText->render();
         render_Button(mainMenuBt);
     }
+    aiMoney = 0;
 
     if (start) {
         money += 1/30.0;
@@ -221,7 +231,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             default:
                 break;
         }
+
         Move(renderer);
+
+        render_Button(tower1Bt);
     }
 
     SDL_RenderPresent(renderer);

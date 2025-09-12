@@ -21,7 +21,9 @@ public:
     Subtitle(TTF_Font* font, SDL_Color color, SDL_FRect rect);
     ~Subtitle();
 
-    void setText(const std::string& newText);
     void render() const;
+
+    void setText(const std::string& newText);
+    void setRect(SDL_FRect newRect);
 };
 #endif //FELIRAT_H
