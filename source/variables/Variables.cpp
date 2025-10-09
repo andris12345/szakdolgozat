@@ -55,6 +55,8 @@ Gomb *hardBt = nullptr;
 Gomb *mainMenuBt = nullptr;
 Gomb *tower1Bt = nullptr;
 Gomb *tower2Bt = nullptr;
+Gomb *towerType1Bt = nullptr;
+Gomb *towerType2Bt = nullptr;
 
 int frameSzamlalo = 0;
 
@@ -66,7 +68,14 @@ int enemybaseHp = maxEnemybaseHp;
 bool vege = false;
 bool fomanu = true;
 bool vegeMenu = false;
+bool buyTower = false;
+bool haveTower1 = false;
+bool haveTower2 = false;
 
-bool moveTower = false;
-SDL_FRect moveTowerRect = {0,0,0,0};
-SDL_Color moveTowerColor = {0,0,0,0};
+int type = 0;
+int pos = 0;
+float tower1Cost = 10;
+float tower2Cost = 15;
+
+int towerNumber = 0;
+Tower towers[2];

@@ -26,7 +26,6 @@ bool isMouseOver(Gomb* button, float mouseX, float mouseY) {
 }
 
 void render_Button(Gomb* button) {
-    button->getSubtitle()->setRect({button->getRect().x, button->getRect().y, 0, 0});
     float x, y;
     SDL_GetMouseState(&x, &y);
 
@@ -63,8 +62,8 @@ SDL_Color Gomb::getHoverColor() { return hoverColor; }
 
 std::string Gomb::getText() { return text; }
 
-bool Gomb::getIsHovered() const { return isHovered; }
+bool Gomb::getIsHovered() { return isHovered; }
 
-bool Gomb::getIsVisible() const { return isVisible; }
+bool Gomb::getIsVisible() { return isVisible; }
 
 Subtitle *Gomb::getSubtitle() { return subtitle; }

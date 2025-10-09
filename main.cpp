@@ -56,9 +56,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
     mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
     tower1Bt = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower2Bt = new Gomb({(behuzasi_tavolsag - 40), 70, 40, 20},{137, 81, 41, 255}, {98, 58, 29, 255}, " +", font);
+    tower2Bt = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    towerType1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1", font);
+    towerType2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2", font);
 
     kocka.h = kocka.w = 20;
+
+
 
     return SDL_APP_CONTINUE;
 }
@@ -91,55 +95,97 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     easyBt->setIsVisible(false);
                     mediumBt->setIsVisible(false);
                     hardBt->setIsVisible(false);
-                }
-                if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
+                }else  if (mediumBt->getIsVisible() && isMouseOver(mediumBt, x, y)) {
                     SDL_Log("meg van nyomva: mediumBT");
                     dificulty = 2;
                     start = true;
                     easyBt->setIsVisible(false);
                     mediumBt->setIsVisible(false);
                     hardBt->setIsVisible(false);
-                }
-                if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
+                }else if (hardBt->getIsVisible() && isMouseOver(hardBt, x, y)) {
                     SDL_Log("meg van nyomva: hardBT");
                     dificulty = 3;
                     start = true;
                     easyBt->setIsVisible(false);
                     mediumBt->setIsVisible(false);
                     hardBt->setIsVisible(false);
-                }
-                if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
+                }else if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
                     Fighter fighter = Fighter(0, 12 ,2, false);
                     if (money >= fighter.getPrice()) {
                         money -= fighter.getPrice();
                         CreateManToPool(fighter, false);
                     }
-                }
-                if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
+                }else if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
                     Ranged ranged = Ranged(1, 8, 2, false);
                     if (money >= ranged.getPrice()) {
                         money -= ranged.getPrice();
                         CreateManToPool(ranged, false);
                     }
-                }
-                if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
+                }else if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
                     Tank tank = Tank(2, 16, 2, false);
                     if (money >= tank.getPrice()) {
                         money -= tank.getPrice();
                         CreateManToPool(tank, false);
                     }
-                }
-                if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
+                }else if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
                     fomanu = true;
                     start = false;
                     vegeMenu = false;
                     singlePlayer = false;
                     mainMenuBt->setIsVisible(false);
+                }else if (towerType1Bt->getIsVisible() && isMouseOver(towerType1Bt, x, y)) {
+                    if (money >= tower1Cost) {
+                        money -= tower1Cost;
+                        SDL_FRect fr;
+                        if (pos == 0) {
+                            fr = tower1Bt->getRect();
+                            haveTower1 = true;
+                            tower1Bt->setIsVisible(false);
+                        }else {
+                            fr = tower2Bt->getRect();
+                            haveTower2 = true;
+                            tower2Bt->setIsVisible(false);
+                        }
+                        CreateNewTower(1, 3, 10, type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
+                        buyTower = false;
+                    }
+                }else if (towerType2Bt->getIsVisible() && isMouseOver(towerType2Bt, x, y)) {
+                    if (money >= tower1Cost) {
+                        money -= tower1Cost;
+                        SDL_FRect fr;
+                        if (type == 1) {
+                            fr = tower1Bt->getRect();
+                            haveTower1 = true;
+                            tower1Bt->setIsVisible(false);
+                        }else {
+                            fr = tower2Bt->getRect();
+                            haveTower2 = true;
+                            tower2Bt->setIsVisible(false);
+                        }
+                        CreateNewTower(1, 3, 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
+                        buyTower = false;
+                    }
+                }
+                else {
+                    buyTower = false; // valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
                 }
             }
             if (event->button.button == SDL_BUTTON_RIGHT) {
                 if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
+                    buyTower = true;
+                    type = 1;
+                    pos = 0;
+                }else if (tower2Bt->getIsVisible() && isMouseOver(tower2Bt, x, y)) {
+                    buyTower = true;
+                    type = 2;
+                    pos = 1;
+                }else if (haveTower1 && isMouseOver(&towers[0], x, y)) {
 
+                }else if (haveTower2 && isMouseOver(&towers[1], x, y)) {
+
+                }
+                else {
+                    buyTower = false;
                 }
             }
         }
@@ -215,6 +261,11 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         penzText->setText(text);
         penzText->render();
 
+        if (buyTower) {
+            render_Button(towerType1Bt);
+            render_Button(towerType2Bt);
+        }
+
         switch (dificulty) {
             case 1: {
                 easyAi();
@@ -234,10 +285,26 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
         Move(renderer);
 
-        render_Button(tower1Bt);
+        if (!haveTower1) {
+            render_Button(tower1Bt);
+        }
+        if (!haveTower2) {
+            render_Button(tower2Bt);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            if (towers[i].getDmg() == 0) {
+                continue;
+            }
+            if (towers[i].getIsVisible()) {
+                renderTower(renderer, towers[i]);
+            }
+        }
     }
 
     SDL_RenderPresent(renderer);
+
+
 
     //fix fps
     frameTime = SDL_GetTicks() - frameStart;

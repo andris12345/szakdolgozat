@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include <string>
 #include "../../variables/Variables.h"
+#include  "../felirat/Felirat.h"
 
 class Gomb{
     SDL_FRect rect = {};
@@ -32,8 +33,8 @@ public:
     SDL_Color getColor();
     SDL_Color getHoverColor();
     std::string getText();
-    bool getIsHovered() const;
-    bool getIsVisible() const;
+    bool getIsHovered();
+    bool getIsVisible();
     Subtitle* getSubtitle();
 };
 

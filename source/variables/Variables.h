@@ -13,6 +13,7 @@ extern SDL_Renderer *renderer;
 
 class Gomb;
 class Subtitle;
+class Tower;
 
 extern int width;
 extern int height;
@@ -65,6 +66,8 @@ extern Gomb *hardBt;
 extern Gomb *mainMenuBt;
 extern Gomb *tower1Bt;
 extern Gomb *tower2Bt;
+extern Gomb *towerType1Bt;
+extern Gomb *towerType2Bt;
 
 extern int frameSzamlalo;
 
@@ -78,10 +81,18 @@ extern int enemybaseHp;
 extern bool vege;
 extern bool fomanu;
 extern bool vegeMenu;
-extern bool moveTower;
+extern bool buyTower;
+extern bool haveTower1;
+extern bool haveTower2;
 
-extern SDL_FRect moveTowerRect;
-extern SDL_Color moveTowerColor;
+extern float tower1Cost;
+extern float tower2Cost;
 
+extern int type;
+extern int pos;
+extern int towerNumber;
+extern Tower towers[2];
+
+#include "../tower/Tower.h"
 #include "../gui/gomb/Gomb.h"
 #endif // VARIABLES_H
