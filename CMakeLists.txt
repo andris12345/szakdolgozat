@@ -66,7 +66,9 @@ add_executable(szakdolgozat main.cpp
         source/unit/attack/Attack.cpp
         source/unit/attack/Attack.h
         source/tower/tower.cpp
-        source/tower/tower.h)
+        source/tower/tower.h
+        source/tower/TowerAttack.cpp
+        source/tower/TowerAttack.h)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 

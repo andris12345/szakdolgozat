@@ -252,7 +252,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         endText->render();
         render_Button(mainMenuBt);
     }
-    aiMoney = 0;
 
     if (start) {
         money += 1/30.0;
@@ -300,6 +299,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
                 renderTower(renderer, towers[i]);
             }
         }
+
+
     }
 
     SDL_RenderPresent(renderer);

@@ -167,6 +167,7 @@ void mozgatas(GameUnit &man){
             }
             if (frameSzamlalo == 0) {
                 attackHandler(man, hely);
+                tower_attack.TowerAttackHandler();
             }
         }
     }else {
@@ -189,6 +190,7 @@ void mozgatas(GameUnit &man){
             }
             if (frameSzamlalo == 0) {
                 attackHandler(man, hely);
+                tower_attack.TowerAttackHandler();
             }
         }
     }

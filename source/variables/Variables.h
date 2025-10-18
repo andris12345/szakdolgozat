@@ -14,6 +14,7 @@ extern SDL_Renderer *renderer;
 class Gomb;
 class Subtitle;
 class Tower;
+class TowerAttack;
 
 extern int width;
 extern int height;
@@ -93,6 +94,8 @@ extern int pos;
 extern int towerNumber;
 extern Tower towers[2];
 
-#include "../tower/Tower.h"
+extern TowerAttack& tower_attack;
+
 #include "../gui/gomb/Gomb.h"
+#include "../tower/TowerAttack.h"
 #endif // VARIABLES_H

@@ -79,3 +79,5 @@ float tower2Cost = 15;
 
 int towerNumber = 0;
 Tower towers[2];
+
+TowerAttack& tower_attack = TowerAttack::GetInstance();
