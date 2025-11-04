@@ -39,6 +39,7 @@ void removeFirstManFromMap(bool isEnemy) {
     if (isEnemy) {
         if (enemyManSize == 0) return;
 
+        xp += enemyMan[0].getXp();
         map[enemyMan[0].getPos()] = 0;
 
         for (size_t i = 1; i < enemyManSize; i++) {
@@ -56,6 +57,7 @@ void removeFirstManFromMap(bool isEnemy) {
         SDL_Log("map torles");
         if (manSize == 0) return;
 
+        enemyXp += man[0].getXp();
         map[man[0].getPos()] = 0;
 
         for (size_t i = 1; i < manSize; i++) {

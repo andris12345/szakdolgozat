@@ -44,6 +44,7 @@ TTF_Font *gombFont;
 float money = 20;
 Subtitle *penzText = nullptr;
 Subtitle *endText = nullptr;
+Subtitle *xpText = nullptr;
 
 Gomb *fighterBt = nullptr;
 Gomb *rangedBt = nullptr;
@@ -67,6 +68,8 @@ int maxBaseHp = 50;                 //todo: csinalni kulon user classt es belera
 int baseHp = maxBaseHp;
 int maxEnemybaseHp = 50;
 int enemybaseHp = maxEnemybaseHp;
+int xp = 0;
+int enemyXp = 0;
 
 bool vege = false;
 bool fomanu = true;

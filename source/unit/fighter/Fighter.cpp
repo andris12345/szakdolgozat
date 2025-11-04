@@ -4,6 +4,7 @@ Fighter::Fighter(int _tipus, int _hp, int _dmg, bool _isEnemy): GameUnit(_tipus,
    this->setColor(  { 0, 255, 0, 255 });
    this->setPrice(10);
    this->setRange(1);
+   this->setXp(15);
 }
 
 Fighter::Fighter() {

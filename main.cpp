@@ -45,6 +45,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     }
 
     penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
+    xpText = new Subtitle(font, fontColor, SDL_FRect{240, 20, 0, 0});
     endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
     //todo: gombokbol kirakni a meseszamokat ha lehet
     fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
@@ -328,6 +329,21 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             }
         }
 
+        //xp kirajzolas:
+        float ratio = static_cast<float>(xp) / static_cast<float>(100);
+        float xpWidth = std::min((ratio * 100), static_cast<float>(100));
+        SDL_FRect rect = {.x = 200, .y = 20, .w = 100, .h = 20};
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
+
+        rect = {.x = 200, .y = 20, .w = xpWidth, .h = 20};
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
+
+        text = std::to_string(xp) + "/100";
+
+        xpText->setText(text);
+        xpText->render();
 
     }
 
@@ -364,6 +380,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     delete deleteBt;
 
     TTF_CloseFont(font);
+    TTF_CloseFont(gombFont);
 
     free(window);
     free(renderer);
@@ -371,4 +388,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     free(pool);
     free(enemyMan);
     free(enemyPool);
+    free(penzText);
+    free(endText);
+    free(xpText);
 }

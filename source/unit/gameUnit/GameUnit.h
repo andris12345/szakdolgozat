@@ -12,6 +12,7 @@ class GameUnit {
     int range{};
     int dmg{};
     int poz{};
+    int xp{};
     bool isEnemy;
     SDL_FRect rect{};
     SDL_Color color{};
@@ -27,6 +28,7 @@ public:
     int getDmg();
     int getRange();
     int getPos();
+    int getXp();
     SDL_FRect getRect();
     SDL_Color getColor();
     float getRextX();
@@ -38,6 +40,7 @@ public:
     void setDmg(int _dmg);
     void setRange(int _range);
     void setPos(int _pos);
+    void setXp(int _xp);
     void setRect(SDL_FRect _rect);
     void setColor(SDL_Color _color);
     void setRectX(float x);

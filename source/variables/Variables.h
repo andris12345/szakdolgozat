@@ -56,6 +56,7 @@ extern TTF_Font *gombFont;
 extern float money;
 extern Subtitle *penzText;
 extern Subtitle *endText;
+extern Subtitle *xpText;
 
 extern Gomb *fighterBt;
 extern Gomb *rangedBt;
@@ -81,6 +82,8 @@ extern int maxBaseHp;
 extern int baseHp;
 extern int maxEnemybaseHp;
 extern int enemybaseHp;
+extern int xp;
+extern int enemyXp;
 
 extern bool vege;
 extern bool fomanu;
