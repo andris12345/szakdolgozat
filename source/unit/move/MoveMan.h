@@ -13,5 +13,6 @@ void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man);
 void kirajzolas(SDL_Renderer *renderer, GameUnit &man);
 void mozgatas(GameUnit &man);
 void basekirajzolas(SDL_Renderer *renderer);
+void levelUp();
 
 #endif //MOVEMAN_H

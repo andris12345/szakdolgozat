@@ -59,17 +59,20 @@ Gomb *tower2Holder = nullptr;
 Gomb *tower1Bt = nullptr;
 Gomb *tower2Bt = nullptr;
 Gomb *deleteBt = nullptr;
+Gomb *levelUpBt = nullptr;
 
 int deleteTowerNumber = 0;
 
 int frameSzamlalo = 0;
 
 int maxBaseHp = 50;                 //todo: csinalni kulon user classt es belerakni az ait is
-int baseHp = maxBaseHp;
+float baseHp = maxBaseHp;
 int maxEnemybaseHp = 50;
-int enemybaseHp = maxEnemybaseHp;
-int xp = 0;
-int enemyXp = 0;
+float enemybaseHp = maxEnemybaseHp;
+float xp = 0;
+float enemyXp = 0;
+int level = 0;
+int enemyLevel = 0;
 
 bool vege = false;
 bool fomanu = true;

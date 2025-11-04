@@ -15,6 +15,7 @@ class Gomb;
 class Subtitle;
 class Tower;
 class TowerAttack;
+class GameUnit;
 
 extern int width;
 extern int height;
@@ -71,6 +72,7 @@ extern Gomb *tower2Holder;
 extern Gomb *tower1Bt;
 extern Gomb *tower2Bt;
 extern Gomb *deleteBt;
+extern Gomb *levelUpBt;
 
 extern int deleteTowerNumber;
 
@@ -79,11 +81,13 @@ extern int frameSzamlalo;
 extern GameUnit* enemy;
 
 extern int maxBaseHp;
-extern int baseHp;
+extern float baseHp;
 extern int maxEnemybaseHp;
-extern int enemybaseHp;
-extern int xp;
-extern int enemyXp;
+extern float enemybaseHp;
+extern float xp;
+extern float enemyXp;
+extern int level;
+extern int enemyLevel;
 
 extern bool vege;
 extern bool fomanu;
@@ -104,4 +108,5 @@ extern TowerAttack& tower_attack;
 
 #include "../gui/gomb/Gomb.h"
 #include "../tower/TowerAttack.h"
+#include "../unit/gameUnit/GameUnit.h"
 #endif // VARIABLES_H

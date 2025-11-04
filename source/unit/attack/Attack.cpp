@@ -33,6 +33,7 @@ void attack(GameUnit unit_man, bool attackBase) {
                 enemy->setHp(enemy->getHp() - unit_man.getDmg());
                 if (enemy->getHp() <= 0) {
                     aiMoney += enemy->getPrice() / 2;
+                    enemyXp += enemy->getXp();
                     removeFirstManFromPool(false);
                 }
             }else {
@@ -48,6 +49,7 @@ void attack(GameUnit unit_man, bool attackBase) {
             if (enemy->getHp() <= 0) {
                 map[enemy->getPos()] = 0;
                 aiMoney += enemy->getPrice() / 2;
+                enemyXp += enemy->getXp();
                 removeFirstManFromMap(false);   //todo: megcsinalni szebbre
             }
         }
@@ -59,6 +61,7 @@ void attack(GameUnit unit_man, bool attackBase) {
                 enemy->setHp(enemy->getHp() - unit_man.getDmg());
                 if (enemy->getHp() <= 0) {
                     money += enemy->getPrice() / 2;
+                    xp += enemy->getXp();
                     removeFirstManFromPool(true);
                 }
             }else {
@@ -73,6 +76,7 @@ void attack(GameUnit unit_man, bool attackBase) {
             if (enemy->getHp() <= 0) {
                 map[enemy->getPos()] = 0;
                 money += enemy->getPrice() / 2;
+                xp += enemy->getXp();
                 removeFirstManFromMap(true);
             }
         }
@@ -87,6 +91,7 @@ void attackFromPool(GameUnit unit_man, bool enemyBase) {
         if (enemy->getHp() <= 0) {
             map[mezoszam - 1] = 0;
             aiMoney += enemy->getPrice() / 2;
+            enemyXp += enemy->getXp();
             removeFirstManFromMap(false);
         }
     }else {
@@ -95,6 +100,7 @@ void attackFromPool(GameUnit unit_man, bool enemyBase) {
         if (enemy->getHp() <= 0) {
             map[0] = 0;
             money += enemy->getPrice() / 2;
+            xp += enemy->getXp();
             removeFirstManFromMap(true);
         }
     }

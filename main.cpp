@@ -45,7 +45,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     }
 
     penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
-    xpText = new Subtitle(font, fontColor, SDL_FRect{240, 20, 0, 0});
+    xpText = new Subtitle(font, fontColor, SDL_FRect{250, 20, 0, 0});
     endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
     //todo: gombokbol kirakni a meseszamokat ha lehet
     fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
@@ -61,6 +61,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     tower1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1", font);
     tower2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2", font);
     deleteBt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
+    levelUpBt = new Gomb({350, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
 
     kocka.h = kocka.w = 20;
 
@@ -84,7 +85,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             float x, y;
             SDL_GetMouseState(&x, &y);
             if (event->button.button == SDL_BUTTON_LEFT) {
-                 if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
+                if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
                 fomanu = false;
@@ -179,6 +180,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                         haveTower2 = false;
                     }
                     deleteBt->setIsVisible(false);
+                }else if (levelUpBt->getIsVisible() && isMouseOver(levelUpBt, x, y)) {
+                    levelUp();
+                    xp -= 100;
+                    levelUpBt->setIsVisible(false);
                 }
                 else {
                     buyTower = false; // valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
@@ -330,9 +335,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         }
 
         //xp kirajzolas:
-        float ratio = static_cast<float>(xp) / static_cast<float>(100);
-        float xpWidth = std::min((ratio * 100), static_cast<float>(100));
-        SDL_FRect rect = {.x = 200, .y = 20, .w = 100, .h = 20};
+        float ratio = xp / static_cast<float>(100);
+        float xpWidth = std::min((ratio * 125), static_cast<float>(125));
+        SDL_FRect rect = {.x = 200, .y = 20, .w = 125, .h = 20};
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
@@ -340,11 +345,17 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
-        text = std::to_string(xp) + "/100";
+        text = std::to_string(static_cast<int>(xp)) + "/100";
 
         xpText->setText(text);
         xpText->render();
 
+        if (ratio >= 1) {
+            render_Button(levelUpBt);
+        }
+        if (enemyXp >= 100) {
+            enemyLevel++;
+        }
     }
 
     SDL_RenderPresent(renderer);
@@ -365,6 +376,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
+    // Gombok
     delete fighterBt;
     delete rangedBt;
     delete tankBt;
@@ -379,16 +391,22 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     delete tower2Bt;
     delete deleteBt;
 
+    // Szövegek
+    delete penzText;
+    delete endText;
+    delete xpText;
+
+    // SDL
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    // Fontok
     TTF_CloseFont(font);
     TTF_CloseFont(gombFont);
 
-    free(window);
-    free(renderer);
+    // Dinamikus egységek
     free(man);
     free(pool);
     free(enemyMan);
     free(enemyPool);
-    free(penzText);
-    free(endText);
-    free(xpText);
 }

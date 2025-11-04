@@ -195,3 +195,7 @@ void mozgatas(GameUnit &man){
         }
     }
 }
+
+void levelUp() {
+    level++;
+}

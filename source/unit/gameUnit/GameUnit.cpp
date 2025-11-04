@@ -1,8 +1,6 @@
 ﻿#include "GameUnit.h"
 
-#include "../../variables/Variables.h"
-
-GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), maxHp(_hp), dmg(_dmg), isEnemy(_isEnemy){
+GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp + _hp * level * 0.25), maxHp(_hp + _hp * level * 0.25), dmg(_dmg + _dmg * level * 0.25), isEnemy(_isEnemy){
     if (_isEnemy) {
         this->rect = {mezoszam * mezoszelesseg + behuzasi_tavolsag + mezoszelesseg/2 - emberszelesseg/2, emberKezdoY};
     }else {
@@ -15,13 +13,13 @@ GameUnit::GameUnit() {
 }
 
 float GameUnit::getPrice() { return price; }
-int GameUnit::getHp() { return hp; }
-int GameUnit::getMaxHp() { return maxHp; }
+float GameUnit::getHp() { return hp; }
+float GameUnit::getMaxHp() { return maxHp; }
 int GameUnit::getTipus() { return tipus; }
-int GameUnit::getDmg() { return dmg; }
+float GameUnit::getDmg() { return dmg; }
 int GameUnit::getRange() { return range; }
 int GameUnit::getPos() { return poz; }
-int GameUnit::getXp() { return xp; }
+float GameUnit::getXp() { return xp; }
 SDL_FRect GameUnit::getRect() { return rect; }
 SDL_Color GameUnit::getColor() { return color; }
 float GameUnit::getRextX() { return rect.x; }
@@ -29,12 +27,12 @@ bool GameUnit::getIsEnemy() { return isEnemy; }
 
 
 void GameUnit::setPrice(float _price) { price = _price; };
-void GameUnit::setHp(int _hp) { hp = _hp; }
-void GameUnit::setMaxHp(int _maxHp) { maxHp = _maxHp; }
-void GameUnit::setDmg(int _dmg) { dmg = _dmg; }
+void GameUnit::setHp(float _hp) { hp = _hp; }
+void GameUnit::setMaxHp(float _maxHp) { maxHp = _maxHp; }
+void GameUnit::setDmg(float _dmg) { dmg = _dmg; }
 void GameUnit::setRange(int _range) { range = _range; }
 void GameUnit::setPos(int _pos) { poz = _pos; }
-void GameUnit::setXp(int _xp) { xp = _xp; }
+void GameUnit::setXp(float _xp) { xp = _xp; }
 void GameUnit::setRect(SDL_FRect _rect) { rect = _rect; }
 void GameUnit::setColor(SDL_Color _color) { color = _color; }
 void GameUnit::setRectX(float x) { rect.x = x; }
