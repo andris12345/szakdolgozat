@@ -12,7 +12,7 @@ Gomb::Gomb(SDL_FRect rect, SDL_Color color, SDL_Color hoverColor, std::string te
     this->hoverColor = hoverColor;
     this->text = std::move(text);
     this->subtitle = new Subtitle(font, {0, 0, 0}, {rect.x, rect.y, 0, 0});
-    subtitle->setText(this->text);
+    subtitle->setText(this->text); //todo miert van kulon text es a subtitlebe is text + miert nincs textes konstruktor a subtitlenek?
 }
 
 Gomb::~Gomb() {

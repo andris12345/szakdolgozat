@@ -55,10 +55,11 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
     hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
     mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
-    tower1Bt = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower2Bt = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    towerType1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1", font);
-    towerType2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2", font);
+    tower1Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    tower2Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    tower1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1", font);
+    tower2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2", font);
+    deleteBt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
 
     kocka.h = kocka.w = 20;
 
@@ -133,59 +134,79 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     vegeMenu = false;
                     singlePlayer = false;
                     mainMenuBt->setIsVisible(false);
-                }else if (towerType1Bt->getIsVisible() && isMouseOver(towerType1Bt, x, y)) {
+                }else if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
                     if (money >= tower1Cost) {
                         money -= tower1Cost;
                         SDL_FRect fr;
                         if (pos == 0) {
-                            fr = tower1Bt->getRect();
+                            fr = tower1Holder->getRect();
                             haveTower1 = true;
-                            tower1Bt->setIsVisible(false);
+                            tower1Holder->setIsVisible(false);
                         }else {
-                            fr = tower2Bt->getRect();
+                            fr = tower2Holder->getRect();
                             haveTower2 = true;
-                            tower2Bt->setIsVisible(false);
+                            tower2Holder->setIsVisible(false);
                         }
                         CreateNewTower(1, 3, 10, type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
                         buyTower = false;
                     }
-                }else if (towerType2Bt->getIsVisible() && isMouseOver(towerType2Bt, x, y)) {
+                    buyTower = false;
+                }else if (tower2Bt->getIsVisible() && isMouseOver(tower2Bt, x, y)) {
                     if (money >= tower1Cost) {
                         money -= tower1Cost;
                         SDL_FRect fr;
                         if (type == 1) {
-                            fr = tower1Bt->getRect();
+                            fr = tower1Holder->getRect();
                             haveTower1 = true;
-                            tower1Bt->setIsVisible(false);
+                            tower1Holder->setIsVisible(false);
                         }else {
-                            fr = tower2Bt->getRect();
+                            fr = tower2Holder->getRect();
                             haveTower2 = true;
-                            tower2Bt->setIsVisible(false);
+                            tower2Holder->setIsVisible(false);
                         }
                         CreateNewTower(1, 3, 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
                         buyTower = false;
                     }
+                    buyTower = false;
+                }else if (deleteBt->getIsVisible() && isMouseOver(deleteBt, x, y)) {
+                    money += towers[deleteTowerNumber].getCost()/2;
+                    towerNumber--;
+                    towers[deleteTowerNumber] = Tower();
+                    if (deleteTowerNumber == 0) {
+                        haveTower1 = false;
+                    }else {
+                        haveTower2 = false;
+                    }
+                    deleteBt->setIsVisible(false);
                 }
                 else {
                     buyTower = false; // valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
+                    tower1Bt->setIsVisible(false);
+                    tower2Bt->setIsVisible(false);
+                    deleteBt->setIsVisible(false);
                 }
             }
             if (event->button.button == SDL_BUTTON_RIGHT) {
-                if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
+                if (tower1Holder->getIsVisible() && isMouseOver(tower1Holder, x, y)) {
                     buyTower = true;
                     type = 1;
                     pos = 0;
-                }else if (tower2Bt->getIsVisible() && isMouseOver(tower2Bt, x, y)) {
+                }else if (tower2Holder->getIsVisible() && isMouseOver(tower2Holder, x, y)) {
                     buyTower = true;
                     type = 2;
                     pos = 1;
                 }else if (haveTower1 && isMouseOver(&towers[0], x, y)) {
-
+                    deleteBt->setIsVisible(true);
+                    deleteTowerNumber = 0;
                 }else if (haveTower2 && isMouseOver(&towers[1], x, y)) {
-
+                    deleteBt->setIsVisible(true);
+                    deleteTowerNumber = 1;
                 }
                 else {
                     buyTower = false;
+                    tower1Bt->setIsVisible(false);
+                    tower2Bt->setIsVisible(false);
+                    deleteBt->setIsVisible(false);
                 }
             }
         }
@@ -261,8 +282,15 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         penzText->render();
 
         if (buyTower) {
-            render_Button(towerType1Bt);
-            render_Button(towerType2Bt);
+            render_Button(tower1Bt);
+            render_Button(tower2Bt);
+        }else {
+            tower1Bt->setIsVisible(false);
+            tower2Bt->setIsVisible(false);
+        }
+
+        if (deleteBt->getIsVisible()) {
+            render_Button(deleteBt);
         }
 
         switch (dificulty) {
@@ -285,10 +313,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         Move(renderer);
 
         if (!haveTower1) {
-            render_Button(tower1Bt);
+            render_Button(tower1Holder);
         }
         if (!haveTower2) {
-            render_Button(tower2Bt);
+            render_Button(tower2Holder);
         }
 
         for (int i = 0; i < 2; i++) {
@@ -328,6 +356,12 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     delete easyBt;
     delete mediumBt;
     delete hardBt;
+    delete mainMenuBt;
+    delete tower1Holder;
+    delete tower2Holder;
+    delete tower1Bt;
+    delete tower2Bt;
+    delete deleteBt;
 
     TTF_CloseFont(font);
 

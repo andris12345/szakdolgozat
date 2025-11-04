@@ -53,10 +53,13 @@ Gomb *easyBt = nullptr;
 Gomb *mediumBt = nullptr;
 Gomb *hardBt = nullptr;
 Gomb *mainMenuBt = nullptr;
+Gomb *tower1Holder = nullptr;
+Gomb *tower2Holder = nullptr;
 Gomb *tower1Bt = nullptr;
 Gomb *tower2Bt = nullptr;
-Gomb *towerType1Bt = nullptr;
-Gomb *towerType2Bt = nullptr;
+Gomb *deleteBt = nullptr;
+
+int deleteTowerNumber = 0;
 
 int frameSzamlalo = 0;
 

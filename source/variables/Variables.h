@@ -65,10 +65,13 @@ extern Gomb *easyBt;
 extern Gomb *mediumBt;
 extern Gomb *hardBt;
 extern Gomb *mainMenuBt;
+extern Gomb *tower1Holder;
+extern Gomb *tower2Holder;
 extern Gomb *tower1Bt;
 extern Gomb *tower2Bt;
-extern Gomb *towerType1Bt;
-extern Gomb *towerType2Bt;
+extern Gomb *deleteBt;
+
+extern int deleteTowerNumber;
 
 extern int frameSzamlalo;
 
