@@ -113,19 +113,25 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     mediumBt->setIsVisible(false);
                     hardBt->setIsVisible(false);
                 }else if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                    Fighter fighter = Fighter(0, 12 ,2, false);
+                    Fighter fighter = Fighter(0, (12 + (12 * level * 0.25)),(2 + (2 * level * 0.25)), false);
+                    fighter.setPrice(10 + 10 * level * 0.25);
+                    fighter.setXp(10 + 10 * level * 0.25);
                     if (money >= fighter.getPrice()) {
                         money -= fighter.getPrice();
                         CreateManToPool(fighter, false);
                     }
                 }else if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
-                    Ranged ranged = Ranged(1, 8, 2, false);
+                    Ranged ranged = Ranged(1, (8 + (8 * level * 0.25)), (2 + (2 * level * 0.25)), false);
+                    ranged.setPrice(15 + 15 * level * 0.25);
+                    ranged.setXp(10 + 10 * level * 0.25);
                     if (money >= ranged.getPrice()) {
                         money -= ranged.getPrice();
                         CreateManToPool(ranged, false);
                     }
                 }else if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
-                    Tank tank = Tank(2, 16, 2, false);
+                    Tank tank = Tank(2, (16 + (16 * level * 0.25)), (2 + (2 * level * 0.25)), false);
+                    tank.setPrice(20 + 20 * level * 0.25);
+                    tank.setXp(20 + 20 * level * 0.25);
                     if (money >= tank.getPrice()) {
                         money -= tank.getPrice();
                         CreateManToPool(tank, false);
@@ -186,7 +192,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     levelUpBt->setIsVisible(false);
                 }
                 else {
-                    buyTower = false; // valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
+                    buyTower = false; //todo: valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
                     tower1Bt->setIsVisible(false);
                     tower2Bt->setIsVisible(false);
                     deleteBt->setIsVisible(false);
@@ -299,6 +305,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             render_Button(deleteBt);
         }
 
+        if (enemyXp >= 100) {
+            enemyXp -= 100;
+            enemyLevel++;
+        }
         switch (dificulty) {
             case 1: {
                 easyAi();
@@ -352,9 +362,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
         if (ratio >= 1) {
             render_Button(levelUpBt);
-        }
-        if (enemyXp >= 100) {
-            enemyLevel++;
         }
     }
 

@@ -6,14 +6,14 @@
 #include "../../variables/Variables.h"
 
 class GameUnit {
-    float price{};
+    double price{};
     int tipus{};
-    float hp{};
-    float maxHp{};
+    double hp{};
+    double maxHp{};
     int range{};
-    float dmg{};
+    double dmg{};
     int poz{};
-    float xp{};
+    double xp{};
     bool isEnemy;
     SDL_FRect rect{};
     SDL_Color color{};
@@ -22,26 +22,26 @@ public:
     GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy);
     GameUnit();
 
-    float getPrice();
+    double getPrice();
     int getTipus();
-    float getHp();
-    float getMaxHp();
-    float getDmg();
+    double getHp();
+    double getMaxHp();
+    double getDmg();
     int getRange();
     int getPos();
-    float getXp();
+    double getXp();
     SDL_FRect getRect();
     SDL_Color getColor();
     float getRextX();
     bool getIsEnemy();
 
-    void setPrice(float _price);
-    void setHp(float _hp);
-    void setMaxHp(float _maxHp);
-    void setDmg(float _dmg);
+    void setPrice(double _price);
+    void setHp(double _hp);
+    void setMaxHp(double _maxHp);
+    void setDmg(double _dmg);
     void setRange(int _range);
     void setPos(int _pos);
-    void setXp(float _xp);
+    void setXp(double _xp);
     void setRect(SDL_FRect _rect);
     void setColor(SDL_Color _color);
     void setRectX(float x);
