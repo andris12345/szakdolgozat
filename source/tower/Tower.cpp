@@ -1,11 +1,11 @@
 ﻿#include "Tower.h"
 
-Tower::Tower( int _dmg, int _range, int _cost,int _type, SDL_FRect _rect, SDL_Color _color, SDL_Color _hoverColor):  dmg(_dmg), range(_range), cost(_cost), type(_type), rect(_rect), color(_color), hoverColor(_hoverColor){ }
+Tower::Tower( double _dmg, int _range, double _cost,int _type, SDL_FRect _rect, SDL_Color _color, SDL_Color _hoverColor):  dmg(_dmg), range(_range), cost(_cost), type(_type), rect(_rect), color(_color), hoverColor(_hoverColor){ }
 
 Tower::Tower() = default;
 
-int Tower::getCost() { return cost; }
-int Tower::getDmg() { return dmg; }
+double Tower::getCost() { return cost; }
+double Tower::getDmg() { return dmg; }
 int Tower::getRange() { return range; }
 int Tower::getType() { return type; }
 SDL_FRect& Tower::getRect() { return rect; }
@@ -16,15 +16,15 @@ bool Tower::getIsVisible() { return isVisible; }
 
 
 
-void Tower::setDmg(int _dmg) { dmg = _dmg; }
+void Tower::setDmg(double _dmg) { dmg = _dmg; }
 void Tower::setRange(int _range) { range = _range; }
-void Tower::setCost(int _cost) { cost = _cost; }
+void Tower::setCost(double _cost) { cost = _cost; }
 void Tower::setType(int _type) { type = _type; }
 void Tower::setIsHovered(bool _isHovered) { isHovered = _isHovered; }
 void Tower::setIsVisible(bool _isVisible) { isVisible = _isVisible; }
 
 
-void CreateNewTower( int dmg, int range, int cost, int type, SDL_FRect _rect, SDL_Color _color, SDL_Color _hoverColor, int pos) {
+void CreateNewTower( double dmg, int range, double cost, int type, SDL_FRect _rect, SDL_Color _color, SDL_Color _hoverColor, int pos) {
     towerNumber++;
     Tower t = Tower(dmg, range, cost, type, _rect, _color, _hoverColor);
     t.setIsVisible(true);

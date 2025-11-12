@@ -48,9 +48,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     xpText = new Subtitle(font, fontColor, SDL_FRect{250, 20, 0, 0});
     endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
     //todo: gombokbol kirakni a meseszamokat ha lehet
-    fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter", gombFont);
-    rangedBt = new Gomb({580, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged", gombFont);
-    tankBt = new Gomb({690, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank", gombFont);
+    fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter " + std::to_string((10 + 10 * level * 0.25)), gombFont);
+    rangedBt = new Gomb({580, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged " + std::to_string(15 + 15 * level * 0.25), gombFont);
+    tankBt = new Gomb({690, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank " + std::to_string(20 + 20 * level * 0.25), gombFont);
     singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255},"single player", gombFont);
     easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
     mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
@@ -58,8 +58,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
     tower1Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
     tower2Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1", font);
-    tower2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2", font);
+    tower1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1 " + std::to_string(10 + 10 * level * 0.25), font);
+    tower2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2 " + std::to_string(10 + 10 * level * 0.25), font);
     deleteBt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
     levelUpBt = new Gomb({350, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
 
@@ -155,7 +155,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                             haveTower2 = true;
                             tower2Holder->setIsVisible(false);
                         }
-                        CreateNewTower(1, 3, 10, type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
+                        CreateNewTower((1 + 1 * level * 0.25), 3, (10 + 10 * level * 0.25), type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
                         buyTower = false;
                     }
                     buyTower = false;
@@ -172,7 +172,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                             haveTower2 = true;
                             tower2Holder->setIsVisible(false);
                         }
-                        CreateNewTower(1, 3, 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
+                        CreateNewTower((1 + 1 * level * 0.25), (10 + 10 * level * 0.25), 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
                         buyTower = false;
                     }
                     buyTower = false;
