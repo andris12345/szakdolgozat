@@ -3,10 +3,12 @@
 #include <cstdio>
 #include <string>
 #include <filesystem>
+#include <thread>
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
+#include <SDL3_net/SDL_net.h>
 
 #include "source/gui/felirat/Felirat.h"
 #include "source/variables/Variables.h"
@@ -19,6 +21,7 @@
 #include "source/ai/easy/easyAi.h"
 #include "source/ai/medium/mediumAi.h"
 #include "source/ai/hard/hardAi.h"
+#include "source/MultiPlayer/multiPlayer.h"
 
 const int FRAME_DELAY = 1000 / TARGET_FPS; // Ennyi ms kell egy frame-hez (1000ms / 60fps = 16.67ms)
 
@@ -48,24 +51,30 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     xpText = new Subtitle(font, fontColor, SDL_FRect{250, 20, 0, 0});
     endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
     //todo: gombokbol kirakni a meseszamokat ha lehet
-    fighterBt = new Gomb({470, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter " + std::to_string((10 + 10 * level * 0.25)), gombFont);
-    rangedBt = new Gomb({580, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged " + std::to_string(15 + 15 * level * 0.25), gombFont);
-    tankBt = new Gomb({690, 10, 100, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank " + std::to_string(20 + 20 * level * 0.25), gombFont);
-    singlePlayerBT = new Gomb({350, 100, 100, 80}, {0, 255, 0, 255}, {0, 90, 0, 255},"single player", gombFont);
-    easyBt = new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
-    mediumBt = new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
-    hardBt = new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
-    mainMenuBt = new Gomb({350, 300, 200, 80},{0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
-    tower1Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower2Holder = new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower1Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1 " + std::to_string(10 + 10 * level * 0.25), font);
-    tower2Bt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2 " + std::to_string(10 + 10 * level * 0.25), font);
-    deleteBt = new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
-    levelUpBt = new Gomb({350, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
+    fighterBt =         new Gomb({470, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter " + std::to_string((10 + 10 * level * 0.25)), gombFont);
+    rangedBt =          new Gomb({580, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged " + std::to_string(15 + 15 * level * 0.25), gombFont);
+    tankBt =            new Gomb({690, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank " + std::to_string(20 + 20 * level * 0.25), gombFont);
+    singlePlayerBT =    new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "single player", gombFont);
+    multiPlayerBt =     new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "multi player", gombFont);
+    exitBt =            new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "exit", gombFont);
+    easyBt =            new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "easy", gombFont);
+    mediumBt =          new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "medium", gombFont);
+    hardBt =            new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "hard", gombFont);
+    mainMenuBt =        new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
+    tower1Holder =      new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    tower2Holder =      new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
+    tower1Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1 " + std::to_string(10 + 10 * level * 0.25), font);
+    tower2Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2 " + std::to_string(10 + 10 * level * 0.25), font);
+    deleteBt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
+    levelUpBt =         new Gomb({350, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
+    hostBt =            new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Host game", gombFont);
+    joinBt =          new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Join game", gombFont);
 
     kocka.h = kocka.w = 20;
 
-
+    if (InitializeNetworking()) {
+        std::cout << "Initializing networking..." << std::endl;
+    }
 
     return SDL_APP_CONTINUE;
 }
@@ -84,11 +93,12 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN :{
             float x, y;
             SDL_GetMouseState(&x, &y);
+
             if (event->button.button == SDL_BUTTON_LEFT) {
                 if (singlePlayerBT->getIsVisible() && isMouseOver(singlePlayerBT, x, y)) {
                 SDL_Log("meg van nyomva: singlePlayerBT");
                 singlePlayer = true;
-                fomanu = false;
+                fomenu = false;
                 singlePlayerBT->setIsVisible(false);
             }
                 if (easyBt->getIsVisible() && isMouseOver(easyBt, x, y)) {
@@ -118,6 +128,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     fighter.setXp(10 + 10 * level * 0.25);
                     if (money >= fighter.getPrice()) {
                         money -= fighter.getPrice();
+                        const char* welcome = "fighter letrehozva";
+                        NET_WriteToStreamSocket(g_network.clientSocket, welcome, strlen(welcome));
                         CreateManToPool(fighter, false);
                     }
                 }else if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
@@ -137,11 +149,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                         CreateManToPool(tank, false);
                     }
                 }else if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
-                    fomanu = true;
+                    fomenu = true;
                     start = false;
                     vegeMenu = false;
                     singlePlayer = false;
                     mainMenuBt->setIsVisible(false);
+                    hostBt->setIsVisible(false);
+                    joinBt->setIsVisible(false);
+                    multiPlayer = false;
                 }else if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
                     if (money >= tower1Cost) {
                         money -= tower1Cost;
@@ -190,6 +205,45 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     levelUp();
                     xp -= 100;
                     levelUpBt->setIsVisible(false);
+                }else if (multiPlayerBt->getIsVisible() && isMouseOver(multiPlayerBt, x, y)) {
+                    multiPlayer = true;
+                    fomenu = false;
+                    singlePlayerBT->setIsVisible(false);
+                    multiPlayerBt->setIsVisible(false);
+                    exitBt->setIsVisible(false);
+                }else if (exitBt->getIsVisible() && isMouseOver(exitBt, x, y)) {
+                    return SDL_APP_SUCCESS;
+                }else if (hostBt->getIsVisible() && isMouseOver(hostBt, x, y)) {
+                    SDL_Log("Host game gomb megnyomva!");
+                    multiPlayer = false;
+                    hostBt->setIsVisible(false);
+                    joinBt->setIsVisible(false);
+                    mainMenuBt->setIsVisible(false);
+
+                    // Szerver indítása KÜLÖN SZÁLON (nem blokkoló!)
+                    if (StartServerAsync()) {
+                        SDL_Log("Szerver indítása elkezdődött!");
+                        // A játék folytatódik, nem fagy be!
+                    } else {
+                        SDL_Log("Szerver indítása sikertelen!");
+                    }
+
+                }else if (joinBt->getIsVisible() && isMouseOver(joinBt, x, y)) {
+                    SDL_Log("Join game gomb megnyomva!");
+                    multiPlayer = false;
+                    hostBt->setIsVisible(false);
+                    joinBt->setIsVisible(false);
+                    mainMenuBt->setIsVisible(false);
+
+                    // Csatlakozás szerverhez
+                    if (ConnectToServer("127.0.0.1")) {
+                        SDL_Log("Sikeres csatlakozás!");
+                        client = true;
+                    } else {
+                        SDL_Log("Csatlakozás sikertelen!");
+                    }
+
+
                 }
                 else {
                     buyTower = false; //todo: valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
@@ -198,6 +252,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     deleteBt->setIsVisible(false);
                 }
             }
+
+
             if (event->button.button == SDL_BUTTON_RIGHT) {
                 if (tower1Holder->getIsVisible() && isMouseOver(tower1Holder, x, y)) {
                     buyTower = true;
@@ -235,13 +291,20 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
-    if (fomanu) {
+    if (fomenu) {
         render_Button(singlePlayerBT);
+        render_Button(multiPlayerBt);
+        render_Button(exitBt);
     }
     if (singlePlayer && !start) {
         render_Button(easyBt);
         render_Button(mediumBt);
         render_Button(hardBt);
+    }
+    if (multiPlayer && !start) {
+        render_Button(hostBt);
+        render_Button(joinBt);
+        render_Button(mainMenuBt);
     }
 
     if (vege) {
@@ -285,6 +348,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         endText->render();
         render_Button(mainMenuBt);
     }
+    if (client) {
+        UpdateNetworking();
+    }
 
     if (start) {
         money += 1/30.0;
@@ -292,6 +358,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
         penzText->setText(text);
         penzText->render();
+
+        if (client) {
+            UpdateNetworking();
+        }
 
         if (buyTower) {
             render_Button(tower1Bt);
@@ -383,6 +453,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
+    CleanupNetworking();
     // Gombok
     delete fighterBt;
     delete rangedBt;

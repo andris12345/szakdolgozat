@@ -37,6 +37,8 @@ extern size_t enemyPoolSize;
 extern bool add;
 extern bool start;
 extern bool singlePlayer;
+extern bool multiPlayer;
+extern bool client;
 
 extern SDL_FRect kocka;
 
@@ -73,6 +75,10 @@ extern Gomb *tower1Bt;
 extern Gomb *tower2Bt;
 extern Gomb *deleteBt;
 extern Gomb *levelUpBt;
+extern Gomb *multiPlayerBt;
+extern Gomb *exitBt;
+extern Gomb *hostBt;
+extern Gomb *joinBt;
 
 extern int deleteTowerNumber;
 
@@ -90,7 +96,7 @@ extern int level;
 extern int enemyLevel;
 
 extern bool vege;
-extern bool fomanu;
+extern bool fomenu;
 extern bool vegeMenu;
 extern bool buyTower;
 extern bool haveTower1;

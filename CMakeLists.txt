@@ -35,6 +35,12 @@ if (NOT SDL3_ttf_FOUND)
     include_dependency(SDL_ttf https://github.com/libsdl-org/SDL_ttf.git release-3.2.2)
 endif ()
 
+# SDL_net
+find_package(SDL3_net QUIET)
+if (NOT SDL3_net_FOUND)
+    include_dependency(SDL_net https://github.com/libsdl-org/SDL_net.git main)
+endif ()
+
 # Create your game executable target as usual
 add_executable(szakdolgozat main.cpp
         source/gui/gomb/Gomb.cpp
@@ -68,7 +74,10 @@ add_executable(szakdolgozat main.cpp
         source/tower/tower.cpp
         source/tower/tower.h
         source/tower/TowerAttack.cpp
-        source/tower/TowerAttack.h)
+        source/tower/TowerAttack.h
+        source/MultiPlayer/multiPlayer.cpp
+        source/MultiPlayer/multiPlayer.h
+)
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
 
@@ -76,4 +85,4 @@ target_compile_definitions(szakdolgozat PRIVATE SDL_MAIN_USE_CALLBACKS)
 
 
 # Link to the actual SDL3 library.
-target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf)
+target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf SDL3_net::SDL3_net)

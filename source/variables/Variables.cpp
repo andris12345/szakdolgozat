@@ -22,9 +22,11 @@ size_t enemyManSize;
 GameUnit *enemyPool;
 size_t enemyPoolSize;
 
-bool add;
-bool start;
-bool singlePlayer;
+bool add = false;
+bool start = false;
+bool singlePlayer = false;
+bool multiPlayer = false;
+bool client = false;
 SDL_FRect kocka;
 
 float behuzasi_tavolsag = 100;
@@ -60,6 +62,10 @@ Gomb *tower1Bt = nullptr;
 Gomb *tower2Bt = nullptr;
 Gomb *deleteBt = nullptr;
 Gomb *levelUpBt = nullptr;
+Gomb *multiPlayerBt = nullptr;
+Gomb *exitBt = nullptr;
+Gomb *hostBt = nullptr;
+Gomb *joinBt = nullptr;
 
 int deleteTowerNumber = 0;
 
@@ -75,7 +81,7 @@ int level = 0;
 int enemyLevel = 0;
 
 bool vege = false;
-bool fomanu = true;
+bool fomenu = true;
 bool vegeMenu = false;
 bool buyTower = false;
 bool haveTower1 = false;
