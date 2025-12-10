@@ -7,6 +7,7 @@
 
 #include "../gui/felirat/Felirat.h"
 #include "../unit/gameUnit/GameUnit.h"
+#include "../user/User.h"
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
@@ -23,6 +24,9 @@ extern int height;
 extern Uint32 frameStart;
 extern Uint64 frameTime;
 extern int TARGET_FPS;
+
+extern User player1;
+extern User player2;
 
 extern GameUnit *man;
 extern size_t manSize;

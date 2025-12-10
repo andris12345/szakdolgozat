@@ -12,6 +12,9 @@ Uint32 frameStart;
 Uint64 frameTime;
 int TARGET_FPS = 30;
 
+User player1;
+User player2;
+
 GameUnit *man;
 size_t manSize;
 GameUnit *pool;

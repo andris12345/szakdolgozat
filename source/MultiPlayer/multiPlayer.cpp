@@ -73,7 +73,7 @@ int ServerThreadFunction(void* data) {
         if (NET_AcceptClient(server, &newClient) && newClient) {
             SDL_Log("Client connected!");
             start = true;
-            
+
             // Ha már van kliens, zárjuk be az újat (egyszerre 1 kliens)
             if (g_network.clientSocket) {
                 SDL_Log("Already have a client, rejecting new connection");
@@ -152,7 +152,7 @@ bool ConnectToServer(const char* hostname) {
         SDL_Log("Already connected");
         return false;
     }
-    
+
     SDL_Log("Resolving hostname: %s", hostname);
     NET_Address* address = NET_ResolveHostname(hostname);
     if (!address) {

@@ -77,6 +77,8 @@ add_executable(szakdolgozat main.cpp
         source/tower/TowerAttack.h
         source/MultiPlayer/multiPlayer.cpp
         source/MultiPlayer/multiPlayer.h
+        source/user/user.cpp
+        source/user/user.h
 )
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})
