@@ -6,129 +6,124 @@ void removeFirstManFromPool(bool isEnemy);
 void CreateManToMap(bool isEnemy) {
     if (isEnemy) {
         SDL_Log("enemy create to map");
-        GameUnit point = enemyPool[0];
+        GameUnit point = *player2.getPoolAt(0);
         point.setPos(mezoszam - 1);
         removeFirstManFromPool(isEnemy);
-        enemyManSize++;
+        player2.setManSize(player2.getManSize() + 1);
         SDL_Log("delete enemy from pool");
-        GameUnit* temp = (GameUnit*)realloc(enemyMan, enemyManSize * sizeof(GameUnit));
-        if (temp) {
-            enemyMan = temp;
-            enemyMan[enemyManSize - 1] = point;
+
+        if (player2.reallocMan(player2.getManSize())) {
+            player2.setManAt(player2.getManSize() - 1, &point);
         } else {
-            SDL_Log("realloc failed in CreateManToMap");
+            SDL_Log("realloc failed in CreateManToMap player2");
         }
     }else {
         SDL_Log("ember generalas");
-        GameUnit point = pool[0];
+        GameUnit point = *player1.getPoolAt(0);
         point.setPos(0);
         removeFirstManFromPool(isEnemy);
-        manSize++;
+        player1.setManSize(player1.getManSize() + 1);
         SDL_Log("delete man from pool");
-        GameUnit* temp = (GameUnit*)realloc(man, manSize * sizeof(GameUnit));
-        if (temp) {
-            man = temp;
-            man[manSize - 1] = point;
-        } else {
-            SDL_Log("realloc failed in CreateManToMap");
+
+        if (player1.reallocMan(player1.getManSize())) {
+            player1.setManAt(player1.getManSize() - 1, &point);
+        }else {
+            SDL_Log("realloc failed in CreateManToMap player1");
         }
+
     }
 }
 
 void removeFirstManFromMap(bool isEnemy) {
     if (isEnemy) {
-        if (enemyManSize == 0) return;
+        if (player2.getManSize() == 0) return;
 
-        map[enemyMan[0].getPos()] = 0;
+        map[player2.getManAt(0)->getPos()] = 0;
 
-        for (size_t i = 1; i < enemyManSize; i++) {
-            enemyMan[i - 1] = enemyMan[i];
+        player2.shiftManLeft();
+
+        player2.setManSize(player2.getManSize() - 1);
+
+        // Realloc - EGYSZERŰBB!
+        if (!player2.reallocMan(player2.getManSize())) {
+            SDL_Log("realloc failed in removeFirstManFromMap player2");
         }
 
-        enemyManSize--;
-
-        enemyMan = (GameUnit*)realloc(enemyMan, enemyManSize * sizeof(GameUnit));
-
-        if (enemyManSize == 0) {
-            enemyMan = NULL;
+        if (player2.getManSize() == 0) {
+            player2.setMan(nullptr);
         }
     }else {
         SDL_Log("map torles");
-        if (manSize == 0) return;
+        if (player1.getManSize() == 0) return;
 
-        map[man[0].getPos()] = 0;
+        map[player1.getManAt(0)->getPos()] = 0;
 
-        for (size_t i = 1; i < manSize; i++) {
-            man[i - 1] = man[i];
+        player1.shiftManLeft();
+
+        player1.setManSize(player1.getManSize() - 1);
+
+        // Realloc - EGYSZERŰBB!
+        if (!player1.reallocMan(player1.getManSize())) {
+            SDL_Log("realloc failed in removeFirstManFromMap player1");
         }
 
-        manSize--;
-
-        man = (GameUnit*)realloc(man, manSize * sizeof(GameUnit));
-
-        if (manSize == 0) {
-            man = NULL;
+        if (player1.getManSize() == 0) {
+            player1.setMan(nullptr);
         }
     }
 }
 
 void CreateManToPool(GameUnit unit, bool isEnemy) {
     if (isEnemy) {
-        unit.setPos(mezoszam);
+        unit.setPos(mezoszam - 1);
         SDL_Log("enemy");
-        enemyPoolSize++;
-        enemyPool = (GameUnit*)realloc(enemyPool, enemyPoolSize * sizeof(GameUnit));
+        player2.setPoolSize(player2.getPoolSize() + 1);
+        player2.reallocPool(player2.getPoolSize());
 
         // uj ember beszurasa a tomb vegere
-        enemyPool[enemyPoolSize - 1] = unit;
+        player2.setPoolAt(player2.getPoolSize() - 1, &unit);
         SDL_Log("uj enemyPool letrehozva");
-        SDL_Log(std::to_string(enemyPool[0].getRect().x).c_str());
-        SDL_Log(std::to_string(enemyPool[0].getRect().y).c_str());
+        SDL_Log(std::to_string(player2.getPoolAt(0)->getRect().x).c_str());
+        SDL_Log(std::to_string(player2.getPoolAt(0)->getRect().y).c_str());
     }else {
         unit.setPos(0);
-        poolSize++;
+        player1.setPoolSize(player1.getPoolSize() + 1);
 
-        pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
+        player1.reallocPool(player1.getPoolSize());
 
         // uj ember beszurasa a tomb vegere
-        pool[poolSize - 1] = unit;
+        player1.setPoolAt(player1.getPoolSize() - 1, &unit);
         SDL_Log("uj pool letrehozva");
-        SDL_Log(std::to_string(pool[0].getRect().x).c_str());
-        SDL_Log(std::to_string(pool[0].getRect().y).c_str());
+        SDL_Log(std::to_string(player1.getPoolAt(0)->getRect().x).c_str());
+        SDL_Log(std::to_string(player1.getPoolAt(0)->getRect().y).c_str());
     }
 }
 
 void removeFirstManFromPool(bool isEnemy) {
     if (isEnemy) {
-        if (enemyPoolSize == 0) return; // Ha nincs mit t�r�lni, kil�p�nk
+        if (player2.getPoolSize() == 0) return;
 
-        // Ha tobb elem van, akkor eloretoljuk az elemeket
-        for (size_t i = 1; i < enemyPoolSize; i++) {
-            enemyPool[i - 1] = enemyPool[i];
-        }
+        player2.shiftPoolLeft();
 
-        enemyPoolSize--;
+        player2.setPoolSize(player2.getPoolSize() - 1);
 
-        enemyPool = (GameUnit*)realloc(enemyPool, enemyPoolSize * sizeof(GameUnit));
+        player2.reallocPool(player2.getPoolSize());
 
-        if (enemyPoolSize == 0) {
-            enemyPool = NULL; // Ha mar nincs ember, nullazzuk ki a pointert
+        if (player2.getPoolSize() == 0) {
+            player2.setPool(nullptr);
         }
     }else {
         SDL_Log("pool torles");
-        if (poolSize == 0) return; // Ha nincs mit t�r�lni, kil�p�nk
+        if (player1.getPoolSize() == 0) return;
 
-        // Ha tobb elem van, akkor eloretoljuk az elemeket
-        for (size_t i = 1; i < poolSize; i++) {
-            pool[i - 1] = pool[i];
-        }
+        player1.shiftPoolLeft();
 
-        poolSize--;
+        player1.setPoolSize(player1.getPoolSize() - 1);
 
-        pool = (GameUnit*)realloc(pool, poolSize * sizeof(GameUnit));
+        player1.reallocPool(player1.getPoolSize());
 
-        if (poolSize == 0) {
-            pool = NULL; // Ha mar nincs ember, nullazzuk ki a pointert
+        if (player1.getPoolSize() == 0) {
+            player1.setPool(nullptr);
         }
     }
 }

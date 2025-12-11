@@ -1,5 +1,7 @@
 ﻿#include "MoveMan.h"
 
+#include <format>
+
 void Move(SDL_Renderer *renderer) {
     //mező jelölő vonalak
     for (int i = 0; i <= mezoszam; i++) {
@@ -20,80 +22,79 @@ void Move(SDL_Renderer *renderer) {
     basekirajzolas(renderer);
 
     //poolban lévő emberek kirajzolása + kitevése a mapra
-    if (pool != NULL) {
+    if (!player1.getPoolIsEmpty()) {
         if (map[0] == 0) {
-            pool[0].setRectX(pool[0].getRextX() + 1);
-            if (pool[0].getRextX() + emberszelesseg/2 >= behuzasi_tavolsag) {
+            player1.getPoolAt(0)->setRectX(player1.getPoolAt(0)->getRextX() + 1);
+            if (player1.getPoolAt(0)->getRextX() + emberszelesseg/2 >= behuzasi_tavolsag) {
                 map[0] = 1;
                 CreateManToMap(false);
             }
         }
-        for (int i = 0; i < poolSize; i++) {
-            if (pool != NULL && map[0] == 2 && (pool[i].getRange() == 3 || i == 0)) {
+        for (int i = 0; i < player1.getPoolSize(); i++) {
+            if (!player1.getPoolIsEmpty() && map[0] == 2 && (player1.getPoolAt(i)->getRange() == 3 || i == 0)) {
                 if (frameSzamlalo == 0) {
-                    attackFromPool(pool[i], false);
+                    attackFromPool(*player1.getPoolAt(i), false);
                 }
             }
-            if (poolSize > 0) {
-                kirajzolas(renderer, pool[i]);
+            if (player1.getPoolSize() > 0) {
+                kirajzolas(renderer, *player1.getPoolAt(i));
             }
         }
     }
 
     //enemy pool kirajzolasa
-    if (enemyPool != NULL) {
+    if (!player2.getPoolIsEmpty()) {
         if (map[mezoszam - 1] == 0) {
-            enemyPool[0].setRectX(enemyPool[0].getRextX() - 1);
-            if (enemyPool[0].getRextX() + emberszelesseg/2 <= behuzasi_tavolsag + mezoszam * mezoszelesseg) {
+            player2.getPoolAt(0)->setRectX(player2.getPoolAt(0)->getRextX() - 1);
+            if (player2.getPoolAt(0)->getRextX() + emberszelesseg/2 <= behuzasi_tavolsag + mezoszam * mezoszelesseg) {
                 map[mezoszam - 1] = 2;
                 CreateManToMap(true);
             }
         }
-        for (int i = 0; i < enemyPoolSize; i++) {
-            if (enemyPool != NULL && map[mezoszam - 1] == 1 && (enemyPool[i].getRange() == 3 || i == 0)) {
+        for (int i = 0; i < player2.getPoolSize(); i++) {
+            if (!player2.getPoolIsEmpty() && map[mezoszam - 1] == 1 && (player2.getPoolAt(i)->getRange() == 3 || i == 0)) {
                 if (frameSzamlalo == 0) {
-                    attackFromPool(enemyPool[i], true);
+                    attackFromPool(*player2.getPoolAt(i), true);
                 }
             }
-            if (enemyPoolSize > 0) {
-                kirajzolas(renderer, enemyPool[i]);
+            if (player2.getPoolSize() > 0) {
+                kirajzolas(renderer, *player2.getPoolAt(i));
             }
         }
     }
-
     //kirajzolás + léptetés az embereknek
-    if (manSize > 0) {
-        for (int i = manSize - 1; i >= 0; i--) {
-            mozgatas(man[i]);
-            kirajzolas(renderer, man[i]);
+    if (player1.getManSize() > 0) {
+        for (int i = player1.getManSize() - 1; i >= 0; i--) {
+            mozgatas(*player1.getManAt(i));
+            kirajzolas(renderer, *player1.getManAt(i));
         }
     }
 
     //enemy kirajzolasa + leptetese
-    if (enemyManSize > 0) {
-        for (int i = 0; i < enemyManSize; i++) {
-            mozgatas(enemyMan[i]);
-            kirajzolas(renderer, enemyMan[i]);
+    if (player2.getManSize() > 0) {
+        for (int i = 0; i < player2.getManSize(); i++) {
+            mozgatas(*player2.getManAt(i));
+            kirajzolas(renderer, *player2.getManAt(i));
         }
     }
 
     //hp kirajzplas
-    if (manSize != 0) {
-        if (man[0].getHp() != man[0].getMaxHp()) {
-            hpkirajzolas(renderer, man[0]);
+    if (player1.getManSize() != 0) {
+        if (player1.getManAt(0)->getHp() != player1.getManAt(0)->getMaxHp()) {
+            hpkirajzolas(renderer, *player1.getManAt(0));
         }
-    }else if (poolSize != 0) {
-        if (pool[0].getHp() != pool[0].getMaxHp()) {
-            hpkirajzolas(renderer, pool[0]);
+    }else if (player1.getPoolSize() != 0) {
+        if (player1.getPoolAt(0)->getHp() != player1.getPoolAt(0)->getMaxHp()) {
+            hpkirajzolas(renderer, *player1.getPoolAt(0));
         }
     }
-    if (enemyManSize != 0 ) {
-        if (enemyMan[0].getHp() != enemyMan[0].getMaxHp()) {
-            hpkirajzolas(renderer, enemyMan[0]);
+    if (player2.getManSize() != 0 ) {
+        if (player2.getManAt(0)->getHp() != player2.getManAt(0)->getMaxHp()) {
+            hpkirajzolas(renderer, *player2.getManAt(0));
         }
-    }else if (enemyPoolSize != 0) {
-        if (enemyPool[0].getHp() != enemyPool[0].getMaxHp()) {
-            hpkirajzolas(renderer, enemyPool[0]);
+    }else if (player2.getPoolSize() != 0) {
+        if (player2.getPoolAt(0)->getHp() != player2.getPoolAt(0)->getMaxHp()) {
+            hpkirajzolas(renderer, *player2.getPoolAt(0));
         }
     }
 }
@@ -124,7 +125,7 @@ void basekirajzolas(SDL_Renderer *renderer) {
     rect = {.x = (behuzasi_tavolsag + mezoszam * mezoszelesseg + 20), .y = (emberKezdoY - 100), .w = behuzasi_tavolsag - 40, .h = emberKezdoY - 100 + emberszelesseg};
     SDL_RenderFillRect(renderer, &rect);
 
-    float ratio = static_cast<float>(baseHp) / static_cast<float>(maxBaseHp); // sajat
+    float ratio = static_cast<float>(player1.getBaseHp()) / static_cast<float>(maxBaseHp); // sajat
     float hpwidth = ratio * (behuzasi_tavolsag - 40);
     rect = {.x = 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -134,7 +135,7 @@ void basekirajzolas(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 
-    ratio = static_cast<float>(enemybaseHp) / static_cast<float>(maxEnemybaseHp);  //enemy
+    ratio = static_cast<float>(player2.getBaseHp()) / static_cast<float>(maxEnemybaseHp);  //enemy
     hpwidth = ratio * (behuzasi_tavolsag - 40);
     rect = {.x = behuzasi_tavolsag + mezoszam * mezoszelesseg + 20, .y = (emberKezdoY - 100 - 15), .w = behuzasi_tavolsag - 40, .h = 5};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -197,5 +198,13 @@ void mozgatas(GameUnit &man){
 }
 
 void levelUp() {
-    level++;
+    player1.setLevel(player1.getLevel() + 1);
+
+    fighterBt->getSubtitle()->setText("Fighter: " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+    rangedBt->getSubtitle()->setText("Ranged: " + std::format("{:.1f}",(15 + 15 * player1.getLevel() * 0.25)));
+    tankBt->getSubtitle()->setText("Tank: " +  std::format("{:.1f}",(20 + 20 * player1.getLevel() * 0.25)));
+
+
+    tower1Bt->getSubtitle()->setText("Tower 1 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+    tower2Bt->getSubtitle()->setText("Tower 2 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
 }

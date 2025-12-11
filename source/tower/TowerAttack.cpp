@@ -20,7 +20,7 @@ void TowerAttack::TowerAttackHandler() {
 
 
 void TowerAttack::Attack(Tower t) {
-    GameUnit& enemy = enemyMan[0];
+    GameUnit& enemy = *player2.getManAt(0);
     enemy.setHp(enemy.getHp() - t.getDmg());
     if (enemy.getHp() <= 0) {
         map[enemy.getPos()] = 0;

@@ -19,7 +19,7 @@ class GameUnit {
     SDL_Color color{};
 
 public:
-    GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy);
+    GameUnit(int _tipus, double _hp, double _dmg, bool _isEnemy);
     GameUnit();
 
     double getPrice();

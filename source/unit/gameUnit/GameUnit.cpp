@@ -1,6 +1,6 @@
 ﻿#include "GameUnit.h"
 
-GameUnit::GameUnit(int _tipus, int _hp, int _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), maxHp(_hp), dmg(_dmg), isEnemy(_isEnemy){
+GameUnit::GameUnit(int _tipus, double _hp, double _dmg, bool _isEnemy) : tipus(_tipus), hp(_hp), maxHp(_hp), dmg(_dmg), isEnemy(_isEnemy){
     if (_isEnemy) {
         this->rect = {mezoszam * mezoszelesseg + behuzasi_tavolsag + mezoszelesseg/2 - emberszelesseg/2, emberKezdoY};
     }else {

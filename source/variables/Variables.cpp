@@ -15,16 +15,6 @@ int TARGET_FPS = 30;
 User player1;
 User player2;
 
-GameUnit *man;
-size_t manSize;
-GameUnit *pool;
-size_t poolSize;
-
-GameUnit *enemyMan;
-size_t enemyManSize;
-GameUnit *enemyPool;
-size_t enemyPoolSize;
-
 bool add = false;
 bool start = false;
 bool singlePlayer = false;
@@ -75,13 +65,7 @@ int deleteTowerNumber = 0;
 int frameSzamlalo = 0;
 
 int maxBaseHp = 50;                 //todo: csinalni kulon user classt es belerakni az ait is
-float baseHp = maxBaseHp;
 int maxEnemybaseHp = 50;
-float enemybaseHp = maxEnemybaseHp;
-float xp = 0;
-float enemyXp = 0;
-int level = 0;
-int enemyLevel = 0;
 
 bool vege = false;
 bool fomenu = true;

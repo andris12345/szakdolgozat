@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <string>
 #include <filesystem>
+#include <format>
 #include <thread>
 
 #include <SDL3/SDL.h>
@@ -47,13 +48,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    penzText = new Subtitle(font, fontColor, SDL_FRect{100, 20, 0, 0});
-    xpText = new Subtitle(font, fontColor, SDL_FRect{250, 20, 0, 0});
+    penzText = new Subtitle(font, fontColor, SDL_FRect{50, 20, 0, 0});
+    xpText = new Subtitle(font, fontColor, SDL_FRect{170, 20, 0, 0});
     endText = new Subtitle(gombFont, fontColor, SDL_FRect{350, 200, 0, 0});
     //todo: gombokbol kirakni a meseszamokat ha lehet
-    fighterBt =         new Gomb({470, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter " + std::to_string((10 + 10 * level * 0.25)), gombFont);
-    rangedBt =          new Gomb({580, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged " + std::to_string(15 + 15 * level * 0.25), gombFont);
-    tankBt =            new Gomb({690, 10, 100, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank " + std::to_string(20 + 20 * level * 0.25), gombFont);
+    fighterBt =         new Gomb({320, 10, 150, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Fighter: 10.0", gombFont);
+    rangedBt =          new Gomb({480, 10, 150, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Ranged: 15", gombFont);
+    tankBt =            new Gomb({640, 10, 150, 50},  {0, 255, 0, 255}, {0, 90, 0, 255}, "Tank: 20", gombFont);
     singlePlayerBT =    new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "single player", gombFont);
     multiPlayerBt =     new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "multi player", gombFont);
     exitBt =            new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "exit", gombFont);
@@ -63,10 +64,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     mainMenuBt =        new Gomb({350, 300, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Main Menu", gombFont);
     tower1Holder =      new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 100), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
     tower2Holder =      new Gomb({(behuzasi_tavolsag - 50), (emberKezdoY - 70), 30, 30},{137, 81, 41, 255}, {98, 58, 29, 255}, "+", gombFont);
-    tower1Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1 " + std::to_string(10 + 10 * level * 0.25), font);
-    tower2Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2 " + std::to_string(10 + 10 * level * 0.25), font);
+    tower1Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 100), 65, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 1 10", font);
+    tower2Bt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 65, 20},{255,165,0, 255}, {255,140,0, 255}, "Tower 2 10", font);
     deleteBt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
-    levelUpBt =         new Gomb({350, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
+    levelUpBt =         new Gomb({250, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
     hostBt =            new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Host game", gombFont);
     joinBt =          new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Join game", gombFont);
 
@@ -123,9 +124,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     mediumBt->setIsVisible(false);
                     hardBt->setIsVisible(false);
                 }else if (fighterBt->getIsVisible() && isMouseOver(fighterBt, x, y)) {
-                    Fighter fighter = Fighter(0, (12 + (12 * level * 0.25)),(2 + (2 * level * 0.25)), false);
-                    fighter.setPrice(10 + 10 * level * 0.25);
-                    fighter.setXp(10 + 10 * level * 0.25);
+                    Fighter fighter = Fighter(0, (12 + (12 * player1.getLevel() * 0.25)),(2 + (2 * player1.getLevel() * 0.25)), false);
+                    fighter.setPrice(10 + 10 * player1.getLevel() * 0.25);
+                    fighter.setXp(10 + 10 * player1.getLevel() * 0.25);
                     if (money >= fighter.getPrice()) {
                         money -= fighter.getPrice();
                         const char* welcome = "fighter letrehozva";
@@ -133,17 +134,17 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                         CreateManToPool(fighter, false);
                     }
                 }else if (rangedBt->getIsVisible() && isMouseOver(rangedBt, x, y)) {
-                    Ranged ranged = Ranged(1, (8 + (8 * level * 0.25)), (2 + (2 * level * 0.25)), false);
-                    ranged.setPrice(15 + 15 * level * 0.25);
-                    ranged.setXp(10 + 10 * level * 0.25);
+                    Ranged ranged = Ranged(1, (8 + (8 * player1.getLevel() * 0.25)), (2 + (2 * player1.getLevel() * 0.25)), false);
+                    ranged.setPrice(15 + 15 * player1.getLevel() * 0.25);
+                    ranged.setXp(10 + 10 * player1.getLevel() * 0.25);
                     if (money >= ranged.getPrice()) {
                         money -= ranged.getPrice();
                         CreateManToPool(ranged, false);
                     }
                 }else if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
-                    Tank tank = Tank(2, (16 + (16 * level * 0.25)), (2 + (2 * level * 0.25)), false);
-                    tank.setPrice(20 + 20 * level * 0.25);
-                    tank.setXp(20 + 20 * level * 0.25);
+                    Tank tank = Tank(2, (16 + (16 * player1.getLevel() * 0.25)), (2 + (2 * player1.getLevel() * 0.25)), false);
+                    tank.setPrice(20 + 20 * player1.getLevel() * 0.25);
+                    tank.setXp(20 + 20 * player1.getLevel() * 0.25);
                     if (money >= tank.getPrice()) {
                         money -= tank.getPrice();
                         CreateManToPool(tank, false);
@@ -170,7 +171,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                             haveTower2 = true;
                             tower2Holder->setIsVisible(false);
                         }
-                        CreateNewTower((1 + 1 * level * 0.25), 3, (10 + 10 * level * 0.25), type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
+                        CreateNewTower((1 + 1 * player1.getLevel() * 0.25), 3, (10 + 10 * player1.getLevel() * 0.25), type, fr,{238,130,238, 255}, {186,85,211, 255}, pos);
                         buyTower = false;
                     }
                     buyTower = false;
@@ -187,7 +188,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                             haveTower2 = true;
                             tower2Holder->setIsVisible(false);
                         }
-                        CreateNewTower((1 + 1 * level * 0.25), (10 + 10 * level * 0.25), 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
+                        CreateNewTower((1 + 1 * player1.getLevel() * 0.25), (10 + 10 * player1.getLevel() * 0.25), 10, type, fr,{255,255,0, 255}, {204,204,0, 255}, pos);
                         buyTower = false;
                     }
                     buyTower = false;
@@ -203,7 +204,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     deleteBt->setIsVisible(false);
                 }else if (levelUpBt->getIsVisible() && isMouseOver(levelUpBt, x, y)) {
                     levelUp();
-                    xp -= 100;
+                    player1.setXp(player1.getXp() - 100);
                     levelUpBt->setIsVisible(false);
                 }else if (multiPlayerBt->getIsVisible() && isMouseOver(multiPlayerBt, x, y)) {
                     multiPlayer = true;
@@ -308,7 +309,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
     }
 
     if (vege) {
-        if (baseHp <= 0) {
+        if (player1.getBaseHp() <= 0) {
             endText->setText("Vege sajnos te vesztettel!");
         }else {
             endText->setText("Vege te nyertel!");
@@ -320,17 +321,17 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         rangedBt->setIsVisible(false);
         tankBt->setIsVisible(false);
 
-        baseHp = maxBaseHp;
-        enemybaseHp = maxEnemybaseHp;
-        man = nullptr;
-        manSize = 0;
-        pool = nullptr;
-        poolSize = 0;
+        player1.setBaseHp(maxBaseHp);
+        player2.setBaseHp(maxEnemybaseHp); //todo megcsinalni a veget is a nullazasok
+        //man = nullptr;
+        //manSize = 0;
+        //pool = nullptr;
+        //poolSize = 0;
 
-        enemyMan = nullptr;
-        enemyManSize = 0;
-        enemyPool = nullptr;
-        enemyPoolSize = 0;
+        //enemyMan = nullptr;
+        //enemyManSize = 0;
+        //enemyPool = nullptr;
+        //enemyPoolSize = 0;
 
         money = 20;
         aiMoney = 20;
@@ -354,7 +355,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
     if (start) {
         money += 1/30.0;
-        std::string text = "Pénz: " + std::to_string(static_cast<int>(money));
+        std::string text = "Pénz: " + std::format("{:.1f}", money);
 
         penzText->setText(text);
         penzText->render();
@@ -375,9 +376,9 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             render_Button(deleteBt);
         }
 
-        if (enemyXp >= 100) {
-            enemyXp -= 100;
-            enemyLevel++;
+        if (player2.getXp() >= 100) {
+            player2.setXp(player2.getXp() - 100);
+            player2.setLevel(player2.getLevel() + 1);
         }
         switch (dificulty) {
             case 1: {
@@ -415,17 +416,17 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         }
 
         //xp kirajzolas:
-        float ratio = xp / static_cast<float>(100);
+        float ratio = player1.getXp() / static_cast<float>(100);
         float xpWidth = std::min((ratio * 125), static_cast<float>(125));
-        SDL_FRect rect = {.x = 200, .y = 20, .w = 125, .h = 20};
+        SDL_FRect rect = {.x = 120, .y = 20, .w = 125, .h = 20};
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
-        rect = {.x = 200, .y = 20, .w = xpWidth, .h = 20};
+        rect = {.x = 120, .y = 20, .w = xpWidth, .h = 20};
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
 
-        text = std::to_string(static_cast<int>(xp)) + "/100";
+        text = std::to_string(static_cast<int>(player1.getXp())) + "/100";
 
         xpText->setText(text);
         xpText->render();
@@ -481,10 +482,4 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     // Fontok
     TTF_CloseFont(font);
     TTF_CloseFont(gombFont);
-
-    // Dinamikus egységek
-    free(man);
-    free(pool);
-    free(enemyMan);
-    free(enemyPool);
 }

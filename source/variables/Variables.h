@@ -28,16 +28,6 @@ extern int TARGET_FPS;
 extern User player1;
 extern User player2;
 
-extern GameUnit *man;
-extern size_t manSize;
-extern GameUnit *pool;
-extern size_t poolSize;
-
-extern GameUnit *enemyMan;
-extern size_t enemyManSize;
-extern GameUnit *enemyPool;
-extern size_t enemyPoolSize;
-
 extern bool add;
 extern bool start;
 extern bool singlePlayer;
@@ -91,13 +81,7 @@ extern int frameSzamlalo;
 extern GameUnit* enemy;
 
 extern int maxBaseHp;
-extern float baseHp;
 extern int maxEnemybaseHp;
-extern float enemybaseHp;
-extern float xp;
-extern float enemyXp;
-extern int level;
-extern int enemyLevel;
 
 extern bool vege;
 extern bool fomenu;

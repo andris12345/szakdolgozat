@@ -30,8 +30,12 @@ public:
   int getLevel();
   Tower* getTowerAt(int x);
   GameUnit* getMan();
+  GameUnit* getManAt(int x);
+  bool getManIsEmpty();
   int getManSize();
   GameUnit* getPool();
+  GameUnit* getPoolAt(int x);
+  bool getPoolIsEmpty();
   int getPoolSize();
 
   void setBaseHp(float baseHp);
@@ -39,9 +43,19 @@ public:
   void setLevel(int level);
   void setTowerAt(int x, std::unique_ptr<Tower> tower);
   void setMan(GameUnit *man);
+  void setManAt(int x, GameUnit *unit);
   void setManSize(int manSize);
   void setPool(GameUnit *pool);
+  void setPoolAt(int x, GameUnit *unit);
   void setPoolSize(int poolSize);
+
+  // Realloc wrapperek
+  bool reallocMan(int newSize);
+  bool reallocPool(int newSize);
+
+  // Shift helper (elemek előretolása)
+  void shiftManLeft();
+  void shiftPoolLeft();
 
   ~User();
   };

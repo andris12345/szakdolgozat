@@ -28,55 +28,55 @@ void attack(GameUnit unit_man, bool attackBase) {
     GameUnit* enemy;
     if (unit_man.getIsEnemy()) {                    //bot
         if (attackBase) {
-            if (NULL != pool) {
-                enemy = &pool[0];
+            if (!player1.getPoolIsEmpty()) {
+                enemy = player1.getPoolAt(0);
                 enemy->setHp(enemy->getHp() - unit_man.getDmg());
                 if (enemy->getHp() <= 0) {
                     aiMoney += enemy->getPrice() / 2;
-                    enemyXp += enemy->getXp();
+                    player2.setXp(player2.getXp() + enemy->getXp());
                     removeFirstManFromPool(false);
                 }
             }else {
-                baseHp -= unit_man.getDmg();
-                if (baseHp <= 0) {
+                player1.setBaseHp(player1.getBaseHp() - unit_man.getDmg());
+                if (player1.getBaseHp() <= 0) {
                     SDL_Log("vege van a mecsnek");
                     vege = true;
                 }
             }
         }else {
-            enemy = &man[0];
+            enemy = player1.getManAt(0);
             enemy->setHp(enemy->getHp() - unit_man.getDmg());
             if (enemy->getHp() <= 0) {
                 map[enemy->getPos()] = 0;
                 aiMoney += enemy->getPrice() / 2;
-                enemyXp += enemy->getXp();
+                player2.setXp(player2.getXp() + enemy->getXp());
                 removeFirstManFromMap(false);   //todo: megcsinalni szebbre
             }
         }
 
     }else {                                         //en
         if (attackBase) {
-            if (NULL != enemyPool) {
-                enemy = &enemyPool[0];
+            if (NULL != player2.getPool()) {
+                enemy = player2.getPoolAt(0);
                 enemy->setHp(enemy->getHp() - unit_man.getDmg());
                 if (enemy->getHp() <= 0) {
                     money += enemy->getPrice() / 2;
-                    xp += enemy->getXp();
+                    player1.setXp(player1.getXp() + enemy->getXp());
                     removeFirstManFromPool(true);
                 }
             }else {
-                enemybaseHp -= unit_man.getDmg();
-                if (enemybaseHp <= 0) {
+                player2.setBaseHp(player2.getBaseHp() - unit_man.getDmg());
+                if (player2.getBaseHp() <= 0) {
                     vege = true;
                 }
             }
         }else {
-            enemy = &enemyMan[0];
+            enemy = player2.getManAt(0);
             enemy->setHp(enemy->getHp() - unit_man.getDmg());
             if (enemy->getHp() <= 0) {
                 map[enemy->getPos()] = 0;
                 money += enemy->getPrice() / 2;
-                xp += enemy->getXp();
+                player1.setXp(player1.getXp() + enemy->getXp());
                 removeFirstManFromMap(true);
             }
         }
@@ -86,21 +86,21 @@ void attack(GameUnit unit_man, bool attackBase) {
 void attackFromPool(GameUnit unit_man, bool enemyBase) {
     GameUnit* enemy = nullptr;
     if (enemyBase) {
-        enemy = &man[0];
+        enemy = player1.getManAt(0);
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[mezoszam - 1] = 0;
             aiMoney += enemy->getPrice() / 2;
-            enemyXp += enemy->getXp();
+            player2.setXp(player2.getXp() + enemy->getXp());
             removeFirstManFromMap(false);
         }
     }else {
-        enemy = &enemyMan[0];
+        enemy = player2.getManAt(0);
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[0] = 0;
             money += enemy->getPrice() / 2;
-            xp += enemy->getXp();
+            player1.setXp(player1.getXp() + enemy->getXp());
             removeFirstManFromMap(true);
         }
     }
