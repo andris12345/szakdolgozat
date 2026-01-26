@@ -2,6 +2,357 @@
 
 // Globális hálózati állapot
 NetworkState g_network;
+int num = 0;
+
+// ============================================================================
+// SZERIALIZÁCIÓ: User → GameState.PlayerData
+// ============================================================================
+
+GameState::PlayerData SerializePlayer(User& user) {
+    GameState::PlayerData data = {};
+
+    data.baseHp = user.getBaseHp();
+    data.xp = user.getXp();
+    data.level = user.getLevel();
+    data.money = user.getMoney();
+    data.manSize = user.getManSize();
+    data.poolSize = user.getPoolSize();
+
+    // Towers szerializálása (0-1 index)
+    for (int i = 0; i < 2; i++) {
+        Tower* tower = user.getTowerAt(i);
+        if (tower != nullptr) {
+            data.towers[i].exists = true;
+            data.towers[i].rect = tower->getRect();
+            data.towers[i].color = tower->getColor();
+            data.towers[i].hoverColor = tower->getHoverColor();
+            data.towers[i].isVisible = tower->getIsVisible();
+        } else {
+            data.towers[i].exists = false;
+        }
+    }
+
+    // Man units szerializálása
+    for (int i = 0; i < user.getManSize(); i++) {
+        GameUnit* unit = user.getManAt(i);
+        if (unit) {
+            data.manUnits[i].tipus = unit->getTipus();
+            data.manUnits[i].hp = unit->getHp();
+            data.manUnits[i].maxHp = unit->getMaxHp();
+            data.manUnits[i].rect = unit->getRect();
+            data.manUnits[i].color = unit->getColor();
+        }
+    }
+
+    // Pool units szerializálása
+    for (int i = 0; i < user.getPoolSize(); i++) {
+        GameUnit* unit = user.getPoolAt(i);
+        if (unit) {
+            data.poolUnits[i].tipus = unit->getTipus();
+            data.poolUnits[i].hp = unit->getHp();
+            data.poolUnits[i].maxHp = unit->getMaxHp();
+            data.poolUnits[i].rect = unit->getRect();
+            data.poolUnits[i].color = unit->getColor();
+        }
+    }
+
+    return data;
+}
+
+// ============================================================================
+// DESERIALIZÁCIÓ: GameState.PlayerData → User
+// ============================================================================
+
+void DeserializePlayer(User& user, const GameState::PlayerData& data) {
+    user.setBaseHp(data.baseHp);
+    user.setXp(data.xp);
+    user.setLevel(data.level);
+    user.setMoney(data.money);
+
+    // Towers visszaállítása
+    for (int i = 0; i < 2; i++) {
+        if (data.towers[i].exists) {
+            // Tower létrehozása a szerializált adatokból
+            auto tower = std::make_unique<Tower>();
+            tower->setRect(data.towers[i].rect);
+            tower->setColor(data.towers[i].color);
+            tower->setHoverColor(data.towers[i].hoverColor);
+            tower->setIsVisible(data.towers[i].isVisible);
+
+            user.setTowerAt(i, std::move(tower));
+        } else {
+            // Ha nem létezik, nullptr-t rakunk
+            user.setTowerAt(i, nullptr);
+        }
+    }
+
+    // Man units
+    if (data.manSize != user.getManSize()) {
+        user.reallocMan(data.manSize);
+    }
+
+    // Feltöltjük az adatokat
+    for (int i = 0; i < data.manSize; i++) {
+        GameUnit* unit = user.getManAt(i);
+
+        if (unit) {
+            unit->setHp(data.manUnits[i].hp);
+            unit->setMaxHp(data.manUnits[i].maxHp);
+            unit->setRect(data.manUnits[i].rect);
+            unit->setColor(data.manUnits[i].color);
+        }
+    }
+    user.setManSize(data.manSize);
+
+    // Pool units
+    if (data.poolSize != user.getPoolSize()) {
+        user.reallocPool(data.poolSize);
+    }
+    for (int i = 0; i < data.poolSize; i++) {
+        GameUnit* unit = user.getPoolAt(i);
+        if (unit) {
+            unit->setHp(data.poolUnits[i].hp);
+            unit->setMaxHp(data.poolUnits[i].maxHp);
+            unit->setRect(data.poolUnits[i].rect);
+            unit->setColor(data.poolUnits[i].color);
+        }
+    }
+    user.setPoolSize(data.poolSize);
+}
+
+// ============================================================================
+// KLIENS FÜGGVÉNYEK
+// ============================================================================
+
+// Egység küldése (amikor a játékos megnyom egy gombot)
+void ClientSpawnUnit(int unitType) {
+    if (!g_network.clientSocket || !g_network.isConnected) {
+        SDL_Log("[CLIENT] Not connected!");
+        return;
+    }
+
+    NetworkMessage msg;
+    msg.type = MessageType::CMD_SPAWN_UNIT;
+    msg.command.type = MessageType::CMD_SPAWN_UNIT;
+    msg.command.unitType = unitType;
+
+    int sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+    if (sent > 0) {
+        SDL_Log("[CLIENT] Spawned unit type %d", unitType);
+    } else {
+        SDL_Log("[CLIENT] Failed to spawn unit");
+    }
+}
+
+// Frissítés minden frame-ben (ha kliens vagy és kommunikálni akarsz)
+void UpdateNetworking() {
+    if (!g_network.isConnected || !g_network.clientSocket) {
+        return;
+    }
+
+    NetworkMessage msg = {};
+    int bytes = NET_ReadFromStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+
+
+    if (bytes == sizeof(NetworkMessage)) {
+        switch (msg.type) {
+            case MessageType::STATE_UPDATE:
+                // Játékállapot frissítés
+                DeserializePlayer(player1, msg.state.player1);
+                DeserializePlayer(player2, msg.state.player2);
+                if (player1.getMoney() == 50) {
+                    SDL_Log("[CLIENT] Player 1 has man man");
+                }
+                SDL_Log("%d: [CLIENT] State - P1[HP:%.0f XP:%.0f Lv:%d Man:%d Money:%.0f] P2[HP:%.0f Man:%dMoney:%.0f]",
+                     num, msg.state.player1.baseHp, msg.state.player1.xp, msg.state.player1.level,
+                     msg.state.player1.manSize, msg.state.player1.money, msg.state.player2.baseHp, msg.state.player2.manSize, msg.state.player1.money);
+                num++;
+                break;
+
+            case MessageType::EVENT_GAME_START:
+                SDL_Log("[CLIENT] Game started!");
+                start = true;
+                break;
+
+            case MessageType::EVENT_GAME_END:
+                SDL_Log("[CLIENT] Game ended! Winner: %d", msg.state.winnerId);
+                break;
+
+            default:
+                break;
+        }
+    } else if (bytes < 0) {
+        SDL_Log("[CLIENT] Connection lost");
+        NET_DestroyStreamSocket(g_network.clientSocket);
+        g_network.clientSocket = nullptr;
+        g_network.isConnected = false;
+    }
+}
+
+// ============================================================================
+// SZERVER FÜGGVÉNYEK
+// ============================================================================
+
+// Parancs feldolgozása (egység létrehozása)
+void ProcessClientCommand(const ClientCommand& cmd) {
+    switch (cmd.type) {
+        case MessageType::CMD_SPAWN_UNIT:
+            SDL_Log("[SERVER] Client wants to spawn unit type %d", cmd.unitType);
+
+        // ITT HÍVD MEG A JÁTÉK LOGIKÁT!
+        // if (CanAffordUnit(player2, cmd.unitType)) {
+        //     SpawnUnit(player2, cmd.unitType);
+        //     DeductCost(player2, cmd.unitType);
+        // }
+        break;
+
+        case MessageType::CMD_READY:
+            SDL_Log("[SERVER] Client ready");
+            start = true;
+            break;
+
+        default:
+            break;
+    }
+}
+
+// Játékállapot küldése a kliensnek
+void SendGameStateToClient() {
+    if (!g_network.clientSocket || !g_network.isConnected) {
+        return;
+    }
+
+    NetworkMessage msg;
+    msg.type = MessageType::STATE_UPDATE;
+    msg.state.player1 = SerializePlayer(player2);
+    msg.state.player2 = SerializePlayer(player1);
+    msg.state.gameStarted = start;
+    msg.state.gameEnded = false;
+    msg.state.winnerId = 0;
+    if (msg.state.player1.manSize != 0) {
+        //SDL_Log("nem 0 a mansize");
+    }
+    bool sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+    if (sent) {
+         //SDL_Log("[SERVER] Sent state true");
+    }
+    if (msg.state.player1.baseHp != 50) {
+        SDL_Log("[CLIENT] Client health");
+    }
+    SDL_Log("%d: [CLIENT] State - P1[HP:%.0f XP:%.0f Lv:%d Man:%d Money:%.0f] P2[HP:%.0f Man:%dMoney:%.0f]",
+                     num, msg.state.player1.baseHp, msg.state.player1.xp, msg.state.player1.level,
+                     msg.state.player1.manSize, msg.state.player1.money, msg.state.player2.baseHp, msg.state.player2.manSize, msg.state.player1.money);
+    num++;
+}
+
+// Játék logika frissítése (szerver oldalon minden tick-ben!)
+void ServerUpdateGameLogic() {
+    // ITT TÖRTÉNIK MINDEN JÁTÉK LOGIKA!
+
+    // 1. Egységek mozgatása
+    // MoveAllUnits(player1);
+    // MoveAllUnits(player2);
+
+    // 2. Támadások
+    // ProcessCombat(player1, player2);
+
+    // 3. Collision detection
+    // CheckCollisions(player1, player2);
+
+    // 4. XP és pénz számítás
+    // UpdateRewards(player1, player2);
+
+    // 5. Szint növelés ellenőrzése
+    // CheckLevelUp(player1);
+    // CheckLevelUp(player2);
+
+    // 6. Győzelem ellenőrzése
+    // if (player1.getBaseHp() <= 0 || player2.getBaseHp() <= 0) {
+    //     // Game over
+    // }
+
+    //SDL_Log("[SERVER] Game tick completed");
+}
+
+// Szerver szál
+int ServerThreadFunction(void* data) {
+    SDL_Log("[SERVER] Thread started on port 12345");
+
+    NET_Server* server = NET_CreateServer(nullptr, 12345);
+    if (!server) {
+        SDL_Log("[SERVER] Failed to create server: %s", SDL_GetError());
+        g_network.isServer = false;
+        return -1;
+    }
+
+    g_network.server = server;
+    SDL_Log("[SERVER] Listening...");
+
+    uint32_t lastGameTick = SDL_GetTicks();
+    const uint32_t GAME_TICK_INTERVAL = 16;  // ~60 FPS game logic
+
+    while (g_network.isServer) {
+        int while_start = SDL_GetTicks();
+        // Új kliens fogadása
+        NET_StreamSocket* newClient = nullptr;
+        if (NET_AcceptClient(server, &newClient) && newClient) {
+            SDL_Log("[SERVER] Client connected!");
+            start = true;
+            if (g_network.clientSocket) {
+                NET_DestroyStreamSocket(newClient);
+            } else {
+                g_network.clientSocket = newClient;
+                g_network.isConnected = true;
+
+                // Kezdeti állapot küldése
+                SendGameStateToClient();
+            }
+        }
+
+        // Parancsok fogadása
+        if (g_network.clientSocket) {
+            NetworkMessage msg;
+            int bytes = NET_ReadFromStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+
+            if (bytes == sizeof(NetworkMessage)) {
+                ProcessClientCommand(msg.command);
+            } else if (bytes < 0) {
+                SDL_Log("[SERVER] Client disconnected");
+                NET_DestroyStreamSocket(g_network.clientSocket);
+                g_network.clientSocket = nullptr;
+                g_network.isConnected = false;
+            }
+        }
+
+        // JÁTÉK LOGIKA FUTTATÁSA (minden tick-ben!)
+        uint32_t currentTime = SDL_GetTicks();
+        if (currentTime - lastGameTick >= GAME_TICK_INTERVAL) {
+            lastGameTick = currentTime;
+
+            if (g_network.isConnected && start) {
+                // Játék frissítése
+                ServerUpdateGameLogic();
+
+                // Állapot küldése a kliensnek
+                SendGameStateToClient();
+            }
+        }
+        //fix fps
+        int while_frameTime = SDL_GetTicks() - while_start;
+        if (while_frameTime < (1000 / TARGET_FPS)) {
+            SDL_Delay((1000 / TARGET_FPS) - while_frameTime);
+        }
+
+        SDL_Delay(1);  // Kicsi delay, hogy ne égesse a CPU-t
+    }
+
+    SDL_Log("[SERVER] Thread ending");
+    return 0;
+}
+
+// ============================================================================
+// INICIALIZÁCIÓ
+// ============================================================================
 
 // Inicializálás (egyszer hívd meg a program elején, pl. main()-ben)
 bool InitializeNetworking() {
@@ -51,71 +402,6 @@ void CleanupNetworking() {
     SDL_Log("SDL_net cleaned up");
 }
 
-// Szerver szál függvénye
-int ServerThreadFunction(void* data) {
-    SDL_Log("Server thread started on port 12345");
-    
-    NET_Server* server = NET_CreateServer(nullptr, 12345);
-    if (!server) {
-        SDL_Log("NET_CreateServer failed: %s", SDL_GetError());
-        g_network.isServer = false;
-        return -1;
-    }
-    
-    g_network.server = server;
-    SDL_Log("Server listening...");
-    
-    // Várunk kliensekre
-    while (g_network.isServer) {
-        NET_StreamSocket* newClient = nullptr;
-        
-        // Non-blocking accept
-        if (NET_AcceptClient(server, &newClient) && newClient) {
-            SDL_Log("Client connected!");
-            start = true;
-
-            // Ha már van kliens, zárjuk be az újat (egyszerre 1 kliens)
-            if (g_network.clientSocket) {
-                SDL_Log("Already have a client, rejecting new connection");
-                NET_DestroyStreamSocket(newClient);
-            } else {
-                g_network.clientSocket = newClient;
-                g_network.isConnected = true;
-                
-                // Üdvözlő üzenet
-                const char* welcome = "Welcome to the server!";
-                NET_WriteToStreamSocket(g_network.clientSocket, welcome, strlen(welcome));
-            }
-        }
-        
-        // Ha van kliens, olvassunk tőle
-        if (g_network.clientSocket) {
-            char buffer[256];
-            int bytes = NET_ReadFromStreamSocket(g_network.clientSocket, buffer, sizeof(buffer) - 1);
-            
-            if (bytes > 0) {
-                buffer[bytes] = '\0';
-                SDL_Log("Received from client: %s", buffer);
-                
-                // Echo vissza
-                const char* reply = "Message received!";
-                NET_WriteToStreamSocket(g_network.clientSocket, reply, strlen(reply));
-            } else if (bytes < 0) {
-                SDL_Log("Client disconnected");
-                NET_DestroyStreamSocket(g_network.clientSocket);
-                g_network.clientSocket = nullptr;
-                g_network.isConnected = false;
-            }
-            // bytes == 0 azt jelenti, hogy nincs új adat (ez normális)
-        }
-        
-        SDL_Delay(10); // Kis szünet, hogy ne égesse a CPU-t
-    }
-    
-    SDL_Log("Server thread ending");
-    return 0;
-}
-
 // Szerver indítása külön szálon (nem blokkoló!)
 bool StartServerAsync() {
     if (!g_network.isInitialized) {
@@ -143,13 +429,7 @@ bool StartServerAsync() {
 
 // Csatlakozás szerverhez (nem blokkoló - de várunk a kapcsolatra!)
 bool ConnectToServer(const char* hostname) {
-    if (!g_network.isInitialized) {
-        SDL_Log("Network not initialized! Call InitializeNetworking() first.");
-        return false;
-    }
-    
-    if (g_network.clientSocket) {
-        SDL_Log("Already connected");
+    if (!g_network.isInitialized || g_network.clientSocket) {
         return false;
     }
 
@@ -189,32 +469,7 @@ bool ConnectToServer(const char* hostname) {
     g_network.isConnected = true;
     SDL_Log("Connected to server!");
     
-    // Teszt üzenet küldése
-    const char* testMsg = "Hello from client! Szeretem az oszt!";
-    NET_WriteToStreamSocket(g_network.clientSocket, testMsg, strlen(testMsg));
-    
     NET_UnrefAddress(address);
     return true;
 }
 
-// Frissítés minden frame-ben (ha kliens vagy és kommunikálni akarsz)
-void UpdateNetworking() {
-    if (!g_network.isConnected || !g_network.clientSocket) {
-        return;
-    }
-    
-    // Olvassunk a szervertől (non-blocking)
-    char buffer[256];
-    int bytes = NET_ReadFromStreamSocket(g_network.clientSocket, buffer, sizeof(buffer) - 1);
-    
-    if (bytes > 0) {
-        buffer[bytes] = '\0';
-        SDL_Log("Received from server: %s", buffer);
-    } else if (bytes < 0) {
-        SDL_Log("Connection lost");
-        NET_DestroyStreamSocket(g_network.clientSocket);
-        g_network.clientSocket = nullptr;
-        g_network.isConnected = false;
-    }
-    // bytes == 0 azt jelenti, hogy nincs új adat (ez normális)
-}

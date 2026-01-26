@@ -4,6 +4,7 @@ Tower::Tower( double _dmg, int _range, double _cost,int _type, SDL_FRect _rect, 
 
 Tower::Tower() = default;
 
+bool Tower::isExists() { return exists; }
 double Tower::getCost() { return cost; }
 double Tower::getDmg() { return dmg; }
 int Tower::getRange() { return range; }
@@ -14,8 +15,19 @@ SDL_Color Tower::getHoverColor() { return hoverColor; }
 bool Tower::getIsHovered() { return isHovered; }
 bool Tower::getIsVisible() { return isVisible; }
 
+void Tower::setRect(SDL_FRect _rect) {
+    rect = _rect;
+}
 
+void Tower::setColor(SDL_Color _color) {
+    color = _color;
+}
 
+void Tower::setHoverColor(SDL_Color _hoverColor) {
+    hoverColor = _hoverColor;
+}
+
+void Tower::setExists(bool _exists) { exists = _exists; }
 void Tower::setDmg(double _dmg) { dmg = _dmg; }
 void Tower::setRange(int _range) { range = _range; }
 void Tower::setCost(double _cost) { cost = _cost; }

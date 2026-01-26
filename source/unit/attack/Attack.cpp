@@ -60,7 +60,7 @@ void attack(GameUnit unit_man, bool attackBase) {
                 enemy = player2.getPoolAt(0);
                 enemy->setHp(enemy->getHp() - unit_man.getDmg());
                 if (enemy->getHp() <= 0) {
-                    money += enemy->getPrice() / 2;
+                    player1.setMoney(player1.getMoney() + (enemy->getPrice() / 2));
                     player1.setXp(player1.getXp() + enemy->getXp());
                     removeFirstManFromPool(true);
                 }
@@ -75,7 +75,7 @@ void attack(GameUnit unit_man, bool attackBase) {
             enemy->setHp(enemy->getHp() - unit_man.getDmg());
             if (enemy->getHp() <= 0) {
                 map[enemy->getPos()] = 0;
-                money += enemy->getPrice() / 2;
+                player1.setMoney(player1.getMoney() + (enemy->getPrice() / 2));
                 player1.setXp(player1.getXp() + enemy->getXp());
                 removeFirstManFromMap(true);
             }
@@ -99,7 +99,7 @@ void attackFromPool(GameUnit unit_man, bool enemyBase) {
         enemy->setHp(enemy->getHp() - unit_man.getDmg());
         if (enemy->getHp() <= 0) {
             map[0] = 0;
-            money += enemy->getPrice() / 2;
+            player1.setMoney(player1.getMoney() + (enemy->getPrice() / 2));
             player1.setXp(player1.getXp() + enemy->getXp());
             removeFirstManFromMap(true);
         }

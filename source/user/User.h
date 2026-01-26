@@ -11,6 +11,7 @@ class User {
   float baseHp;
   float xp;
   int level;
+  float money;
   std::array<std::unique_ptr<Tower>, 2> towers;
   GameUnit *man;
   int manSize;
@@ -22,12 +23,13 @@ public:
 
   User(float baseHp);
 
-
+  User &operator=(const User &);
 
 
   float getBaseHp();
   float getXp();
   int getLevel();
+  float getMoney();
   Tower* getTowerAt(int x);
   GameUnit* getMan();
   GameUnit* getManAt(int x);
@@ -41,6 +43,7 @@ public:
   void setBaseHp(float baseHp);
   void setXp(float xp);
   void setLevel(int level);
+  void setMoney(float money);
   void setTowerAt(int x, std::unique_ptr<Tower> tower);
   void setMan(GameUnit *man);
   void setManAt(int x, GameUnit *unit);
@@ -56,6 +59,8 @@ public:
   // Shift helper (elemek előretolása)
   void shiftManLeft();
   void shiftPoolLeft();
+
+  std::string toString();
 
   ~User();
   };

@@ -20,6 +20,7 @@ bool start = false;
 bool singlePlayer = false;
 bool multiPlayer = false;
 bool client = false;
+bool server = false;
 SDL_FRect kocka;
 
 float behuzasi_tavolsag = 100;
@@ -36,7 +37,6 @@ float fontSize = 12;
 TTF_Font *font;
 TTF_Font *gombFont;
 
-float money = 20;
 Subtitle *penzText = nullptr;
 Subtitle *endText = nullptr;
 Subtitle *xpText = nullptr;

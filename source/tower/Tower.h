@@ -4,6 +4,7 @@
 #include "../variables/Variables.h"
 
 class Tower {
+    bool exists = false;
     double dmg{};
     int range{};
     double cost{};
@@ -18,6 +19,7 @@ public:
     Tower();
     Tower(double dmg, int range, double cost, int type, SDL_FRect rect, SDL_Color color, SDL_Color hoverColor);
 
+    bool isExists();
     double getDmg();
     int getRange();
     double getCost();
@@ -28,6 +30,10 @@ public:
     bool getIsHovered();
     bool getIsVisible();
 
+    void setRect(SDL_FRect _rect);
+    void setColor(SDL_Color _color);
+    void setHoverColor(SDL_Color _hoverColor);
+    void setExists(bool exists);
     void setDmg(double dmg);
     void setRange(int range);
     void setCost(double cost);

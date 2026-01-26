@@ -127,8 +127,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     Fighter fighter = Fighter(0, (12 + (12 * player1.getLevel() * 0.25)),(2 + (2 * player1.getLevel() * 0.25)), false);
                     fighter.setPrice(10 + 10 * player1.getLevel() * 0.25);
                     fighter.setXp(10 + 10 * player1.getLevel() * 0.25);
-                    if (money >= fighter.getPrice()) {
-                        money -= fighter.getPrice();
+                    if (player1.getMoney() >= fighter.getPrice()) {
+                        player1.setMoney(player1.getMoney() - fighter.getPrice());
                         const char* welcome = "fighter letrehozva";
                         NET_WriteToStreamSocket(g_network.clientSocket, welcome, strlen(welcome));
                         CreateManToPool(fighter, false);
@@ -137,16 +137,16 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     Ranged ranged = Ranged(1, (8 + (8 * player1.getLevel() * 0.25)), (2 + (2 * player1.getLevel() * 0.25)), false);
                     ranged.setPrice(15 + 15 * player1.getLevel() * 0.25);
                     ranged.setXp(10 + 10 * player1.getLevel() * 0.25);
-                    if (money >= ranged.getPrice()) {
-                        money -= ranged.getPrice();
+                    if (player1.getMoney() >= ranged.getPrice()) {
+                        player1.setMoney(player1.getMoney() - ranged.getPrice());
                         CreateManToPool(ranged, false);
                     }
                 }else if (tankBt->getIsVisible() && isMouseOver(tankBt, x, y)) {
                     Tank tank = Tank(2, (16 + (16 * player1.getLevel() * 0.25)), (2 + (2 * player1.getLevel() * 0.25)), false);
                     tank.setPrice(20 + 20 * player1.getLevel() * 0.25);
                     tank.setXp(20 + 20 * player1.getLevel() * 0.25);
-                    if (money >= tank.getPrice()) {
-                        money -= tank.getPrice();
+                    if (player1.getMoney() >= tank.getPrice()) {
+                        player1.setMoney(player1.getMoney() - tank.getPrice());
                         CreateManToPool(tank, false);
                     }
                 }else if (mainMenuBt->getIsVisible() && isMouseOver(mainMenuBt, x, y)) {
@@ -159,8 +159,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     joinBt->setIsVisible(false);
                     multiPlayer = false;
                 }else if (tower1Bt->getIsVisible() && isMouseOver(tower1Bt, x, y)) {
-                    if (money >= tower1Cost) {
-                        money -= tower1Cost;
+                    if (player1.getMoney() >= tower1Cost) {
+                        player1.setMoney(player1.getMoney() - tower1Cost);
                         SDL_FRect fr;
                         if (pos == 0) {
                             fr = tower1Holder->getRect();
@@ -176,8 +176,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     }
                     buyTower = false;
                 }else if (tower2Bt->getIsVisible() && isMouseOver(tower2Bt, x, y)) {
-                    if (money >= tower1Cost) {
-                        money -= tower1Cost;
+                    if (player1.getMoney() >= tower2Cost) {
+                        player1.setMoney(player1.getMoney() - tower2Cost);
                         SDL_FRect fr;
                         if (type == 1) {
                             fr = tower1Holder->getRect();
@@ -193,7 +193,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     }
                     buyTower = false;
                 }else if (deleteBt->getIsVisible() && isMouseOver(deleteBt, x, y)) {
-                    money += towers[deleteTowerNumber].getCost()/2;
+                    player1.setMoney(player1.getMoney() + (towers[deleteTowerNumber].getCost()/2));
                     towerNumber--;
                     towers[deleteTowerNumber] = Tower();
                     if (deleteTowerNumber == 0) {
@@ -224,7 +224,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     // Szerver indítása KÜLÖN SZÁLON (nem blokkoló!)
                     if (StartServerAsync()) {
                         SDL_Log("Szerver indítása elkezdődött!");
-                        // A játék folytatódik, nem fagy be!
+                        server = true;
                     } else {
                         SDL_Log("Szerver indítása sikertelen!");
                     }
@@ -240,6 +240,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     if (ConnectToServer("127.0.0.1")) {
                         SDL_Log("Sikeres csatlakozás!");
                         client = true;
+                        start = true;
                     } else {
                         SDL_Log("Csatlakozás sikertelen!");
                     }
@@ -333,8 +334,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         //enemyPool = nullptr;
         //enemyPoolSize = 0;
 
-        money = 20;
-        aiMoney = 20;
+        player1.setBaseHp(20);
+        player2.setMoney(20);
         unitCounter = 0;
 
         vegeMenu = true;
@@ -349,90 +350,124 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         endText->render();
         render_Button(mainMenuBt);
     }
-    if (client) {
-        UpdateNetworking();
-    }
+
+
 
     if (start) {
-        money += 1/30.0;
-        std::string text = "Pénz: " + std::format("{:.1f}", money);
-
-        penzText->setText(text);
-        penzText->render();
 
         if (client) {
-            UpdateNetworking();
-        }
+            UpdateNetworking();  // Automatikus szinkronizáció
 
-        if (buyTower) {
-            render_Button(tower1Bt);
-            render_Button(tower2Bt);
+            // Gombok
+            render_Button(fighterBt);
+            render_Button(rangedBt);
+            render_Button(tankBt);
+
+            // UI (a money és xp már frissítve van a szerver állapotból)
+            std::string text = "Pénz: " + std::format("{:.1f}", player1.getMoney());
+            penzText->setText(text);
+            penzText->render();
+
+            // XP bar
+            float ratio = player1.getXp() / 100.0f;
+            float xpWidth = std::min((ratio * 125), 125.0f);
+            SDL_FRect rect = {120, 20, 125, 20};
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+            rect = {120, 20, xpWidth, 20};
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+
+            text = std::to_string((int)player1.getXp()) + "/100";
+            xpText->setText(text);
+            xpText->render();
+
+            basekirajzolas(renderer);
+            unitKirajzolas(renderer);
+            hpKirajzolasHelper();
+
+
         }else {
-            tower1Bt->setIsVisible(false);
-            tower2Bt->setIsVisible(false);
-        }
+            player1.setMoney(player1.getMoney() + 1/30.0);
+            std::string text = "Pénz: " + std::format("{:.1f}", player1.getMoney());
 
-        if (deleteBt->getIsVisible()) {
-            render_Button(deleteBt);
-        }
+            penzText->setText(text);
+            penzText->render();
 
-        if (player2.getXp() >= 100) {
-            player2.setXp(player2.getXp() - 100);
-            player2.setLevel(player2.getLevel() + 1);
-        }
-        switch (dificulty) {
-            case 1: {
-                easyAi();
-                break;
+
+            if (buyTower) {
+                render_Button(tower1Bt);
+                render_Button(tower2Bt);
+            }else {
+                tower1Bt->setIsVisible(false);
+                tower2Bt->setIsVisible(false);
             }
-            case 2: {
-                mediumAi();
-                break;
+
+            if (deleteBt->getIsVisible()) {
+                render_Button(deleteBt);
             }
-            case 3: {
-                hardAi();
-                break;
+
+            if (player2.getXp() >= 100) {
+                player2.setXp(player2.getXp() - 100);
+                player2.setLevel(player2.getLevel() + 1);
             }
-            default:
-                break;
-        }
-
-        Move(renderer);
-
-        if (!haveTower1) {
-            render_Button(tower1Holder);
-        }
-        if (!haveTower2) {
-            render_Button(tower2Holder);
-        }
-
-        for (int i = 0; i < 2; i++) {
-            if (towers[i].getDmg() == 0) {
-                continue;
+            switch (dificulty) {
+                case 1: {
+                    easyAi();
+                    break;
+                }
+                case 2: {
+                    mediumAi();
+                    break;
+                }
+                case 3: {
+                    hardAi();
+                    break;
+                }
+                default:
+                    break;
             }
-            if (towers[i].getIsVisible()) {
-                renderTower(renderer, towers[i]);
+
+            Move(renderer);
+
+            if (!haveTower1) {
+                render_Button(tower1Holder);
             }
-        }
+            if (!haveTower2) {
+                render_Button(tower2Holder);
+            }
 
-        //xp kirajzolas:
-        float ratio = player1.getXp() / static_cast<float>(100);
-        float xpWidth = std::min((ratio * 125), static_cast<float>(125));
-        SDL_FRect rect = {.x = 120, .y = 20, .w = 125, .h = 20};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+            for (int i = 0; i < 2; i++) {
+                if (towers[i].getDmg() == 0) {
+                    continue;
+                }
+                if (towers[i].getIsVisible()) {
+                    renderTower(renderer, towers[i]);
+                }
+            }
 
-        rect = {.x = 120, .y = 20, .w = xpWidth, .h = 20};
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+            //xp kirajzolas:
+            float ratio = player1.getXp() / static_cast<float>(100);
+            float xpWidth = std::min((ratio * 125), static_cast<float>(125));
+            SDL_FRect rect = {.x = 120, .y = 20, .w = 125, .h = 20};
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
 
-        text = std::to_string(static_cast<int>(player1.getXp())) + "/100";
+            rect = {.x = 120, .y = 20, .w = xpWidth, .h = 20};
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
 
-        xpText->setText(text);
-        xpText->render();
+            text = std::to_string(static_cast<int>(player1.getXp())) + "/100";
 
-        if (ratio >= 1) {
-            render_Button(levelUpBt);
+            xpText->setText(text);
+            xpText->render();
+
+            if (ratio >= 1) {
+                render_Button(levelUpBt);
+            }
+            if (server) {
+
+            }
         }
     }
 

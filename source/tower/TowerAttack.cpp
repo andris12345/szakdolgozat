@@ -24,7 +24,7 @@ void TowerAttack::Attack(Tower t) {
     enemy.setHp(enemy.getHp() - t.getDmg());
     if (enemy.getHp() <= 0) {
         map[enemy.getPos()] = 0;
-        money += enemy.getPrice() / 2;
+        player1.setMoney(player1.getMoney() + (enemy.getPrice() / 2));
         removeFirstManFromMap(true);
     }
 }

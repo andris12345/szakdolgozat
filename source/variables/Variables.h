@@ -33,6 +33,7 @@ extern bool start;
 extern bool singlePlayer;
 extern bool multiPlayer;
 extern bool client;
+extern bool server;
 
 extern SDL_FRect kocka;
 
@@ -50,7 +51,6 @@ extern float fontSize;
 extern TTF_Font *font;
 extern TTF_Font *gombFont;
 
-extern float money;
 extern Subtitle *penzText;
 extern Subtitle *endText;
 extern Subtitle *xpText;

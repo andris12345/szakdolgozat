@@ -79,6 +79,8 @@ add_executable(szakdolgozat main.cpp
         source/MultiPlayer/multiPlayer.h
         source/user/user.cpp
         source/user/user.h
+        source/unit/drawing/Drawing.cpp
+        source/unit/drawing/Drawing.h
 )
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})

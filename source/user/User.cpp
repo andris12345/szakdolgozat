@@ -1,12 +1,19 @@
 ﻿#include "User.h"
+
+#include <sstream>
+
 #include "../tower/Tower.h"
 
-User::User() : baseHp(50), xp(0), level(0), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
+User::User() : baseHp(50), xp(0), level(0), money(20), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
 
 }
 
-User::User(float baseHp) : baseHp(baseHp), xp(0), level(0), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
+User::User(float baseHp) : baseHp(baseHp), xp(0), level(0), money(20), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
 
+}
+
+User &User::operator=(const User &) {
+    return *this;
 }
 
 //getterek
@@ -18,6 +25,9 @@ float User::getXp() {
 }
 int User::getLevel() {
     return level;
+}
+float User::getMoney() {
+    return money;
 }
 Tower* User::getTowerAt(int x) {
     return towers[x].get();
@@ -65,7 +75,9 @@ void User::setXp(float xp) {
 void User::setLevel(int level) {
     this->level = level;
 }
-
+void User::setMoney(float money) {
+    this->money = money;
+}
 void User::setTowerAt(int x, std::unique_ptr<Tower> tower) {
     this->towers[x] = std::move(tower);
 
@@ -122,6 +134,19 @@ void User::shiftPoolLeft() {
     for (int i = 1; i < poolSize; i++) {
         pool[i - 1] = pool[i];
     }
+}
+
+std::string User::toString() {
+    std::ostringstream oss;
+    int a = 0;
+    if (this->getTowerAt(0)) {
+        a++;
+    }else if (this->getTowerAt(1)) {
+        a++;
+    }
+    oss << "User[Lv" << level << " XP:" << xp << " HP:" << baseHp
+        << " Towers:" << std::to_string(a) << " Man:" << manSize << " Pool:" << poolSize << "]";
+    return oss.str();
 }
 
 User::~User() {
