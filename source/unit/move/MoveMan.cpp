@@ -62,6 +62,9 @@ void Move(SDL_Renderer *renderer) {
             }
         }
     }
+    if (frameSzamlalo == 0) {
+        tower_attack.TowerAttackHandler();
+    }
     //kirajzolás + léptetés az embereknek
     if (player1.getManSize() > 0) {
         for (int i = player1.getManSize() - 1; i >= 0; i--) {
@@ -102,7 +105,6 @@ void mozgatas(GameUnit &man){
             }
             if (frameSzamlalo == 0) {
                 attackHandler(man, hely);
-                tower_attack.TowerAttackHandler();
             }
         }
     }else {
@@ -125,7 +127,6 @@ void mozgatas(GameUnit &man){
             }
             if (frameSzamlalo == 0) {
                 attackHandler(man, hely);
-                tower_attack.TowerAttackHandler();
             }
         }
     }

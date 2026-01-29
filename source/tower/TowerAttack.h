@@ -9,7 +9,7 @@ private:
     TowerAttack() = default;
     ~TowerAttack() = default;
 
-    void Attack(Tower tower);
+    void Attack(Tower tower, bool p1);
 
 public:
     static TowerAttack& GetInstance();
