@@ -110,9 +110,13 @@ void toronyKirajzolas(SDL_Renderer *renderer) {
 
             if (!player1.getTowerAt(0)->isExists()) {
                 render_Button(tower1Holder);
+            }else {
+                tower1Holder->setIsVisible(false);
             }
             if (!player1.getTowerAt(1)->isExists()) {
                 render_Button(tower2Holder);
+            }else {
+                tower2Holder->setIsVisible(false);
             }
         }
         if (player2.getTowerAt(i)->isExists()) {

@@ -77,6 +77,7 @@ enum class MessageType : uint8_t {
     CMD_SPAWN_UNIT = 1,
     CMD_READY = 2,
     CMD_BUY_TOWER = 3,
+    CMD_DELETE_TOWER = 4,
 
     // Szerver → Kliens
     STATE_UPDATE = 100,
@@ -135,6 +136,8 @@ void ClientSpawnUnit(int unitType);
  * @param towerType torony típusa (0, 1)
  */
 void ClientBuyTower(int towerType, int towerPosition);
+
+void ClientDeleteTower(int towerPosition);
 /**
  * Kliens hálózati frissítés - hívd meg minden frame-ben!
  * Fogadja a szerver állapotot és frissíti a helyi játékállást

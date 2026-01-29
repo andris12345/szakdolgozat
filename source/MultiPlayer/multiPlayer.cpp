@@ -158,6 +158,26 @@ void ClientBuyTower(int towerType, int towerPosition) {
     }
 }
 
+void ClientDeleteTower(int towerPosition) {
+    if (!g_network.clientSocket || !g_network.isConnected) {
+        SDL_Log("[CLIENT] Not connected!");
+        return;
+    }
+
+    NetworkMessage msg;
+    msg.type = MessageType::CMD_DELETE_TOWER;
+    msg.command.type = MessageType::CMD_DELETE_TOWER;
+    msg.command.towerposition = towerPosition;
+
+    int sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+    if (sent > 0) {
+        SDL_Log("[CLIENT] Bought tower position %d", towerPosition);
+    } else {
+        SDL_Log("[CLIENT] Failed to spawn unit");
+    }
+}
+
+
 // Frissítés minden frame-ben (ha kliens vagy és kommunikálni akarsz)
 void UpdateNetworking() {
     if (!g_network.isConnected || !g_network.clientSocket) {
@@ -245,6 +265,12 @@ void ProcessClientCommand(const ClientCommand& cmd) {
 
         case MessageType::CMD_BUY_TOWER:
             CreateNewTower(cmd.towerType, cmd.towerposition, true);
+            player2.setMoney(player2.getMoney() - (player2.getTowerAt(cmd.towerposition)->getCost()));
+            break;
+
+        case MessageType::CMD_DELETE_TOWER:
+            player2.setMoney(player2.getMoney() + (player2.getTowerAt(cmd.towerposition)->getCost()/2));
+            player2.getTowerAt(cmd.towerposition)->resetTower();
             break;
 
         case MessageType::CMD_READY:

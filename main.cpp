@@ -211,9 +211,15 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     }
                     buyTower = false;
                 }else if (deleteBt->getIsVisible() && isMouseOver(deleteBt, x, y)) {
-                    player1.setMoney(player1.getMoney() + (player1.getTowerAt(deleteTowerNumber)->getCost()/2));
-                    player1.getTowerAt(deleteTowerNumber)->resetTower();
-                    deleteBt->setIsVisible(false);
+                    if (client) {
+                        ClientDeleteTower(deleteTowerNumber);
+                        deleteBt->setIsVisible(false);
+                    }else {
+                        player1.setMoney(player1.getMoney() + (player1.getTowerAt(deleteTowerNumber)->getCost()/2));
+                        player1.getTowerAt(deleteTowerNumber)->resetTower();
+                        deleteBt->setIsVisible(false);
+                    }
+
                 }else if (levelUpBt->getIsVisible() && isMouseOver(levelUpBt, x, y)) {
                     levelUp(false);
                     player1.setXp(player1.getXp() - 100);
@@ -367,7 +373,13 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             player2.setMoney(player2.getMoney() + 1/30.0);
         }
         if (client) {
+            if (player1.getTowerAt(0)->isExists()) {
+                SDL_Log("Tower 1 exists!");
+            }
             UpdateNetworking();  // Automatikus szinkronizáció
+            if (player1.getTowerAt(0)->isExists()) {
+                SDL_Log("Tower 1 exists!");
+            }
 
             SDL_FRect vonal = {.x = 300 , .y = 200-emberszelesseg/2, .w = 1, .h = emberszelesseg + emberszelesseg};
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -377,6 +389,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
                 SDL_RenderFillRect(renderer, &rect);
             }
+
+
 
             // Gombok
             fighterBt->getSubtitle()->setText("Fighter: " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
