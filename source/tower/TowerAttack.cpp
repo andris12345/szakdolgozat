@@ -7,10 +7,10 @@ TowerAttack& TowerAttack::GetInstance() {
 
 void TowerAttack::TowerAttackHandler() {
     for (int i = 0; i < 2; i++) {
-        if (towers[i].getDmg() != 0) {
-            for (int j = 0; j < towers[i].getRange(); j++) {
+        if (player1.getTowerAt(i) != NULL) {
+            for (int j = 0; j < player1.getTowerAt(i)->getRange(); j++) {
                 if (map[j] == 2) {
-                    Attack(towers[i]);
+                    Attack(*player1.getTowerAt(i));
                     return;
                 }
             }

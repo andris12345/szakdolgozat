@@ -1,8 +1,4 @@
-﻿//
-// Created by Andris on 2026. 01. 17..
-//
-
-#include "Drawing.h"
+﻿#include "Drawing.h"
 
 void hpKirajzolasHelper() {
     if (player1.getManSize() != 0) {
@@ -93,4 +89,34 @@ void basekirajzolas(SDL_Renderer *renderer) {
     rect = {.x = behuzasi_tavolsag + mezoszam * mezoszelesseg + 20, .y = (emberKezdoY - 100 - 15), .w = hpwidth, .h = 5};
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
+}
+
+void toronyKirajzolas(SDL_Renderer *renderer) {
+    for (int i = 0; i < 2; i++) {
+        if (player1.getTowerAt(i)->isExists()) {
+            renderTower(renderer, *player1.getTowerAt(i));
+        }else {
+            if (buyTower) {
+                render_Button(tower1Bt);
+                render_Button(tower2Bt);
+            }else {
+                tower1Bt->setIsVisible(false);
+                tower2Bt->setIsVisible(false);
+            }
+
+            if (deleteBt->getIsVisible()) {
+                render_Button(deleteBt);
+            }
+
+            if (!player1.getTowerAt(0)->isExists()) {
+                render_Button(tower1Holder);
+            }
+            if (!player1.getTowerAt(1)->isExists()) {
+                render_Button(tower2Holder);
+            }
+        }
+        if (player2.getTowerAt(i)->isExists()) {
+            renderTower(renderer, *player2.getTowerAt(i));
+        }
+    }
 }

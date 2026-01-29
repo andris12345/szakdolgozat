@@ -9,6 +9,7 @@ class Tower {
     int range{};
     double cost{};
     int type{};
+    int pos{};
     SDL_FRect rect = {};
     SDL_Color color = {};
     SDL_Color hoverColor = {}; //todo: talan atrakni coverre hover helyett
@@ -24,6 +25,7 @@ public:
     int getRange();
     double getCost();
     int getType();
+    int getPos();
     SDL_FRect& getRect();
     SDL_Color getColor();
     SDL_Color getHoverColor();
@@ -38,18 +40,21 @@ public:
     void setRange(int range);
     void setCost(double cost);
     void setType(int type);
+    void setPos(int pos);
     void setIsHovered(bool isHovered);
     void setIsVisible(bool isVisible);
 
-
+    void resetTower();
+    void setTower(Tower tower);
 
 };
 
-void CreateNewTower(double dmg, int range, double cost, int type, SDL_FRect _rect, SDL_Color _color, SDL_Color _hoverColor, int pos);
+void CreateNewTower( int _type, int _pos, bool _client);
 
 void renderTower(SDL_Renderer* renderer, Tower& tower);
 
 bool isMouseOver(Tower* Tower, float mouseX, float mouseY);
 
+void resetTower();
 
 #endif //TOWER_H

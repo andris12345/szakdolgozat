@@ -21,15 +21,12 @@ GameState::PlayerData SerializePlayer(User& user) {
     // Towers szerializálása (0-1 index)
     for (int i = 0; i < 2; i++) {
         Tower* tower = user.getTowerAt(i);
-        if (tower != nullptr) {
-            data.towers[i].exists = true;
-            data.towers[i].rect = tower->getRect();
-            data.towers[i].color = tower->getColor();
-            data.towers[i].hoverColor = tower->getHoverColor();
-            data.towers[i].isVisible = tower->getIsVisible();
-        } else {
-            data.towers[i].exists = false;
-        }
+        data.towers[i].exists = tower->isExists();
+        data.towers[i].pos = tower->getPos();
+        data.towers[i].rect = tower->getRect();
+        data.towers[i].color = tower->getColor();
+        data.towers[i].hoverColor = tower->getHoverColor();
+        data.towers[i].isVisible = tower->getIsVisible();
     }
 
     // Man units szerializálása
@@ -71,19 +68,16 @@ void DeserializePlayer(User& user, const GameState::PlayerData& data) {
 
     // Towers visszaállítása
     for (int i = 0; i < 2; i++) {
-        if (data.towers[i].exists) {
-            // Tower létrehozása a szerializált adatokból
-            auto tower = std::make_unique<Tower>();
-            tower->setRect(data.towers[i].rect);
-            tower->setColor(data.towers[i].color);
-            tower->setHoverColor(data.towers[i].hoverColor);
-            tower->setIsVisible(data.towers[i].isVisible);
+        // Tower létrehozása a szerializált adatokból
+        auto tower = std::make_unique<Tower>();
+        tower->setExists(data.towers[i].exists);
+        tower->setPos(data.towers[i].pos);
+        tower->setRect(data.towers[i].rect);
+        tower->setColor(data.towers[i].color);
+        tower->setHoverColor(data.towers[i].hoverColor);
+        tower->setIsVisible(data.towers[i].isVisible);
 
-            user.setTowerAt(i, std::move(tower));
-        } else {
-            // Ha nem létezik, nullptr-t rakunk
-            user.setTowerAt(i, nullptr);
-        }
+        user.setTowerAt(i, std::move(tower));
     }
 
     // Man units
@@ -144,6 +138,26 @@ void ClientSpawnUnit(int unitType) {
     }
 }
 
+void ClientBuyTower(int towerType, int towerPosition) {
+    if (!g_network.clientSocket || !g_network.isConnected) {
+        SDL_Log("[CLIENT] Not connected!");
+        return;
+    }
+
+    NetworkMessage msg;
+    msg.type = MessageType::CMD_BUY_TOWER;
+    msg.command.type = MessageType::CMD_BUY_TOWER;
+    msg.command.towerType = towerType;
+    msg.command.towerposition = towerPosition;
+
+    int sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
+    if (sent > 0) {
+        SDL_Log("[CLIENT] Bought tower type %d, position %d", towerType, towerPosition);
+    } else {
+        SDL_Log("[CLIENT] Failed to spawn unit");
+    }
+}
+
 // Frissítés minden frame-ben (ha kliens vagy és kommunikálni akarsz)
 void UpdateNetworking() {
     if (!g_network.isConnected || !g_network.clientSocket) {
@@ -160,6 +174,7 @@ void UpdateNetworking() {
                 // Játékállapot frissítés
                 DeserializePlayer(player1, msg.state.player1);
                 DeserializePlayer(player2, msg.state.player2);
+
                 if (player1.getMoney() == 50) {
                     SDL_Log("[CLIENT] Player 1 has man man");
                 }
@@ -198,13 +213,40 @@ void ProcessClientCommand(const ClientCommand& cmd) {
     switch (cmd.type) {
         case MessageType::CMD_SPAWN_UNIT:
             SDL_Log("[SERVER] Client wants to spawn unit type %d", cmd.unitType);
+            switch (cmd.unitType) {
+                case 0: {
+                    Fighter fighter = Fighter(0, (12 + (12 * player2.getLevel() * 0.25)),(2 + (2 * player2.getLevel() * 0.25)), true);
+                    fighter.setPrice(10 + 10 * player2.getLevel() * 0.25);
+                    //fighter.setXp(10 + 10 * player2.getLevel() * 0.25);
+                    fighter.setXp(100);
+                    player2.setMoney(player2.getMoney() - fighter.getPrice());
+                    CreateManToPool(fighter, true);
+                    break;
+                }
+                case 1: {
+                    Ranged ranged = Ranged(1, (8 + (8 * player2.getLevel() * 0.25)), (2 + (2 * player2.getLevel() * 0.25)), true);
+                    ranged.setPrice(15 + 15 * player2.getLevel() * 0.25);
+                    ranged.setXp(10 + 10 * player2.getLevel() * 0.25);
+                    player2.setMoney(player2.getMoney() - ranged.getPrice());
+                    CreateManToPool(ranged, true);
+                    break;
+                }
+                case 2: {
+                    Tank tank = Tank(2, (16 + (16 * player2.getLevel() * 0.25)), (2 + (2 * player2.getLevel() * 0.25)), true);
+                    tank.setPrice(20 + 20 * player2.getLevel() * 0.25);
+                    tank.setXp(20 + 20 * player2.getLevel() * 0.25);
+                    player2.setMoney(player2.getMoney() - tank.getPrice());
+                    CreateManToPool(tank, true);
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
 
-        // ITT HÍVD MEG A JÁTÉK LOGIKÁT!
-        // if (CanAffordUnit(player2, cmd.unitType)) {
-        //     SpawnUnit(player2, cmd.unitType);
-        //     DeductCost(player2, cmd.unitType);
-        // }
-        break;
+        case MessageType::CMD_BUY_TOWER:
+            CreateNewTower(cmd.towerType, cmd.towerposition, true);
+            break;
 
         case MessageType::CMD_READY:
             SDL_Log("[SERVER] Client ready");
@@ -218,6 +260,7 @@ void ProcessClientCommand(const ClientCommand& cmd) {
 
 // Játékállapot küldése a kliensnek
 void SendGameStateToClient() {
+    float p = (mezoszelesseg * mezoszam) / 2.0f + 100.0f;
     if (!g_network.clientSocket || !g_network.isConnected) {
         return;
     }
@@ -225,13 +268,44 @@ void SendGameStateToClient() {
     NetworkMessage msg;
     msg.type = MessageType::STATE_UPDATE;
     msg.state.player1 = SerializePlayer(player2);
+    if (msg.state.player1.manSize != 0) {
+        for (int i = 0; i < msg.state.player1.manSize; i++) {
+            msg.state.player1.manUnits[i].rect.x = ( 2.0f * p - msg.state.player1.manUnits[i].rect.x) - emberszelesseg;
+        }
+    }
+    if (msg.state.player1.poolSize != 0) {
+        for (int i = 0; i < msg.state.player1.poolSize; i++) {
+            msg.state.player1.poolUnits[i].rect.x = ( 2.0f * p - msg.state.player1.poolUnits[i].rect.x) - emberszelesseg;
+        }
+    }
+    for (int i = 0; i < 2; i++) {
+        if (msg.state.player1.towers[i].exists) {
+            msg.state.player1.towers[i].rect.x = (2.0f * p - msg.state.player1.towers[i].rect.x) - msg.state.player1.towers[i].rect.w;
+        }
+    }
+
+
     msg.state.player2 = SerializePlayer(player1);
+    if (msg.state.player2.manSize != 0) {
+        for (int i = 0; i < msg.state.player2.manSize; i++) {
+            msg.state.player2.manUnits[i].rect.x = ( 2.0f * p - msg.state.player2.manUnits[i].rect.x) - emberszelesseg;
+        }
+    }
+    if (msg.state.player2.poolSize != 0) {
+        for (int i = 0; i < msg.state.player2.poolSize; i++) {
+            msg.state.player2.poolUnits[i].rect.x = ( 2.0f * p - msg.state.player2.poolUnits[i].rect.x) - emberszelesseg;
+        }
+    }
+    for (int i = 0; i < 2; i++) {
+        if (msg.state.player2.towers[i].exists) {
+            msg.state.player2.towers[i].rect.x = (2.0f * p - msg.state.player2.towers[i].rect.x) - msg.state.player2.towers[i].rect.w;
+        }
+    }
+
     msg.state.gameStarted = start;
     msg.state.gameEnded = false;
     msg.state.winnerId = 0;
-    if (msg.state.player1.manSize != 0) {
-        //SDL_Log("nem 0 a mansize");
-    }
+
     bool sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
     if (sent) {
          //SDL_Log("[SERVER] Sent state true");
@@ -278,14 +352,14 @@ void ServerUpdateGameLogic() {
 int ServerThreadFunction(void* data) {
     SDL_Log("[SERVER] Thread started on port 12345");
 
-    NET_Server* server = NET_CreateServer(nullptr, 12345);
-    if (!server) {
+    NET_Server* net_server = NET_CreateServer(nullptr, 12345);
+    if (!net_server) {
         SDL_Log("[SERVER] Failed to create server: %s", SDL_GetError());
         g_network.isServer = false;
         return -1;
     }
 
-    g_network.server = server;
+    g_network.server = net_server;
     SDL_Log("[SERVER] Listening...");
 
     uint32_t lastGameTick = SDL_GetTicks();
@@ -295,9 +369,10 @@ int ServerThreadFunction(void* data) {
         int while_start = SDL_GetTicks();
         // Új kliens fogadása
         NET_StreamSocket* newClient = nullptr;
-        if (NET_AcceptClient(server, &newClient) && newClient) {
+        if (NET_AcceptClient(net_server, &newClient) && newClient) {
             SDL_Log("[SERVER] Client connected!");
             start = true;
+            server = true;
             if (g_network.clientSocket) {
                 NET_DestroyStreamSocket(newClient);
             } else {

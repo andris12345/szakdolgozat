@@ -34,6 +34,7 @@ extern bool singlePlayer;
 extern bool multiPlayer;
 extern bool client;
 extern bool server;
+extern bool bot;
 
 extern SDL_FRect kocka;
 
@@ -87,16 +88,12 @@ extern bool vege;
 extern bool fomenu;
 extern bool vegeMenu;
 extern bool buyTower;
-extern bool haveTower1;
-extern bool haveTower2;
 
 extern float tower1Cost;
 extern float tower2Cost;
 
 extern int type;
 extern int pos;
-extern int towerNumber;
-extern Tower towers[2];
 
 extern TowerAttack& tower_attack;
 

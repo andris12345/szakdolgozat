@@ -11,6 +11,6 @@
 
 void Move(SDL_Renderer *renderer);
 void mozgatas(GameUnit &man);
-void levelUp();
+void levelUp(bool isenemy);
 
 #endif //MOVEMAN_H

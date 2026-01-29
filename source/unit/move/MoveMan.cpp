@@ -131,14 +131,26 @@ void mozgatas(GameUnit &man){
     }
 }
 
-void levelUp() {
-    player1.setLevel(player1.getLevel() + 1);
+void levelUp(bool isenemy) {
+    if (isenemy) {
+        player2.setLevel(player2.getLevel() + 1);
 
-    fighterBt->getSubtitle()->setText("Fighter: " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
-    rangedBt->getSubtitle()->setText("Ranged: " + std::format("{:.1f}",(15 + 15 * player1.getLevel() * 0.25)));
-    tankBt->getSubtitle()->setText("Tank: " +  std::format("{:.1f}",(20 + 20 * player1.getLevel() * 0.25)));
+        fighterBt->getSubtitle()->setText("Fighter: " + std::format("{:.1f}",(10 + 10 * player2.getLevel() * 0.25)));
+        rangedBt->getSubtitle()->setText("Ranged: " + std::format("{:.1f}",(15 + 15 * player2.getLevel() * 0.25)));
+        tankBt->getSubtitle()->setText("Tank: " +  std::format("{:.1f}",(20 + 20 * player2.getLevel() * 0.25)));
 
 
-    tower1Bt->getSubtitle()->setText("Tower 1 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
-    tower2Bt->getSubtitle()->setText("Tower 2 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+        tower1Bt->getSubtitle()->setText("Tower 1 " + std::format("{:.1f}",(10 + 10 * player2.getLevel() * 0.25)));
+        tower2Bt->getSubtitle()->setText("Tower 2 " + std::format("{:.1f}",(10 + 10 * player2.getLevel() * 0.25)));
+    }else {
+        player1.setLevel(player1.getLevel() + 1);
+
+        fighterBt->getSubtitle()->setText("Fighter: " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+        rangedBt->getSubtitle()->setText("Ranged: " + std::format("{:.1f}",(15 + 15 * player1.getLevel() * 0.25)));
+        tankBt->getSubtitle()->setText("Tank: " +  std::format("{:.1f}",(20 + 20 * player1.getLevel() * 0.25)));
+
+
+        tower1Bt->getSubtitle()->setText("Tower 1 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+        tower2Bt->getSubtitle()->setText("Tower 2 " + std::format("{:.1f}",(10 + 10 * player1.getLevel() * 0.25)));
+    }
 }

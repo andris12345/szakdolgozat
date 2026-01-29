@@ -9,6 +9,10 @@
 #include "../variables/Variables.h"
 #include "../unit/drawing/Drawing.h"
 
+#include "../unit/fighter/Fighter.h"
+#include "../unit/ranged/Ranged.h"
+#include "../unit/tank/Tank.h"
+
 // ============================================================================
 // HÁLÓZATI ÁLLAPOT
 // ============================================================================
@@ -52,6 +56,7 @@ struct GameState {
 
         struct Tower {
             bool exists;
+            int pos;
             SDL_FRect rect;
             SDL_Color color;
             SDL_Color hoverColor;
@@ -71,6 +76,7 @@ enum class MessageType : uint8_t {
     // Kliens → Szerver
     CMD_SPAWN_UNIT = 1,
     CMD_READY = 2,
+    CMD_BUY_TOWER = 3,
 
     // Szerver → Kliens
     STATE_UPDATE = 100,
@@ -81,6 +87,9 @@ enum class MessageType : uint8_t {
 struct ClientCommand {
     MessageType type;
     int unitType;
+
+    int towerType;
+    int towerposition;
 };
 
 struct NetworkMessage {
@@ -119,6 +128,13 @@ void DeserializePlayer(User& user, const GameState::PlayerData& data);
  */
 void ClientSpawnUnit(int unitType);
 
+/**
+ * Torony vasarlas parancs küldése a szervernek
+ * @param towerType torony típusa (0, 1)
+ * @param rect torony típusa (0, 1)
+ * @param towerType torony típusa (0, 1)
+ */
+void ClientBuyTower(int towerType, int towerPosition);
 /**
  * Kliens hálózati frissítés - hívd meg minden frame-ben!
  * Fogadja a szerver állapotot és frissíti a helyi játékállást

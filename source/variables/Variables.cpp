@@ -21,13 +21,14 @@ bool singlePlayer = false;
 bool multiPlayer = false;
 bool client = false;
 bool server = false;
+bool bot = false;
 SDL_FRect kocka;
 
 float behuzasi_tavolsag = 100;
 float mezoszelesseg = 40;
 float emberszelesseg = 30;
 float emberKezdoY = 200;
-float emberKezdoX = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2);;
+float emberKezdoX = behuzasi_tavolsag - mezoszelesseg + (mezoszelesseg/2 - emberszelesseg/2); // 100-40+(20 - 15)
 const int mezoszam = 10;
 
 int map[mezoszam] = {};
@@ -79,7 +80,5 @@ int pos = 0;
 float tower1Cost = 10;
 float tower2Cost = 15;
 
-int towerNumber = 0;
-Tower towers[2];
 
 TowerAttack& tower_attack = TowerAttack::GetInstance();

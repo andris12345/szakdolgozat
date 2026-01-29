@@ -5,11 +5,15 @@
 #include "../tower/Tower.h"
 
 User::User() : baseHp(50), xp(0), level(0), money(20), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
-
+    for (auto& tower : towers) {
+        tower = std::make_unique<Tower>();
+    }
 }
 
 User::User(float baseHp) : baseHp(baseHp), xp(0), level(0), money(20), man(nullptr), manSize(0), pool(nullptr), poolSize(0) {
-
+    for (auto& tower : towers) {
+        tower = std::make_unique<Tower>();
+    }
 }
 
 User &User::operator=(const User &) {
