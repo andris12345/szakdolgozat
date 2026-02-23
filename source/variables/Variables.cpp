@@ -82,3 +82,13 @@ float tower2Cost = 15;
 
 
 TowerAttack& tower_attack = TowerAttack::GetInstance();
+
+SDL_Texture* fighterBodyTexture;
+SDL_Texture* fighterWeaponTexture;
+SDL_Texture* fighterArmorTexture;
+
+SDL_Texture* rangedBodyTexture;
+SDL_Texture* rangedWeaponTexture;
+SDL_Texture* rangedArmorTexture;
+
+SDL_Texture* tankUnitTexture;

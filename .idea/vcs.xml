@@ -2,5 +2,23 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl3-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_net-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/freetype" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/freetype/subprojects/dlg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/harfbuzz" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/plutosvg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/plutosvg/plutovg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/plutovg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/aom" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/dav1d" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/jpeg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/libavif" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/libjxl" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/libpng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/libtiff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/libwebp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/zlib" vcs="Git" />
   </component>
 </project>

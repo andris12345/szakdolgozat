@@ -35,8 +35,22 @@ void hpkirajzolas(SDL_Renderer *renderer, GameUnit &man) {
 
 void kirajzolas(SDL_Renderer *renderer, GameUnit &man) {
     SDL_FRect rect = {.x = man.getRect().x, .y = man.getRect().y, .w = emberszelesseg, .h = emberszelesseg};
-    SDL_SetRenderDrawColor(renderer, man.getColor().r, man.getColor().g, man.getColor().b, 255);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_Texture temp;
+    switch (man.getTipus()){
+        case 0: {
+            SDL_RenderTexture(renderer, fighterBodyTexture, NULL, &rect);
+            SDL_RenderTexture(renderer, fighterWeaponTexture, NULL, &rect);
+            break;
+        }
+        case 1: {
+            SDL_RenderTexture(renderer, rangedBodyTexture, NULL, &rect);
+            SDL_RenderTexture(renderer, rangedWeaponTexture, NULL, &rect);
+            break;
+        }
+        case 2: {
+            SDL_RenderTexture(renderer, tankUnitTexture, NULL, &rect);
+        }
+    }
 }
 
 void unitKirajzolas(SDL_Renderer *renderer) {

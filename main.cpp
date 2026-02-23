@@ -10,6 +10,7 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_opengl.h>
 #include <SDL3_net/SDL_net.h>
+#include <SDL3_image/SDL_image.h>
 
 #include "source/gui/felirat/Felirat.h"
 #include "source/variables/Variables.h"
@@ -43,9 +44,47 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     }
 
     // 800x450 is 16:9
-    if (SDL_CreateWindowAndRenderer("hello SDL3", width, height, 0, &window, &renderer) == false){
+    if (SDL_CreateWindowAndRenderer("Game", width, height, 0, &window, &renderer) == false){
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), nullptr);
         return SDL_APP_FAILURE;
+    }
+
+    SDL_Surface* tempSurface = nullptr;
+
+    tempSurface = IMG_Load("D:/CLion/szakdolgozat/source/images/roguelikeChar_transparent_596.png");
+    if (tempSurface) {
+        fighterBodyTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+        SDL_DestroySurface(tempSurface);
+    }else {
+        SDL_Log("Failed to load image! SDL Error: %s", SDL_GetError());
+    }
+
+    // Fighter weapon
+    tempSurface = IMG_Load("D:/CLion/szakdolgozat/source/images/roguelikeChar_transparent_369.png");
+    if (tempSurface) {
+        fighterWeaponTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+        SDL_DestroySurface(tempSurface);
+    }
+
+    // Ranged body
+    tempSurface = IMG_Load("D:/CLion/szakdolgozat/source/images/roguelikeChar_transparent_326.png");
+    if (tempSurface) {
+        rangedBodyTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+        SDL_DestroySurface(tempSurface);
+    }
+
+    // ranged weapon
+    tempSurface = IMG_Load("D:/CLion/szakdolgozat/source/images/roguelikeChar_transparent_107.png");
+    if (tempSurface) {
+        rangedWeaponTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+        SDL_DestroySurface(tempSurface);
+    }
+
+    // tank unit
+    tempSurface = IMG_Load("D:/CLion/szakdolgozat/source/images/roguelikeChar_transparent_595.png");
+    if (tempSurface) {
+        tankUnitTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+        SDL_DestroySurface(tempSurface);
     }
 
     penzText = new Subtitle(font, fontColor, SDL_FRect{50, 20, 0, 0});
@@ -553,4 +592,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     // Fontok
     TTF_CloseFont(font);
     TTF_CloseFont(gombFont);
+
+    TTF_Quit();
+    SDL_Quit();
 }

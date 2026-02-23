@@ -97,6 +97,16 @@ extern int pos;
 
 extern TowerAttack& tower_attack;
 
+extern SDL_Texture* fighterBodyTexture;
+extern SDL_Texture* fighterWeaponTexture;
+extern SDL_Texture* fighterArmorTexture;
+
+extern SDL_Texture* rangedBodyTexture;
+extern SDL_Texture* rangedWeaponTexture;
+extern SDL_Texture* rangedArmorTexture;
+
+extern SDL_Texture* tankUnitTexture;
+
 #include "../gui/gomb/Gomb.h"
 #include "../tower/TowerAttack.h"
 #include "../unit/gameUnit/GameUnit.h"

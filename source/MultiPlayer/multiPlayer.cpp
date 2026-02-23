@@ -237,7 +237,7 @@ void ProcessClientCommand(const ClientCommand& cmd) {
                 case 0: {
                     Fighter fighter = Fighter(0, (12 + (12 * player2.getLevel() * 0.25)),(2 + (2 * player2.getLevel() * 0.25)), true);
                     fighter.setPrice(10 + 10 * player2.getLevel() * 0.25);
-                    fighter.setXp(10 + 10 * player2.getLevel() * 0.25);
+                    fighter.setXp(10 + 10 * player2.getLevel() * 0.25); 
                     player2.setMoney(player2.getMoney() - fighter.getPrice());
                     CreateManToPool(fighter, true);
                     break;

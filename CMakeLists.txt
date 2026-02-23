@@ -41,6 +41,11 @@ if (NOT SDL3_net_FOUND)
     include_dependency(SDL_net https://github.com/libsdl-org/SDL_net.git main)
 endif ()
 
+find_package(SDL3_image QUIET)
+if (NOT SDL3_image_FOUND)
+    include_dependency(SDL3_image https://github.com/libsdl-org/SDL_image.git release-3.2.0)
+endif ()
+
 # Create your game executable target as usual
 add_executable(szakdolgozat main.cpp
         source/gui/gomb/Gomb.cpp
@@ -89,4 +94,4 @@ target_compile_definitions(szakdolgozat PRIVATE SDL_MAIN_USE_CALLBACKS)
 
 
 # Link to the actual SDL3 library.
-target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf SDL3_net::SDL3_net)
+target_link_libraries(szakdolgozat PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf SDL3_net::SDL3_net SDL3_image::SDL3_image)
