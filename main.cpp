@@ -108,7 +108,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[]) {
     deleteBt =          new Gomb({(behuzasi_tavolsag - 10), (emberKezdoY - 70), 40, 20},{255,165,0, 255}, {255,140,0, 255}, "Delete", font);
     levelUpBt =         new Gomb({250, 20, 40, 20},{0, 255, 0, 255}, {0, 90, 0, 255}, "Level up", font);
     hostBt =            new Gomb({350, 100, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Host game", gombFont);
-    joinBt =          new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Join game", gombFont);
+    joinBt =            new Gomb({350, 200, 200, 80}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Join game", gombFont);
+    backBt =            new Gomb({700, 10, 80, 50}, {0, 255, 0, 255}, {0, 90, 0, 255}, "Back", gombFont);
 
     kocka.h = kocka.w = 20;
 
@@ -276,7 +277,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     multiPlayer = false;
                     hostBt->setIsVisible(false);
                     joinBt->setIsVisible(false);
-                    mainMenuBt->setIsVisible(false);
+                    backBt->setIsVisible(false);
 
                     // Szerver indítása KÜLÖN SZÁLON (nem blokkoló!)
                     if (StartServerAsync()) {
@@ -290,7 +291,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     multiPlayer = false;
                     hostBt->setIsVisible(false);
                     joinBt->setIsVisible(false);
-                    mainMenuBt->setIsVisible(false);
+                    backBt->setIsVisible(false);
 
                     // Csatlakozás szerverhez
                     if (ConnectToServer("127.0.0.1")) {
@@ -299,9 +300,36 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                         start = true;
                     } else {
                         SDL_Log("Csatlakozás sikertelen!");
+                        multiPlayer = true;
                     }
 
 
+                }   else if (backBt->getIsVisible() && isMouseOver(backBt, x, y)) {
+                    if (singlePlayer && !start) {
+                        singlePlayer = false;
+                        fomenu = true;
+                        easyBt->setIsVisible(false);
+                        mediumBt->setIsVisible(false);
+                        hardBt->setIsVisible(false);
+                        backBt->setIsVisible(false);
+                    }else if (multiPlayer && !start){
+                        fomenu = true;
+                        start = false;
+                        vegeMenu = false;
+                        singlePlayer = false;
+                        hostBt->setIsVisible(false);
+                        joinBt->setIsVisible(false);
+                        backBt->setIsVisible(false);
+                        multiPlayer = false;
+                    }else if (waitingForPlayer && !start) {
+                        waitingForPlayer = false;
+                        fomenu = false;
+                        start = false;
+                        vegeMenu = false;
+                        singlePlayer = false;
+                        multiPlayer = true;
+                        g_network.isServer = false;
+                    }
                 }
                 else {
                     buyTower = false; //todo: valahogz megcsinalni hogy ne mindig ugyan ugy jelenjen meg a towervasarlas
@@ -356,11 +384,15 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
         render_Button(easyBt);
         render_Button(mediumBt);
         render_Button(hardBt);
+        render_Button(backBt);
     }
     if (multiPlayer && !start) {
         render_Button(hostBt);
         render_Button(joinBt);
-        render_Button(mainMenuBt);
+        render_Button(backBt);
+    }
+    if (waitingForPlayer) {
+        render_Button(backBt);
     }
 
     if (vege) {
@@ -579,6 +611,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     delete tower1Bt;
     delete tower2Bt;
     delete deleteBt;
+    delete backBt;
 
     // Szövegek
     delete penzText;

@@ -344,35 +344,6 @@ void SendGameStateToClient() {
     num++;
 }
 
-// Játék logika frissítése (szerver oldalon minden tick-ben!)
-void ServerUpdateGameLogic() {
-    // ITT TÖRTÉNIK MINDEN JÁTÉK LOGIKA!
-
-    // 1. Egységek mozgatása
-    // MoveAllUnits(player1);
-    // MoveAllUnits(player2);
-
-    // 2. Támadások
-    // ProcessCombat(player1, player2);
-
-    // 3. Collision detection
-    // CheckCollisions(player1, player2);
-
-    // 4. XP és pénz számítás
-    // UpdateRewards(player1, player2);
-
-    // 5. Szint növelés ellenőrzése
-    // CheckLevelUp(player1);
-    // CheckLevelUp(player2);
-
-    // 6. Győzelem ellenőrzése
-    // if (player1.getBaseHp() <= 0 || player2.getBaseHp() <= 0) {
-    //     // Game over
-    // }
-
-    //SDL_Log("[SERVER] Game tick completed");
-}
-
 // Szerver szál
 int ServerThreadFunction(void* data) {
     SDL_Log("[SERVER] Thread started on port 12345");
@@ -384,6 +355,7 @@ int ServerThreadFunction(void* data) {
         return -1;
     }
 
+    waitingForPlayer = true;
     g_network.server = net_server;
     SDL_Log("[SERVER] Listening...");
 
@@ -398,6 +370,7 @@ int ServerThreadFunction(void* data) {
             SDL_Log("[SERVER] Client connected!");
             start = true;
             server = true;
+            waitingForPlayer = false;
             if (g_network.clientSocket) {
                 NET_DestroyStreamSocket(newClient);
             } else {
@@ -430,9 +403,6 @@ int ServerThreadFunction(void* data) {
             lastGameTick = currentTime;
 
             if (g_network.isConnected && start) {
-                // Játék frissítése
-                ServerUpdateGameLogic();
-
                 // Állapot küldése a kliensnek
                 SendGameStateToClient();
             }
@@ -444,6 +414,21 @@ int ServerThreadFunction(void* data) {
         }
 
         SDL_Delay(1);  // Kicsi delay, hogy ne égesse a CPU-t
+    }
+
+    waitingForPlayer = false;
+
+    // Kliens socket bezárása
+    if (g_network.clientSocket) {
+        NET_DestroyStreamSocket(g_network.clientSocket);
+        g_network.clientSocket = nullptr;
+        g_network.isConnected = false;
+    }
+
+    // Szerver bezárása
+    if (g_network.server) {
+        NET_DestroyServer(g_network.server);
+        g_network.server = nullptr;
     }
 
     SDL_Log("[SERVER] Thread ending");
@@ -540,8 +525,8 @@ bool ConnectToServer(const char* hostname) {
         return false;
     }
     
-    // Várunk a DNS feloldásra (max 5 másodperc)
-    NET_Status status = NET_WaitUntilResolved(address, 5000);
+    // Várunk a DNS feloldásra (max 30 másodperc)
+    NET_Status status = NET_WaitUntilResolved(address, 30000);
     if (status != NET_SUCCESS) {
         SDL_Log("Address resolution failed: %s", SDL_GetError());
         NET_UnrefAddress(address);

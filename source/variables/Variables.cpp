@@ -22,6 +22,8 @@ bool multiPlayer = false;
 bool client = false;
 bool server = false;
 bool bot = false;
+bool waitingForPlayer = false;
+
 SDL_FRect kocka;
 
 float behuzasi_tavolsag = 100;
@@ -60,6 +62,7 @@ Gomb *multiPlayerBt = nullptr;
 Gomb *exitBt = nullptr;
 Gomb *hostBt = nullptr;
 Gomb *joinBt = nullptr;
+Gomb *backBt = nullptr;
 
 int deleteTowerNumber = 0;
 

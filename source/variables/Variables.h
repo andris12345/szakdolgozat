@@ -35,6 +35,7 @@ extern bool multiPlayer;
 extern bool client;
 extern bool server;
 extern bool bot;
+extern bool waitingForPlayer;
 
 extern SDL_FRect kocka;
 
@@ -74,6 +75,7 @@ extern Gomb *multiPlayerBt;
 extern Gomb *exitBt;
 extern Gomb *hostBt;
 extern Gomb *joinBt;
+extern Gomb *backBt;
 
 extern int deleteTowerNumber;
 
