@@ -90,6 +90,7 @@ void DeserializePlayer(User& user, const GameState::PlayerData& data) {
         GameUnit* unit = user.getManAt(i);
 
         if (unit) {
+            unit->setTipus(data.manUnits[i].tipus);
             unit->setHp(data.manUnits[i].hp);
             unit->setMaxHp(data.manUnits[i].maxHp);
             unit->setRect(data.manUnits[i].rect);
@@ -105,6 +106,7 @@ void DeserializePlayer(User& user, const GameState::PlayerData& data) {
     for (int i = 0; i < data.poolSize; i++) {
         GameUnit* unit = user.getPoolAt(i);
         if (unit) {
+            unit->setTipus(data.manUnits[i].tipus);
             unit->setHp(data.poolUnits[i].hp);
             unit->setMaxHp(data.poolUnits[i].maxHp);
             unit->setRect(data.poolUnits[i].rect);
@@ -202,6 +204,11 @@ void UpdateNetworking() {
                      num, msg.state.player1.baseHp, msg.state.player1.xp, msg.state.player1.level,
                      msg.state.player1.manSize, msg.state.player1.money, msg.state.player2.baseHp, msg.state.player2.manSize, msg.state.player1.money);
                 num++;
+                if (msg.state.gameEnded) {
+                    vege = true;
+                    start = false;
+                    SDL_Log("[CLIENT] Game ended! Winner: %d", msg.state.winnerId);
+                }
                 break;
 
             case MessageType::EVENT_GAME_START:
@@ -210,6 +217,8 @@ void UpdateNetworking() {
                 break;
 
             case MessageType::EVENT_GAME_END:
+                vege = true;
+                start = false;
                 SDL_Log("[CLIENT] Game ended! Winner: %d", msg.state.winnerId);
                 break;
 
@@ -328,8 +337,17 @@ void SendGameStateToClient() {
     }
 
     msg.state.gameStarted = start;
-    msg.state.gameEnded = false;
-    msg.state.winnerId = 0;
+    if (player1.getBaseHp() <= 0 || player2.getBaseHp() <= 0) {
+        msg.state.gameEnded = true;
+        if (player1.getBaseHp() <= 0) {
+            msg.state.winnerId = 2; // Player 2 (szerver) nyert
+        } else {
+            msg.state.winnerId = 1; // Player 1 (kliens) nyert
+        }
+    } else {
+        msg.state.gameEnded = false;
+        msg.state.winnerId = 0;
+    }
 
     bool sent = NET_WriteToStreamSocket(g_network.clientSocket, &msg, sizeof(NetworkMessage));
     if (sent) {
@@ -372,6 +390,7 @@ int ServerThreadFunction(void* data) {
             server = true;
             waitingForPlayer = false;
             if (g_network.clientSocket) {
+                SendGameStateToClient();
                 NET_DestroyStreamSocket(newClient);
             } else {
                 g_network.clientSocket = newClient;
@@ -403,6 +422,20 @@ int ServerThreadFunction(void* data) {
             lastGameTick = currentTime;
 
             if (g_network.isConnected && start) {
+                if (player1.getBaseHp() <= 0 || player2.getBaseHp() <= 0) {
+                    SDL_Log("[SERVER] Game ended!");
+                    vege = true;
+                    start = false;
+                    server = false;
+
+                    SendGameStateToClient();
+
+                    SDL_Delay(100);
+
+                    g_network.isServer = false;
+                    break;
+                }
+
                 // Állapot küldése a kliensnek
                 SendGameStateToClient();
             }

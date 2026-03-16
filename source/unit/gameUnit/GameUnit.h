@@ -36,6 +36,7 @@ public:
     bool getIsEnemy();
 
     void setPrice(double _price);
+    void setTipus(int _tipus);
     void setHp(double _hp);
     void setMaxHp(double _maxHp);
     void setDmg(double _dmg);

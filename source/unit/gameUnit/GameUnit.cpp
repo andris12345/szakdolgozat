@@ -29,6 +29,7 @@ bool GameUnit::getIsEnemy() { return isEnemy; }
 void GameUnit::setPrice(double _price) { price = _price; };
 void GameUnit::setHp(double _hp) { hp = _hp; }
 void GameUnit::setMaxHp(double _maxHp) { maxHp = _maxHp; }
+void GameUnit::setTipus(int _tipus) { tipus = _tipus; };
 void GameUnit::setDmg(double _dmg) { dmg = _dmg; }
 void GameUnit::setRange(int _range) { range = _range; }
 void GameUnit::setPos(int _pos) { poz = _pos; }

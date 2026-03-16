@@ -154,6 +154,8 @@ void UpdateNetworking();
  */
 void ProcessClientCommand(const ClientCommand& cmd);
 
+void SendGameEndToClient();
+
 /**
  * Játékállapot küldése a kliensnek
  */

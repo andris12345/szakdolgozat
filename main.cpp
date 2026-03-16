@@ -402,8 +402,19 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
             endText->setText("Vege te nyertel!");
         }
 
+        if (client) {
+            if (g_network.clientSocket) {
+                NET_DestroyStreamSocket(g_network.clientSocket);
+                g_network.clientSocket = nullptr;
+                g_network.isConnected = false;
+            }
+        }
+
         start = false;
         singlePlayer = false;
+        client = false;
+        server = false;
+
         fighterBt->setIsVisible(false);
         rangedBt->setIsVisible(false);
         tankBt->setIsVisible(false);
