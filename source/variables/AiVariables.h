@@ -5,6 +5,8 @@ extern int dificulty;
 
 extern float aiMoney;
 extern int unitCounter;
+extern int aiStrategy;
+extern int aiTurnCounter;
 
 
 

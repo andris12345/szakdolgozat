@@ -86,6 +86,8 @@ add_executable(szakdolgozat main.cpp
         source/user/user.h
         source/unit/drawing/Drawing.cpp
         source/unit/drawing/Drawing.h
+        source/ai/aiUtils/aiUtils.h
+        source/ai/aiUtils/aiUtils.cpp
 )
 
 target_include_directories(szakdolgozat PUBLIC ${SDL3_INCLUDE_DIRS})

@@ -1,46 +1,38 @@
-﻿//
-// Created by Andris on 2025. 07. 23..
-//
-
-#include "mediumAi.h"
+﻿#include "mediumAi.h"
 
 void mediumAi() {
     aiMoney += 1.0 / 30;
-    switch (unitCounter) {
-        case 0: {
-            Fighter fighter = Fighter(0, (12 + (12 * player2.getLevel() * 0.25)),(2 + (2 * player2.getLevel() * 0.25)), true);
-            fighter.setPrice(10 + 10 * player2.getLevel() * 0.25);
-            fighter.setXp(10 + 10 * player2.getLevel() * 0.25);
-            if (aiMoney >= fighter.getPrice()) {
-                aiMoney -= fighter.getPrice();
-                CreateManToPool(fighter, true);
-                unitCounter++;
-            }
-            break;
-        }
-        case 1: {
-            Fighter fighter = Fighter(0, (12 + (12 * player2.getLevel() * 0.25)),(2 + (2 * player2.getLevel() * 0.25)), true);
-            fighter.setPrice(10 + 10 * player2.getLevel() * 0.25);
-            fighter.setXp(10 + 10 * player2.getLevel() * 0.25);
-            if (aiMoney >= fighter.getPrice()) {
-                aiMoney -= fighter.getPrice();
-                CreateManToPool(fighter, true);
-                unitCounter++;
-            }
-        }
-        case 2: {
-            Ranged ranged = Ranged(1, (8 + (8 * player2.getLevel() * 0.25)), (2 + (2 * player2.getLevel() * 0.25)), true);
-            ranged.setPrice(15 + 15 * player2.getLevel() * 0.25);
-            ranged.setXp(10 + 10 * player2.getLevel() * 0.25);
-            if (aiMoney >= ranged.getPrice()) {
-                aiMoney -= ranged.getPrice();
-                unitCounter = 0;
-                CreateManToPool(ranged, true);
+    aiTurnCounter++;
 
-            }
-            break;
+    int playerFighters, playerRanged, playerTanks;
+    analyzePlayerUnits(playerFighters, playerRanged, playerTanks);
+
+    if (playerTanks > playerFighters + playerRanged) {
+        aiStrategy = 1; // Ranged focus
+    }
+    else if (playerRanged > playerFighters) {
+        aiStrategy = 0; // Fighter focus
+    }
+    else {
+        aiStrategy = 2; // Mixed
+    }
+
+    if (aiTurnCounter % 600 == 0) { // ~10 másodpercenként
+        if (!player2.getTowerAt(0)->isExists() && aiMoney >= tower1Cost) {
+            CreateNewTower(1, 0, true);
+            aiMoney -= tower1Cost;
         }
-        default:
-            break;
+    }
+
+    switch (aiStrategy) {
+        case 0: // Fighter focus
+            spawnFighterFocused();
+        break;
+        case 1: // Ranged focus
+            spawnRangedFocused();
+        break;
+        case 2: // Mixed
+            spawnMixed();
+        break;
     }
 }

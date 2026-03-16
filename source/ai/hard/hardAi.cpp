@@ -6,6 +6,25 @@
 
 void hardAi() {
     aiMoney += 1.5 / 30;
+    aiTurnCounter++;
+
+    int playerFighters, playerRanged, playerTanks;
+    analyzePlayerUnits(playerFighters, playerRanged, playerTanks);
+
+    // Ellenstratégia választás
+    if (player1.getManSize() > player2.getManSize() + 3) {
+        // Játékos előnyben - védekezzünk tankokkal
+        spawnDefensive();
+    }
+    else if (player1.getBaseHp() < 30) {
+        // Játékos gyenge - all-in támadás
+        spawnAggressive();
+    }
+    else {
+        // Counter composition
+        spawnCounter(playerFighters, playerRanged, playerTanks);
+    }
+
     switch (unitCounter) {
         case 0: {
             Fighter fighter = Fighter(0, (12 + (12 * player2.getLevel() * 0.25)),(2 + (2 * player2.getLevel() * 0.25)), true);
