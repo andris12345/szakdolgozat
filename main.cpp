@@ -421,18 +421,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
         player1.setBaseHp(maxBaseHp);
         player2.setBaseHp(maxEnemybaseHp); //todo megcsinalni a veget is a nullazasok
-        //man = nullptr;
-        //manSize = 0;
-        //pool = nullptr;
-        //poolSize = 0;
 
-        //enemyMan = nullptr;
-        //enemyManSize = 0;
-        //enemyPool = nullptr;
-        //enemyPoolSize = 0;
+        player1.resetUser();
+        player2.resetUser();
 
-        player1.setBaseHp(20);
-        player2.setMoney(20);
         unitCounter = 0;
 
         vegeMenu = true;

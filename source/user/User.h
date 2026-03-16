@@ -60,6 +60,8 @@ public:
   void shiftManLeft();
   void shiftPoolLeft();
 
+  void resetUser();
+
   std::string toString();
 
   ~User();

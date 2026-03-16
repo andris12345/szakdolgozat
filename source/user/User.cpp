@@ -140,6 +140,33 @@ void User::shiftPoolLeft() {
     }
 }
 
+void User::resetUser() {
+    baseHp = 50;
+    xp = 0;
+    level = 0;
+    money = 20;
+
+    if (man != nullptr) {
+        free(man);
+        man = nullptr;
+    }
+    manSize = 0;
+
+    // Pool tömb felszabadítása és nullázása
+    if (pool != nullptr) {
+        free(pool);
+        pool = nullptr;
+    }
+    poolSize = 0;
+
+    for (auto& tower : towers) {
+        if (tower) {
+            tower->resetTower();
+        }
+    }
+}
+
+
 std::string User::toString() {
     std::ostringstream oss;
     int a = 0;
